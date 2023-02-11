@@ -1,0 +1,10 @@
+{
+  "version": 2,
+  "dgSpecHash": "u939XpPlXUJXDM9ha0qY7eTfBsFMv9L3Qx+HwzV55HeqNoCXz1y4f1jRmkJie/HuebM6jdwUiBfquugrELK+nw==",
+  "success": true,
+  "projectFilePath": "E:\\web\\web-2023\\Toeic-365-backend-v1\\Web2023_BE\\Web2023_BE.Domain.Shared\\Web2023_BE.Domain.Shared.csproj",
+  "expectedPackageFiles": [
+    "C:\\Users\\nnguy\\.nuget\\packages\\newtonsoft.json\\13.0.1\\newtonsoft.json.13.0.1.nupkg.sha512"
+  ],
+  "logs": []
+}

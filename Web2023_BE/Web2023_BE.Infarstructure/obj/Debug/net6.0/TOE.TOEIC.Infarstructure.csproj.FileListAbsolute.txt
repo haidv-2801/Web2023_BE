@@ -1,0 +1,17 @@
+E:\web\web-2023\Toeic-365-backend-v1\MISA.AMIS\MISA.AMIS.Infarstructure\bin\Debug\net6.0\TOE.TOEIC.Infarstructure.deps.json
+E:\web\web-2023\Toeic-365-backend-v1\MISA.AMIS\MISA.AMIS.Infarstructure\bin\Debug\net6.0\TOE.TOEIC.Infarstructure.dll
+E:\web\web-2023\Toeic-365-backend-v1\MISA.AMIS\MISA.AMIS.Infarstructure\bin\Debug\net6.0\TOE.TOEIC.Infarstructure.pdb
+E:\web\web-2023\Toeic-365-backend-v1\MISA.AMIS\MISA.AMIS.Infarstructure\bin\Debug\net6.0\TOE.TOEIC.ApplicationCore.dll
+E:\web\web-2023\Toeic-365-backend-v1\MISA.AMIS\MISA.AMIS.Infarstructure\bin\Debug\net6.0\TOE.TOEIC.Cache.dll
+E:\web\web-2023\Toeic-365-backend-v1\MISA.AMIS\MISA.AMIS.Infarstructure\bin\Debug\net6.0\TOE.TOEIC.ApplicationCore.pdb
+E:\web\web-2023\Toeic-365-backend-v1\MISA.AMIS\MISA.AMIS.Infarstructure\bin\Debug\net6.0\TOE.TOEIC.Cache.pdb
+E:\web\web-2023\Toeic-365-backend-v1\MISA.AMIS\MISA.AMIS.Infarstructure\obj\Debug\net6.0\TOE.TOEIC.Infarstructure.csproj.AssemblyReference.cache
+E:\web\web-2023\Toeic-365-backend-v1\MISA.AMIS\MISA.AMIS.Infarstructure\obj\Debug\net6.0\TOE.TOEIC.Infarstructure.GeneratedMSBuildEditorConfig.editorconfig
+E:\web\web-2023\Toeic-365-backend-v1\MISA.AMIS\MISA.AMIS.Infarstructure\obj\Debug\net6.0\TOE.TOEIC.Infarstructure.AssemblyInfoInputs.cache
+E:\web\web-2023\Toeic-365-backend-v1\MISA.AMIS\MISA.AMIS.Infarstructure\obj\Debug\net6.0\TOE.TOEIC.Infarstructure.AssemblyInfo.cs
+E:\web\web-2023\Toeic-365-backend-v1\MISA.AMIS\MISA.AMIS.Infarstructure\obj\Debug\net6.0\TOE.TOEIC.Infarstructure.csproj.CoreCompileInputs.cache
+E:\web\web-2023\Toeic-365-backend-v1\MISA.AMIS\MISA.AMIS.Infarstructure\obj\Debug\net6.0\TOE.TOEIC.Infarstructure.csproj.CopyComplete
+E:\web\web-2023\Toeic-365-backend-v1\MISA.AMIS\MISA.AMIS.Infarstructure\obj\Debug\net6.0\TOE.TOEIC.Infarstructure.dll
+E:\web\web-2023\Toeic-365-backend-v1\MISA.AMIS\MISA.AMIS.Infarstructure\obj\Debug\net6.0\refint\TOE.TOEIC.Infarstructure.dll
+E:\web\web-2023\Toeic-365-backend-v1\MISA.AMIS\MISA.AMIS.Infarstructure\obj\Debug\net6.0\TOE.TOEIC.Infarstructure.pdb
+E:\web\web-2023\Toeic-365-backend-v1\MISA.AMIS\MISA.AMIS.Infarstructure\obj\Debug\net6.0\ref\TOE.TOEIC.Infarstructure.dll

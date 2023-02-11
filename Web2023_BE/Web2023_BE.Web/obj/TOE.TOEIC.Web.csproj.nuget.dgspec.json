@@ -1,0 +1,112 @@
+{
+  "format": 1,
+  "restore": {
+    "E:\\web\\web-2023\\Toeic-365-backend-v1\\Web2023_BE\\Web2023_BE.Web\\TOE.TOEIC.Web.csproj": {}
+  },
+  "projects": {
+    "E:\\web\\web-2023\\Toeic-365-backend-v1\\Web2023_BE\\Web2023_BE.Web\\TOE.TOEIC.Web.csproj": {
+      "version": "1.0.0",
+      "restore": {
+        "projectUniqueName": "E:\\web\\web-2023\\Toeic-365-backend-v1\\Web2023_BE\\Web2023_BE.Web\\TOE.TOEIC.Web.csproj",
+        "projectName": "TOE.TOEIC.Web",
+        "projectPath": "E:\\web\\web-2023\\Toeic-365-backend-v1\\Web2023_BE\\Web2023_BE.Web\\TOE.TOEIC.Web.csproj",
+        "packagesPath": "C:\\Users\\nnguy\\.nuget\\packages\\",
+        "outputPath": "E:\\web\\web-2023\\Toeic-365-backend-v1\\Web2023_BE\\Web2023_BE.Web\\obj\\",
+        "projectStyle": "PackageReference",
+        "configFilePaths": [
+          "C:\\Users\\nnguy\\AppData\\Roaming\\NuGet\\NuGet.Config",
+          "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
+        ],
+        "originalTargetFrameworks": [
+          "netcoreapp3.1"
+        ],
+        "sources": {
+          "C:\\Program Files (x86)\\Microsoft SDKs\\NuGetPackages\\": {},
+          "https://api.nuget.org/v3/index.json": {}
+        },
+        "frameworks": {
+          "netcoreapp3.1": {
+            "targetAlias": "netcoreapp3.1",
+            "projectReferences": {
+              "E:\\web\\web-2023\\Toeic-365-backend-v1\\Web2023_BE\\MISA.AMIS.ApplicationCore\\TOE.TOEIC.ApplicationCore.csproj": {
+                "projectPath": "E:\\web\\web-2023\\Toeic-365-backend-v1\\Web2023_BE\\MISA.AMIS.ApplicationCore\\TOE.TOEIC.ApplicationCore.csproj"
+              },
+              "E:\\web\\web-2023\\Toeic-365-backend-v1\\Web2023_BE\\MISA.AMIS.Infarstructure\\TOE.TOEIC.Infarstructure.csproj": {
+                "projectPath": "E:\\web\\web-2023\\Toeic-365-backend-v1\\Web2023_BE\\MISA.AMIS.Infarstructure\\TOE.TOEIC.Infarstructure.csproj"
+              }
+            }
+          }
+        },
+        "warningProperties": {
+          "warnAsError": [
+            "NU1605"
+          ]
+        }
+      },
+      "frameworks": {
+        "netcoreapp3.1": {
+          "targetAlias": "netcoreapp3.1",
+          "dependencies": {
+            "Microsoft.Owin.Cors": {
+              "target": "Package",
+              "version": "[4.2.1, )"
+            },
+            "NLog": {
+              "target": "Package",
+              "version": "[4.7.15, )"
+            },
+            "NLog.Web.AspNetCore": {
+              "target": "Package",
+              "version": "[4.14.0, )"
+            },
+            "Swashbuckle.AspNetCore": {
+              "target": "Package",
+              "version": "[5.6.3, )"
+            },
+            "System.Runtime.Caching": {
+              "target": "Package",
+              "version": "[6.0.0, )"
+            }
+          },
+          "imports": [
+            "net461",
+            "net462",
+            "net47",
+            "net471",
+            "net472",
+            "net48"
+          ],
+          "assetTargetFallback": true,
+          "warn": true,
+          "downloadDependencies": [
+            {
+              "name": "Microsoft.AspNetCore.App.Ref",
+              "version": "[3.1.10, 3.1.10]"
+            },
+            {
+              "name": "Microsoft.NETCore.App.Host.win-x64",
+              "version": "[3.1.27, 3.1.27]"
+            },
+            {
+              "name": "Microsoft.NETCore.App.Ref",
+              "version": "[3.1.0, 3.1.0]"
+            },
+            {
+              "name": "Microsoft.WindowsDesktop.App.Ref",
+              "version": "[3.1.0, 3.1.0]"
+            }
+          ],
+          "frameworkReferences": {
+            "Microsoft.AspNetCore.App": {
+              "privateAssets": "none"
+            },
+            "Microsoft.NETCore.App": {
+              "privateAssets": "all"
+            }
+          },
+          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\6.0.302\\RuntimeIdentifierGraph.json"
+        }
+      }
+    }
+  }
+}

@@ -1,0 +1,10 @@
+E:\web\LedgerBackend-main\MISA.Legder\MISA.Legder.Domain.Shared\bin\Debug\netstandard2.1\MISA.Legder.Domain.Shared.deps.json
+E:\web\LedgerBackend-main\MISA.Legder\MISA.Legder.Domain.Shared\bin\Debug\netstandard2.1\MISA.Legder.Domain.Shared.dll
+E:\web\LedgerBackend-main\MISA.Legder\MISA.Legder.Domain.Shared\bin\Debug\netstandard2.1\MISA.Legder.Domain.Shared.pdb
+E:\web\LedgerBackend-main\MISA.Legder\MISA.Legder.Domain.Shared\obj\Debug\netstandard2.1\MISA.Legder.Domain.Shared.csproj.AssemblyReference.cache
+E:\web\LedgerBackend-main\MISA.Legder\MISA.Legder.Domain.Shared\obj\Debug\netstandard2.1\MISA.Legder.Domain.Shared.GeneratedMSBuildEditorConfig.editorconfig
+E:\web\LedgerBackend-main\MISA.Legder\MISA.Legder.Domain.Shared\obj\Debug\netstandard2.1\MISA.Legder.Domain.Shared.AssemblyInfoInputs.cache
+E:\web\LedgerBackend-main\MISA.Legder\MISA.Legder.Domain.Shared\obj\Debug\netstandard2.1\MISA.Legder.Domain.Shared.AssemblyInfo.cs
+E:\web\LedgerBackend-main\MISA.Legder\MISA.Legder.Domain.Shared\obj\Debug\netstandard2.1\MISA.Legder.Domain.Shared.csproj.CoreCompileInputs.cache
+E:\web\LedgerBackend-main\MISA.Legder\MISA.Legder.Domain.Shared\obj\Debug\netstandard2.1\MISA.Legder.Domain.Shared.dll
+E:\web\LedgerBackend-main\MISA.Legder\MISA.Legder.Domain.Shared\obj\Debug\netstandard2.1\MISA.Legder.Domain.Shared.pdb

@@ -1,0 +1,3 @@
+2023-01-31 00:20:34  INFO Microsoft.Extensions.Hosting.Internal.ConsoleLifetime.OnApplicationStarted - Application started. Press Ctrl+C to shut down.
+2023-01-31 00:20:34  INFO Microsoft.Extensions.Hosting.Internal.ConsoleLifetime.OnApplicationStarted - Hosting environment: Development
+2023-01-31 00:20:34  INFO Microsoft.Extensions.Hosting.Internal.ConsoleLifetime.OnApplicationStarted - Content root path: D:\2022\Vietcomltd-20230128T070619Z-001\Vietcomltd-v1\library-management\Toeic-365-backend-v1\MISA.AMIS\MISA.AMIS.Web
