@@ -8,3 +8,13 @@ E:\web\web-2023\Toeic-365-backend-v1\Web2023_BE\Web2023_BE.Domain.Shared\obj\Deb
 E:\web\web-2023\Toeic-365-backend-v1\Web2023_BE\Web2023_BE.Domain.Shared\obj\Debug\netstandard2.1\Web2023_BE.Domain.Shared.csproj.CoreCompileInputs.cache
 E:\web\web-2023\Toeic-365-backend-v1\Web2023_BE\Web2023_BE.Domain.Shared\obj\Debug\netstandard2.1\Web2023_BE.Domain.Shared.dll
 E:\web\web-2023\Toeic-365-backend-v1\Web2023_BE\Web2023_BE.Domain.Shared\obj\Debug\netstandard2.1\Web2023_BE.Domain.Shared.pdb
+D:\2022\Vietcomltd-20230128T070619Z-001\Web2023\Web2023_BE\Web2023_BE\Web2023_BE.Domain.Shared\bin\Debug\netstandard2.1\Web2023_BE.Domain.Shared.deps.json
+D:\2022\Vietcomltd-20230128T070619Z-001\Web2023\Web2023_BE\Web2023_BE\Web2023_BE.Domain.Shared\bin\Debug\netstandard2.1\Web2023_BE.Domain.Shared.dll
+D:\2022\Vietcomltd-20230128T070619Z-001\Web2023\Web2023_BE\Web2023_BE\Web2023_BE.Domain.Shared\bin\Debug\netstandard2.1\Web2023_BE.Domain.Shared.pdb
+D:\2022\Vietcomltd-20230128T070619Z-001\Web2023\Web2023_BE\Web2023_BE\Web2023_BE.Domain.Shared\obj\Debug\netstandard2.1\Web2023_BE.Domain.Shared.csproj.AssemblyReference.cache
+D:\2022\Vietcomltd-20230128T070619Z-001\Web2023\Web2023_BE\Web2023_BE\Web2023_BE.Domain.Shared\obj\Debug\netstandard2.1\Web2023_BE.Domain.Shared.GeneratedMSBuildEditorConfig.editorconfig
+D:\2022\Vietcomltd-20230128T070619Z-001\Web2023\Web2023_BE\Web2023_BE\Web2023_BE.Domain.Shared\obj\Debug\netstandard2.1\Web2023_BE.Domain.Shared.AssemblyInfoInputs.cache
+D:\2022\Vietcomltd-20230128T070619Z-001\Web2023\Web2023_BE\Web2023_BE\Web2023_BE.Domain.Shared\obj\Debug\netstandard2.1\Web2023_BE.Domain.Shared.AssemblyInfo.cs
+D:\2022\Vietcomltd-20230128T070619Z-001\Web2023\Web2023_BE\Web2023_BE\Web2023_BE.Domain.Shared\obj\Debug\netstandard2.1\Web2023_BE.Domain.Shared.csproj.CoreCompileInputs.cache
+D:\2022\Vietcomltd-20230128T070619Z-001\Web2023\Web2023_BE\Web2023_BE\Web2023_BE.Domain.Shared\obj\Debug\netstandard2.1\Web2023_BE.Domain.Shared.dll
+D:\2022\Vietcomltd-20230128T070619Z-001\Web2023\Web2023_BE\Web2023_BE\Web2023_BE.Domain.Shared\obj\Debug\netstandard2.1\Web2023_BE.Domain.Shared.pdb

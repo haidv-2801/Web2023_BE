@@ -5,10 +5,14 @@
       "Newtonsoft.Json/13.0.1": {
         "type": "package",
         "compile": {
-          "lib/netstandard2.0/Newtonsoft.Json.dll": {}
+          "lib/netstandard2.0/Newtonsoft.Json.dll": {
+            "related": ".xml"
+          }
         },
         "runtime": {
-          "lib/netstandard2.0/Newtonsoft.Json.dll": {}
+          "lib/netstandard2.0/Newtonsoft.Json.dll": {
+            "related": ".xml"
+          }
         }
       }
     }
@@ -48,19 +52,19 @@
     ]
   },
   "packageFolders": {
-    "C:\\Users\\nnguy\\.nuget\\packages\\": {}
+    "C:\\Users\\Admin\\.nuget\\packages\\": {}
   },
   "project": {
     "version": "1.0.0",
     "restore": {
-      "projectUniqueName": "E:\\web\\web-2023\\Toeic-365-backend-v1\\Web2023_BE\\Web2023_BE.Domain.Shared\\Web2023_BE.Domain.Shared.csproj",
+      "projectUniqueName": "D:\\2022\\Vietcomltd-20230128T070619Z-001\\Web2023\\Web2023_BE\\Web2023_BE\\Web2023_BE.Domain.Shared\\Web2023_BE.Domain.Shared.csproj",
       "projectName": "Web2023_BE.Domain.Shared",
-      "projectPath": "E:\\web\\web-2023\\Toeic-365-backend-v1\\Web2023_BE\\Web2023_BE.Domain.Shared\\Web2023_BE.Domain.Shared.csproj",
-      "packagesPath": "C:\\Users\\nnguy\\.nuget\\packages\\",
-      "outputPath": "E:\\web\\web-2023\\Toeic-365-backend-v1\\Web2023_BE\\Web2023_BE.Domain.Shared\\obj\\",
+      "projectPath": "D:\\2022\\Vietcomltd-20230128T070619Z-001\\Web2023\\Web2023_BE\\Web2023_BE\\Web2023_BE.Domain.Shared\\Web2023_BE.Domain.Shared.csproj",
+      "packagesPath": "C:\\Users\\Admin\\.nuget\\packages\\",
+      "outputPath": "D:\\2022\\Vietcomltd-20230128T070619Z-001\\Web2023\\Web2023_BE\\Web2023_BE\\Web2023_BE.Domain.Shared\\obj\\",
       "projectStyle": "PackageReference",
       "configFilePaths": [
-        "C:\\Users\\nnguy\\AppData\\Roaming\\NuGet\\NuGet.Config",
+        "C:\\Users\\Admin\\AppData\\Roaming\\NuGet\\NuGet.Config",
         "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
       ],
       "originalTargetFrameworks": [
@@ -97,7 +101,8 @@
           "net47",
           "net471",
           "net472",
-          "net48"
+          "net48",
+          "net481"
         ],
         "assetTargetFallback": true,
         "warn": true,
@@ -106,7 +111,7 @@
             "privateAssets": "all"
           }
         },
-        "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\6.0.302\\RuntimeIdentifierGraph.json"
+        "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\7.0.102\\RuntimeIdentifierGraph.json"
       }
     }
   }

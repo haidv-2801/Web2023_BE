@@ -30,7 +30,7 @@ namespace Web2023_BE.ApplicationCore.Interfaces
             _configuration = configuration;
             _connectionString = _configuration.GetConnectionString("TOEIC365ConnectionString");
             _dbConnection = new MySqlConnection(_connectionString);
-            _tableName = ClassDisplayName();
+            _tableName = ClassDisplayName().ToLowerInvariant();
         }
         #endregion
 
