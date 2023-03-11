@@ -30,6 +30,8 @@ using Microsoft.Extensions.Caching.Memory;
 using Microsoft.Extensions.Options;
 using Microsoft.AspNetCore.Mvc.Formatters;
 using Web2023_BE.HostBase;
+using Web2023_BE.Infarstructure;
+using Web2023_BE.Infarstructure.Repositories;
 
 namespace Web2023_BE.Web
 {
@@ -69,7 +71,8 @@ namespace Web2023_BE.Web
             services.AddHttpContextAccessor();
 
 
-            services.AddControllersWithViews(options => {
+            services.AddControllersWithViews(options =>
+            {
                 options.InputFormatters.Insert(0, GetJsonPatchInputFormatter());
             }).AddNewtonsoftJson(options =>
             {
@@ -163,6 +166,14 @@ namespace Web2023_BE.Web
             //library card
             services.AddScoped<ILibraryCardRepository, LibraryCardRepository>();
             services.AddScoped<ILibraryCardService, LibraryCardService>();
+
+            //library card
+            services.AddScoped<IFolderRepository, FolderRespository>();
+            services.AddScoped<IFolderService, FolderService>();
+
+
+            services.AddScoped<IImageManagerRepository, ImageManagerRepository>();
+            services.AddScoped<IImageManagerService, ImageManagerService>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
