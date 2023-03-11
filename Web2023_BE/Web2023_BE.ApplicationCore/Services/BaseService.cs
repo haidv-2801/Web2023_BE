@@ -60,6 +60,32 @@ namespace Web2023_BE.ApplicationCore
             return entities.ToList<TEntity>();
         }
 
+
+
+        public async Task<int> CountTotalRecordByClause(PagingRequest pagingRequest, string viewOrTableName = "")
+        {
+            viewOrTableName = CustomTableNameService(viewOrTableName);
+            StringBuilder stringBuilder = new StringBuilder();
+            var filter = JsonConvert.DeserializeObject<JArray>(FunctionHelper.Base64Decode(pagingRequest.Filter));
+            List<string> columns = null;
+
+            if (filter != null && filter.Type == JTokenType.Array)
+            {
+                BuildFilterClause(ref stringBuilder, filter);
+            }
+            else
+            {
+                stringBuilder.Append(" 1 = 1 ");
+            }
+
+            int totalRecord = await _baseRepository.CountTotalRecordByClause(stringBuilder.ToString(), viewOrTableName);
+
+            return totalRecord;
+        }
+
+
+
+
         /// <summary>
         /// 
         /// </summary>
@@ -112,7 +138,7 @@ namespace Web2023_BE.ApplicationCore
 
             if (pagingRequest.PageIndex > 0 && pagingRequest.PageSize > 0)
             {
-                stringBuilder.Append($" LIMIT {pagingRequest.PageSize} OFFSET {pagingRequest.PageSize * (pagingRequest.PageIndex - 1)}");
+                stringBuilder.Append($" LIMIT {pagingRequest.PageSize} OFFSET {(pagingRequest.PageSize * (pagingRequest.PageIndex - 1) + pagingRequest.Delta)}");
             }
 
             if (!string.IsNullOrEmpty(pagingRequest.Columns))

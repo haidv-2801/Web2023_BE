@@ -106,4 +106,13 @@ namespace Web2023_BE.ApplicationCore.Enums
         MEMBER = 2,
         ADMIN = 0
     }
+
+
+    /// <summary>
+    /// kiểu folder
+    /// </summary>
+    public enum ModuleType
+    {
+        IMAGE = 1
+    }
 }

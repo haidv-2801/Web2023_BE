@@ -58,6 +58,8 @@ namespace Web2023_BE.ApplicationCore.Interfaces
         /// CREATED BY: DVHAI (07/07/2021)
         ServiceResult Delete(Guid entityId);
 
+        Task<int> CountTotalRecordByClause(PagingRequest pagingRequest, string viewOrTableName = "");
+
         /// <summary>
         /// Đọc file excel
         /// </summary>
