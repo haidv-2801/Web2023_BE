@@ -1,0 +1,12 @@
+E:\web\web-2023\Toeic-365-backend-v1\Web2023_BE\Web2023_BE.Extension\bin\Release\net6.0\Web2023_BE.Extension.deps.json
+E:\web\web-2023\Toeic-365-backend-v1\Web2023_BE\Web2023_BE.Extension\bin\Release\net6.0\Web2023_BE.Extension.dll
+E:\web\web-2023\Toeic-365-backend-v1\Web2023_BE\Web2023_BE.Extension\bin\Release\net6.0\Web2023_BE.Extension.pdb
+E:\web\web-2023\Toeic-365-backend-v1\Web2023_BE\Web2023_BE.Extension\obj\Release\net6.0\Web2023_BE.Extension.csproj.AssemblyReference.cache
+E:\web\web-2023\Toeic-365-backend-v1\Web2023_BE\Web2023_BE.Extension\obj\Release\net6.0\Web2023_BE.Extension.GeneratedMSBuildEditorConfig.editorconfig
+E:\web\web-2023\Toeic-365-backend-v1\Web2023_BE\Web2023_BE.Extension\obj\Release\net6.0\Web2023_BE.Extension.AssemblyInfoInputs.cache
+E:\web\web-2023\Toeic-365-backend-v1\Web2023_BE\Web2023_BE.Extension\obj\Release\net6.0\Web2023_BE.Extension.AssemblyInfo.cs
+E:\web\web-2023\Toeic-365-backend-v1\Web2023_BE\Web2023_BE.Extension\obj\Release\net6.0\Web2023_BE.Extension.csproj.CoreCompileInputs.cache
+E:\web\web-2023\Toeic-365-backend-v1\Web2023_BE\Web2023_BE.Extension\obj\Release\net6.0\Web2023_BE.Extension.dll
+E:\web\web-2023\Toeic-365-backend-v1\Web2023_BE\Web2023_BE.Extension\obj\Release\net6.0\refint\Web2023_BE.Extension.dll
+E:\web\web-2023\Toeic-365-backend-v1\Web2023_BE\Web2023_BE.Extension\obj\Release\net6.0\Web2023_BE.Extension.pdb
+E:\web\web-2023\Toeic-365-backend-v1\Web2023_BE\Web2023_BE.Extension\obj\Release\net6.0\ref\Web2023_BE.Extension.dll

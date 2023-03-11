@@ -1,0 +1,17 @@
+E:\web\web-2023\Toeic-365-backend-v1\Web2023_BE\Web2023_BE.Cache.Redis\bin\Release\net6.0\Web2023_BE.Cache.Redis.deps.json
+E:\web\web-2023\Toeic-365-backend-v1\Web2023_BE\Web2023_BE.Cache.Redis\bin\Release\net6.0\Web2023_BE.Cache.Redis.dll
+E:\web\web-2023\Toeic-365-backend-v1\Web2023_BE\Web2023_BE.Cache.Redis\bin\Release\net6.0\Web2023_BE.Cache.Redis.pdb
+E:\web\web-2023\Toeic-365-backend-v1\Web2023_BE\Web2023_BE.Cache.Redis\bin\Release\net6.0\Web2023_BE.Cache.dll
+E:\web\web-2023\Toeic-365-backend-v1\Web2023_BE\Web2023_BE.Cache.Redis\bin\Release\net6.0\Web2023_BE.Extension.dll
+E:\web\web-2023\Toeic-365-backend-v1\Web2023_BE\Web2023_BE.Cache.Redis\bin\Release\net6.0\Web2023_BE.Cache.pdb
+E:\web\web-2023\Toeic-365-backend-v1\Web2023_BE\Web2023_BE.Cache.Redis\bin\Release\net6.0\Web2023_BE.Extension.pdb
+E:\web\web-2023\Toeic-365-backend-v1\Web2023_BE\Web2023_BE.Cache.Redis\obj\Release\net6.0\Web2023_BE.Cache.Redis.csproj.AssemblyReference.cache
+E:\web\web-2023\Toeic-365-backend-v1\Web2023_BE\Web2023_BE.Cache.Redis\obj\Release\net6.0\Web2023_BE.Cache.Redis.GeneratedMSBuildEditorConfig.editorconfig
+E:\web\web-2023\Toeic-365-backend-v1\Web2023_BE\Web2023_BE.Cache.Redis\obj\Release\net6.0\Web2023_BE.Cache.Redis.AssemblyInfoInputs.cache
+E:\web\web-2023\Toeic-365-backend-v1\Web2023_BE\Web2023_BE.Cache.Redis\obj\Release\net6.0\Web2023_BE.Cache.Redis.AssemblyInfo.cs
+E:\web\web-2023\Toeic-365-backend-v1\Web2023_BE\Web2023_BE.Cache.Redis\obj\Release\net6.0\Web2023_BE.Cache.Redis.csproj.CoreCompileInputs.cache
+E:\web\web-2023\Toeic-365-backend-v1\Web2023_BE\Web2023_BE.Cache.Redis\obj\Release\net6.0\Web2023_BE.Cache.Redis.csproj.CopyComplete
+E:\web\web-2023\Toeic-365-backend-v1\Web2023_BE\Web2023_BE.Cache.Redis\obj\Release\net6.0\Web2023_BE.Cache.Redis.dll
+E:\web\web-2023\Toeic-365-backend-v1\Web2023_BE\Web2023_BE.Cache.Redis\obj\Release\net6.0\refint\Web2023_BE.Cache.Redis.dll
+E:\web\web-2023\Toeic-365-backend-v1\Web2023_BE\Web2023_BE.Cache.Redis\obj\Release\net6.0\Web2023_BE.Cache.Redis.pdb
+E:\web\web-2023\Toeic-365-backend-v1\Web2023_BE\Web2023_BE.Cache.Redis\obj\Release\net6.0\ref\Web2023_BE.Cache.Redis.dll

@@ -1,0 +1,15 @@
+E:\web\web-2023\Toeic-365-backend-v1\Web2023_BE\Web2023_BE.ApplicationCore\bin\Release\netcoreapp3.1\Web2023_BE.ApplicationCore.deps.json
+E:\web\web-2023\Toeic-365-backend-v1\Web2023_BE\Web2023_BE.ApplicationCore\bin\Release\netcoreapp3.1\Web2023_BE.ApplicationCore.dll
+E:\web\web-2023\Toeic-365-backend-v1\Web2023_BE\Web2023_BE.ApplicationCore\bin\Release\netcoreapp3.1\Web2023_BE.ApplicationCore.pdb
+E:\web\web-2023\Toeic-365-backend-v1\Web2023_BE\Web2023_BE.ApplicationCore\bin\Release\netcoreapp3.1\Web2023_BE.Cache.dll
+E:\web\web-2023\Toeic-365-backend-v1\Web2023_BE\Web2023_BE.ApplicationCore\bin\Release\netcoreapp3.1\Web2023_BE.Cache.pdb
+E:\web\web-2023\Toeic-365-backend-v1\Web2023_BE\Web2023_BE.ApplicationCore\obj\Release\netcoreapp3.1\Web2023_BE.ApplicationCore.csproj.AssemblyReference.cache
+E:\web\web-2023\Toeic-365-backend-v1\Web2023_BE\Web2023_BE.ApplicationCore\obj\Release\netcoreapp3.1\Web2023_BE.ApplicationCore.Properties.Resources.resources
+E:\web\web-2023\Toeic-365-backend-v1\Web2023_BE\Web2023_BE.ApplicationCore\obj\Release\netcoreapp3.1\Web2023_BE.ApplicationCore.csproj.GenerateResource.cache
+E:\web\web-2023\Toeic-365-backend-v1\Web2023_BE\Web2023_BE.ApplicationCore\obj\Release\netcoreapp3.1\Web2023_BE.ApplicationCore.GeneratedMSBuildEditorConfig.editorconfig
+E:\web\web-2023\Toeic-365-backend-v1\Web2023_BE\Web2023_BE.ApplicationCore\obj\Release\netcoreapp3.1\Web2023_BE.ApplicationCore.AssemblyInfoInputs.cache
+E:\web\web-2023\Toeic-365-backend-v1\Web2023_BE\Web2023_BE.ApplicationCore\obj\Release\netcoreapp3.1\Web2023_BE.ApplicationCore.AssemblyInfo.cs
+E:\web\web-2023\Toeic-365-backend-v1\Web2023_BE\Web2023_BE.ApplicationCore\obj\Release\netcoreapp3.1\Web2023_BE.ApplicationCore.csproj.CoreCompileInputs.cache
+E:\web\web-2023\Toeic-365-backend-v1\Web2023_BE\Web2023_BE.ApplicationCore\obj\Release\netcoreapp3.1\Web2023_BE.ApplicationCore.csproj.CopyComplete
+E:\web\web-2023\Toeic-365-backend-v1\Web2023_BE\Web2023_BE.ApplicationCore\obj\Release\netcoreapp3.1\Web2023_BE.ApplicationCore.dll
+E:\web\web-2023\Toeic-365-backend-v1\Web2023_BE\Web2023_BE.ApplicationCore\obj\Release\netcoreapp3.1\Web2023_BE.ApplicationCore.pdb
