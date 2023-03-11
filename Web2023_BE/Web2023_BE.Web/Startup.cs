@@ -204,8 +204,8 @@ namespace Web2023_BE.Web
             {
                 ServeUnknownFileTypes = true,
                 FileProvider = new PhysicalFileProvider(
-           Path.Combine(env.ContentRootPath, "Uploads")),
-                RequestPath = "/uploads",
+           Path.Combine(env.ContentRootPath, "Stores")),
+                RequestPath = "/stores",
                 OnPrepareResponse = ctx =>
                 {
                     const int durationInSeconds = 86400;
@@ -224,8 +224,8 @@ namespace Web2023_BE.Web
             app.UseFileServer(new FileServerOptions
             {
                 FileProvider = new PhysicalFileProvider(
-                    Path.Combine(env.ContentRootPath, "Uploads")),
-                RequestPath = "/uploads",
+                    Path.Combine(env.ContentRootPath, "Stores")),
+                RequestPath = "/stores",
                 EnableDirectoryBrowsing = true
             });
 

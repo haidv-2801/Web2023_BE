@@ -30,7 +30,7 @@ namespace Web2023_BE.Web.Controllers
     {
         #region Declare
         IHostingEnvironment _hostingEnvironment;
-        string FolderName = "Uploads";
+        string FolderName = "Stores";
 
         private readonly IStorageService _storageService;
         private readonly IContextService _contextService;
