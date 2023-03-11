@@ -21,6 +21,7 @@ using Web2023_BE.ApplicationCore.Enums;
 using Newtonsoft.Json.Linq;
 using Microsoft.IdentityModel.Protocols;
 using Microsoft.Extensions.Configuration;
+using Web2023_BE.ApplicationCore.Extensions;
 
 namespace Web2023_BE.ApplicationCore.Interfaces
 {
@@ -89,7 +90,7 @@ namespace Web2023_BE.ApplicationCore.Interfaces
             var propertyName = propertyInfo.Name;
 
             //2. Tên hiển thị
-            var propertyDisplayName = GetAttributeDisplayName(propertyName);
+            var propertyDisplayName = _modelType.GetColumnDisplayName(propertyName);
 
             //3. Tùy chỉnh nguồn dữ liệu để validate, trạng thái thêm hoắc sửa
             var entityDuplicate = _bookOrderRepository.GetEntityByProperty(book, propertyInfo);
@@ -98,7 +99,7 @@ namespace Web2023_BE.ApplicationCore.Interfaces
             {
                 isValid = false;
 
-                _serviceResult.TOECode = TOECode.InValid;
+                _serviceResult.Code = Code.InValid;
                 _serviceResult.Messasge = Properties.Resources.Msg_NotValid;
                 _serviceResult.Data = string.Format(Properties.Resources.Msg_Duplicate, propertyDisplayName);
             }
@@ -114,17 +115,17 @@ namespace Web2023_BE.ApplicationCore.Interfaces
             //get user current borrow
             var user = await _accountService.GetEntityById(bookOrder.AccountID);
 
-            if(user == null)
+            if (user == null)
             {
-                _serviceResult.TOECode = TOECode.InValid;
+                _serviceResult.Code = Code.InValid;
                 _serviceResult.Messasge = "Tài khoản không tồn tại";
                 return _serviceResult;
             }
 
             //validate total loans
             bool isValid = bookOrderInformations.Any(item => !ValidateBookLoanAmount(1, item.BookType, totalLoans));
-            
-            
+
+
             //validate exits book
             var bookIDs = bookOrderInformations.Select(book => "'" + book.id + "'").ToList();
             var query = "SELECT * FROM BOOK WHERE BookID IN";
@@ -135,7 +136,7 @@ namespace Web2023_BE.ApplicationCore.Interfaces
             else
             {
                 _serviceResult.Data = 0;
-                _serviceResult.TOECode = TOECode.Fail;
+                _serviceResult.Code = Code.Fail;
                 _serviceResult.Messasge = "Danh sách id đầu vào trống.";
                 return _serviceResult;
             }
@@ -144,7 +145,7 @@ namespace Web2023_BE.ApplicationCore.Interfaces
             if (listBookByIDS.Count < bookOrderInformations.Count)
             {
                 _serviceResult.Data = 0;
-                _serviceResult.TOECode = TOECode.Fail;
+                _serviceResult.Code = Code.Fail;
                 _serviceResult.Messasge = "Số lượng sách hiện có nhỏ hơn đầu vào.";
                 return _serviceResult;
             }
@@ -152,7 +153,7 @@ namespace Web2023_BE.ApplicationCore.Interfaces
             if (listBookByIDS.Any(book => book.Amount == 0 || book.Available == 0 || book.Reserved == book.Amount))
             {
                 _serviceResult.Data = 0;
-                _serviceResult.TOECode = TOECode.Fail;
+                _serviceResult.Code = Code.Fail;
                 _serviceResult.Messasge = "Một trong số những sách đã chọn không có sẵn.";
                 return _serviceResult;
             }
@@ -160,8 +161,8 @@ namespace Web2023_BE.ApplicationCore.Interfaces
             string maxCode = await _bookOrderRepository.GetNextBookOrderCode();
             if (maxCode == null) maxCode = DefaultCode.BOOK_ORDER;
             bookOrder.BookOrderCode = FunctionHelper.NextRecordCode(maxCode);
-            int rowEffects = _bookOrderRepository.Insert(bookOrder);
-            int rowNotificationEffects = _notificationRepository.Insert(new Notification()
+            int rowEffects = await _bookOrderRepository.Insert(bookOrder);
+            int rowNotificationEffects = await _notificationRepository.Insert(new Notification()
             {
                 Content = string.Format("Bạn có 1 yêu cầu mượn mới từ {0}", bookOrder.CreatedBy),
                 To = Guid.Empty,
@@ -175,13 +176,13 @@ namespace Web2023_BE.ApplicationCore.Interfaces
             if (rowEffects > 0)
             {
                 _serviceResult.Data = bookOrder.BookOrderID;
-                _serviceResult.TOECode = TOECode.Success;
+                _serviceResult.Code = Code.Success;
                 _serviceResult.Messasge = "Thêm mới thành công.";
             }
             else
             {
                 _serviceResult.Data = 0;
-                _serviceResult.TOECode = TOECode.Fail;
+                _serviceResult.Code = Code.Fail;
                 _serviceResult.Messasge = "Thêm mới thất bại.";
             }
 

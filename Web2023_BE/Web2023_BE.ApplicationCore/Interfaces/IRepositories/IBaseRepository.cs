@@ -43,16 +43,7 @@ namespace Web2023_BE.ApplicationCore.Interfaces
         /// <param name="enitity">Thông tin bản ghi</param>
         /// <returns>Số bản ghi</returns>
         /// CREATED BY: DVHAI (07/07/2021)
-        int Insert(TEntity enitity);
-
-
-        /// <summary>
-        /// Update thông tin bản ghi
-        /// </summary>
-        /// <param name="enitity">Thông tin bản ghi</param>
-        /// <returns>Số bản ghi</returns>
-        /// CREATED BY: DVHAI (07/07/2021)
-        int PatchUpdate(TEntity enitity);
+        Task<int> Insert(TEntity enitity);
 
         /// <summary>
         /// Cập nhập thông tin bản ghi
@@ -61,7 +52,7 @@ namespace Web2023_BE.ApplicationCore.Interfaces
         /// <param name="entity">Thông tin bản ghi</param>
         /// <returns>Số bản ghi bị ảnh hưởng</returns>
         /// CREATED BY: DVHAI (07/07/2021)
-        
+
         Task<int> Update(Guid entityId, TEntity entity);
 
         /// <summary>
@@ -90,6 +81,19 @@ namespace Web2023_BE.ApplicationCore.Interfaces
         /// CREATED BY: DVHAI (07/07/2021)
         IEnumerable<TEntity> GetEntitiesByProperty(string propertyName, object propertyValue);
 
-        Task<IEnumerable<TEntity>> QueryUsingCommandTextAsync(string commandText);
+        /// <summary>
+        /// Query lấy bản ghi dùng command text
+        /// </summary>
+        /// <param name="commandText"></param>
+        /// <param name="pars"></param>
+        /// <returns></returns>
+        Task<IEnumerable<TEntity>> QueryUsingCommandTextAsync(string commandText, object pars = null);
+
+        /// <summary>
+        /// Lấy column trong table
+        /// </summary>
+        /// <param name="table"></param>
+        /// <returns></returns>
+        Task<IEnumerable<string>> GetTableColumnsInDatabase(string table);
     }
 }

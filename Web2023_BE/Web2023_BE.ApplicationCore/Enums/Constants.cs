@@ -106,4 +106,9 @@ namespace Web2023_BE.ApplicationCore.Enums
         MEMBER = 2,
         ADMIN = 0
     }
+
+    public enum CarouselSection
+    {
+        HomePage
+    }
 }
