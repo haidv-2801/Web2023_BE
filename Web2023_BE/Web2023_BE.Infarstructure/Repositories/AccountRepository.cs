@@ -10,6 +10,7 @@ using Microsoft.Extensions.Configuration;
 using Web2023_BE.ApplicationCore.Entities;
 using Web2023_BE.ApplicationCore.Entities;
 using System.Threading.Tasks;
+using Web2023_BE.ApplicationCore.Extensions;
 
 namespace Web2023_BE.Infrastructure
 {
@@ -72,7 +73,7 @@ namespace Web2023_BE.Infrastructure
                 try
                 {
                     //1. Ánh xạ giá trị id
-                    var keyName = GetKeyProperty().Name;
+                    var keyName = _modelType.GetKeyName();
                     entity.GetType().GetProperty(keyName).SetValue(entity, entityId);
 
                     //2. Duyệt các thuộc tính trên customer và tạo parameters

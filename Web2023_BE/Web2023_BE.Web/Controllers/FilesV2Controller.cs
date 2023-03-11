@@ -1,9 +1,11 @@
 ﻿using ImageMagick;
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Cors;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
 using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
@@ -11,7 +13,7 @@ using Web2023_BE.ApplicationCore;
 
 namespace Web2023_BE.Web.Controllers
 {
-    [Route("[controller]")]
+    [Route("api/[controller]")]
     [ApiController]
     public class FilesV2Controller : ControllerBase
     {
@@ -39,6 +41,7 @@ namespace Web2023_BE.Web.Controllers
         [HttpGet("{type}/{file}")]
         [HttpGet("{type}/{file}/{name}")]
         [HttpGet("{type}/{file}/{name}/{dbid}")]
+        [EnableCors("AllowCROSPolicy")]
         [AllowAnonymous]
         public async Task<IActionResult> Get(string file, StorageFileType type, int? dbid, string name)
         {
@@ -67,9 +70,10 @@ namespace Web2023_BE.Web.Controllers
         /// </summary>
         [HttpPost]
         [RequestSizeLimit(100000000)]
-        public async Task<IActionResult> UploadFile([FromForm] StorageFileType type, IFormFile file)
+        [EnableCors("AllowCROSPolicy")]
+        public async Task<IActionResult> UploadFile([FromForm] IFormFile file)
         {
-            var err = ValidateUpload(type, file);
+            var err = ValidateUpload(StorageFileType.Temp, file);
             if (!string.IsNullOrEmpty(err))
             {
                 return StatusCode(StatusCodes.Status500InternalServerError, err);
@@ -100,7 +104,7 @@ namespace Web2023_BE.Web.Controllers
         /// <returns>Danh sách tên file temp</returns>
         [RequestSizeLimit(100000000)]
         [HttpPost("multi")]
-        public async Task<IActionResult> UploadFiles(StorageFileType type, List<IFormFile> file)
+        public async Task<IActionResult> UploadFiles([FromRoute][Required] StorageFileType type, List<IFormFile> file)
         {
             int validCount = 0;
             int errorCount = 0;

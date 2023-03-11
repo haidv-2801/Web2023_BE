@@ -11,7 +11,7 @@ namespace Web2023_BE.ApplicationCore.Entities
     /// <summary>
     /// Thực thể book order
     /// </summary>
-    [DisplayName("BookOrder")]
+    [DisplayName("Book_Order")]
     public class BookOrder : BaseEntity
     {
         #region Property

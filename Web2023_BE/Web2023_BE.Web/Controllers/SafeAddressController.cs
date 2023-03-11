@@ -67,10 +67,10 @@ namespace Web2023_BE.Web.Controllers
                 _logger.LogError("Lỗi GetFilter: " + ex.Message);
                 serviceResult.Data = null;
                 serviceResult.Messasge = ex.Message;
-                serviceResult.TOECode = TOECode.Fail;
+                serviceResult.Code = Code.Fail;
             }
 
-            if (serviceResult.TOECode == TOECode.Fail) { return BadRequest(serviceResult); }
+            if (serviceResult.Code == Code.Fail) { return BadRequest(serviceResult); }
 
             return Ok(serviceResult);
         }

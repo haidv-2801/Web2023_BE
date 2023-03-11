@@ -163,6 +163,15 @@ namespace Web2023_BE.Web
             //library card
             services.AddScoped<ILibraryCardRepository, LibraryCardRepository>();
             services.AddScoped<ILibraryCardService, LibraryCardService>();
+
+            //carousel
+            services.AddScoped<ICarouselService, CarouselService>();
+
+            //partner
+            services.AddScoped<IPartnerService, PartnerService>();
+
+            //footer
+            services.AddScoped<IFooterService, FooterService>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
