@@ -9,16 +9,18 @@ using Web2023_BE.ApplicationCore.Extensions;
 
 namespace Web2023_BE.ApplicationCore.Entities
 {
-    [ConfigTables(TableName = "partner")]
-    public class Partner : BaseEntity
+    [ConfigTables(TableName = "technology_introduction")]
+    public class TechIntro : BaseEntity
     {
         #region Property
         [Key]
-        public Guid PartnerID { get; set; } = Guid.NewGuid();
+        public Guid TeachID { get; set; } = Guid.NewGuid();
 
+        public string Content { get; set; }
+ 
         public string Image { get; set; }
 
-        public string Description { get; set; }
+        public int Order { get; set; } = 0;
         #endregion
     }
 }

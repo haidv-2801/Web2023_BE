@@ -3,6 +3,7 @@ using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 using System.Linq;
 using System.Text;
 using Web2023_BE.ApplicationCore.Entities;
@@ -15,11 +16,11 @@ namespace Web2023_BE.ApplicationCore.Extensions
         /// Lấy tên class
         /// </summary>
         /// <returns></returns>
-        public static string GetClassDisplayName(this Type type)
+        public static string GetTableName(this Type type)
         {
-            var displayName = type.GetCustomAttributes(typeof(DisplayNameAttribute), true).FirstOrDefault() as DisplayNameAttribute;
-            if (displayName == null) return type.Name;
-            return displayName.DisplayName;
+            var configTable = GetConfigTable(type);
+            if (configTable == null) return type.Name;
+            return configTable.TableName;
         }
 
         /// <summary>
@@ -95,7 +96,7 @@ namespace Web2023_BE.ApplicationCore.Extensions
            
             if (key == null)
             {
-                throw new ArgumentException($"{type.GetClassDisplayName()} Không có primarykey");
+                throw new ArgumentException($"{type.GetTableName()} Không có primarykey");
             };
 
             return key.Name;

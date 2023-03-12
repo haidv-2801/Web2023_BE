@@ -36,6 +36,7 @@
 
   <ItemGroup>
     <Folder Include="Entities\LibraryCard\DTO\" />
+    <Folder Include="Entities\TechIntro\DTO\" />
     <Folder Include="Entities\Role\DTO\" />
   </ItemGroup>
 

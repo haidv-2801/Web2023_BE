@@ -17,7 +17,7 @@ namespace Web2023_BE.ApplicationCore.Extensions
             if (!columnToAdd.Any()) return string.Empty;
 
             var query = new StringBuilder();
-            query.Append($"INSERT INTO {type.GetClassDisplayName().ToLowerInvariant()} (");
+            query.Append($"INSERT INTO {type.GetTableName().ToLowerInvariant()} (");
 
             // Append the column names
             var columnNames = string.Join(", ", columns);
@@ -42,7 +42,7 @@ namespace Web2023_BE.ApplicationCore.Extensions
             if (!columnToUpdate.Any()) return string.Empty;
 
             var query = new StringBuilder();
-            query.Append($"UPDATE {type.GetClassDisplayName().ToLowerInvariant()} SET ");
+            query.Append($"UPDATE {type.GetTableName().ToLowerInvariant()} SET ");
 
             // Append the column values as parameter placeholders
             var columnValuePairs = columnToUpdate.Select(pair => $"{pair} = @v_{pair}");
