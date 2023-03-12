@@ -33,7 +33,7 @@ namespace Web2023_BE.ApplicationCore.Interfaces
             _connectionString = _configuration.GetConnectionString("TOEIC365ConnectionString");
             _dbConnection = new MySqlConnection(_connectionString);
             _modelType = typeof(TEntity);
-            _tableName = _modelType.GetClassDisplayName().ToLowerInvariant();
+            _tableName = _modelType.GetTableName().ToLowerInvariant();
         }
         #endregion
 
@@ -202,7 +202,6 @@ namespace Web2023_BE.ApplicationCore.Interfaces
             return entityReturn;
         }
 
-
         /// <summary>
         /// Lấy thưc thể theo thuộc tính
         /// </summary>
@@ -286,7 +285,6 @@ namespace Web2023_BE.ApplicationCore.Interfaces
         }
 
         #endregion
-
 
         #region PRIVATE METHODS
         /// <summary>

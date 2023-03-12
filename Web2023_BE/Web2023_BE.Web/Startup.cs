@@ -48,8 +48,8 @@ namespace Web2023_BE.Web
             services.AddControllers();
             services.AddDirectoryBrowser();
 
+            //inject contact service
             HostBaseFactory.InjectContextService(services, Configuration);
-
 
             //cache
             HostBaseFactory.InjectCached(services, Configuration);
@@ -109,7 +109,6 @@ namespace Web2023_BE.Web
                 return new ClientIpCheckActionFilter(
                     Configuration["AdminSafeList"], cache, logger);
             });
-
 
             //File storage
             HostBaseFactory.InjectStorageService(services, Configuration);
@@ -172,6 +171,9 @@ namespace Web2023_BE.Web
 
             //footer
             services.AddScoped<IFooterService, FooterService>();
+
+            //teachintro
+            services.AddScoped<ITechIntroService, TechIntroService>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

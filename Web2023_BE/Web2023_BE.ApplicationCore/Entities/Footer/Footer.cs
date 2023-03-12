@@ -9,8 +9,7 @@ using Web2023_BE.ApplicationCore.Extensions;
 
 namespace Web2023_BE.ApplicationCore.Entities
 {
-    [Table("Footer")]
-    [ConfigTables(uniqueColumns: "Content")]
+    [ConfigTables(TableName = "footer")]
     public class Footer : BaseEntity
     {
         #region Property

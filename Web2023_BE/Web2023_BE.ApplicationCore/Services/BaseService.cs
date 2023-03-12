@@ -21,6 +21,7 @@ using System.Web;
 using Web2023_BE.ApplicationCore.Enums;
 using System.Net.NetworkInformation;
 using Web2023_BE.ApplicationCore.Extensions;
+using Web2023_BE.Cache;
 
 namespace Web2023_BE.ApplicationCore
 {
@@ -43,7 +44,7 @@ namespace Web2023_BE.ApplicationCore
         {
             _baseRepository = baseRepository;
             _modelType = typeof(TEntity);
-            _tableName = _modelType.GetClassDisplayName().ToLowerInvariant();
+            _tableName = _modelType.GetTableName().ToLowerInvariant();
             _serviceResult = new ServiceResult()
             {
                 Data = null,

@@ -4,13 +4,14 @@ using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.Text;
 using System.ComponentModel.DataAnnotations.Schema;
+using Web2023_BE.ApplicationCore.Extensions;
 
 namespace Web2023_BE.ApplicationCore.Entities
 {
     /// <summary>
     /// Thực thể người dùng
     /// </summary>
-    [Table("Account")]
+    [ConfigTables(TableName = "account")]
     public class Account : BaseEntity
     {
         #region Property

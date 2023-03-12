@@ -18,6 +18,7 @@ using System.ComponentModel.DataAnnotations;
 using Microsoft.Extensions.Logging;
 using Web2023_BE.ApplicationCore.MiddleWare;
 using Newtonsoft.Json;
+using Web2023_BE.Cache;
 
 namespace Web2023_BE.Web.Controllers
 {

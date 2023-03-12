@@ -3,12 +3,15 @@ using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.Text;
+using Web2023_BE.ApplicationCore.Extensions;
 
 namespace Web2023_BE.ApplicationCore.Entities
 {
     /// <summary>
     /// Thực thể menu
     /// </summary>
+
+    [ConfigTables(TableName = "menu")]
     public class Menu : BaseEntity
     {
         #region Property
