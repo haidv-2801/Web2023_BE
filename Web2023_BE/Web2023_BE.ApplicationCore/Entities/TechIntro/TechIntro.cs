@@ -14,13 +14,15 @@ namespace Web2023_BE.ApplicationCore.Entities
     {
         #region Property
         [Key]
-        public Guid TeachID { get; set; } = Guid.NewGuid();
+        public Guid TechID { get; set; } = Guid.NewGuid();
 
         public string Content { get; set; }
  
         public string Image { get; set; }
 
         public int Order { get; set; } = 0;
+
+        public bool IsShow { get; set; } = true;
         #endregion
     }
 }
