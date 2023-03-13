@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Nest;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.ComponentModel.DataAnnotations;
@@ -20,7 +21,7 @@ namespace Web2023_BE.ApplicationCore.Extensions
             query.Append($"INSERT INTO {type.GetTableName().ToLowerInvariant()} (");
 
             // Append the column names
-            var columnNames = string.Join(", ", columns);
+            var columnNames = string.Join(", ", columnToAdd);
             query.Append(columnNames);
 
             query.Append(") VALUES (");
@@ -62,25 +63,10 @@ namespace Web2023_BE.ApplicationCore.Extensions
         /// <returns>Dan sách các biến động</returns>
         public static Dictionary<string, object> MappingDbType(this Type type, object data)
         {
-            var parameters = new Dictionary<string, object>();
-            try
-            {
-                //1. Duyệt các thuộc tính trên entity và tạo parameters
-                var properties = type.GetProperties();
+            var excludes = type.GetExcludeColumnNames();
+            var properties = type.GetProperties();
+            var parameters = properties.Where(k => !excludes.Contains(k.Name)).ToDictionary(k => $"@{"v_" + k.Name}", v => v.GetValue(data));
 
-                foreach (var property in properties)
-                {
-                    var propertyName = property.Name;
-                    var propertyValue = property.GetValue(data);
-                    var propertyType = property.PropertyType;
-                    if (propertyName != "EntityState")
-                    {
-                        parameters.Add($"@{"v_" + propertyName}", propertyValue);
-                    }
-                }
-            }
-            catch { }
-            //2. Trả về danh sách các parameter
             return parameters;
         }
     }

@@ -123,5 +123,16 @@ namespace Web2023_BE.ApplicationCore.Extensions
             if (property == null) return null;
             return property.GetValue(data);
         }
+
+
+        /// <summary>
+        /// Lấy các trường exclude
+        /// </summary>
+        /// <returns></returns>
+        public static List<string> GetExcludeColumnNames(this Type type)
+        {
+            var properties = type.GetProperties().Where(f => f.IsDefined(typeof(IExclude), true)).Select(f => f.Name);
+            return properties.ToList();
+        }
     }
 }
