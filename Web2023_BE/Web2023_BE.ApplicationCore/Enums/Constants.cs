@@ -107,12 +107,8 @@ namespace Web2023_BE.ApplicationCore.Enums
         ADMIN = 0
     }
 
-
-    /// <summary>
-    /// kiểu folder
-    /// </summary>
-    public enum ModuleType
+    public enum CarouselSection
     {
-        IMAGE = 1
+        HomePage
     }
 }

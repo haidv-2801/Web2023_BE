@@ -4,6 +4,7 @@ using Microsoft.Extensions.Logging;
 using Newtonsoft.Json;
 using System;
 using System.Threading.Tasks;
+using Web2023_BE.ApplicationCore;
 using Web2023_BE.ApplicationCore.Entities;
 using Web2023_BE.ApplicationCore.Interfaces;
 using Web2023_BE.Entities;
@@ -48,6 +49,17 @@ namespace Web2023_BE.Web.Controllers
             if (serviceResult.TOECode == TOECode.Fail) { return BadRequest(serviceResult); }
 
             return Ok(serviceResult);
+        }
+
+        [EnableCors("AllowCROSPolicy")]
+        [HttpDelete("deleteasync/{id}")]
+        public  async Task<IActionResult> DeleteAsync(string id, StorageFileType type, string name)
+        {
+            var serviceResult = await _imageManagerService.DeleteImage(id, type, name);
+            if (serviceResult)
+                return Ok(serviceResult);
+            else
+                return NoContent();
         }
     }
 }

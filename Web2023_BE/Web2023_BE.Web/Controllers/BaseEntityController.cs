@@ -212,7 +212,7 @@ namespace Web2023_BE.Web.Controllers
         /// CreatedBy: DVHAI 07/07/2021
         [EnableCors("AllowCROSPolicy")]
         [HttpDelete("{id}")]
-        public IActionResult Delete(string id)
+        public virtual IActionResult Delete(string id)
         {
             var serviceResult = _baseService.Delete(Guid.Parse(id));
             if (serviceResult.TOECode == TOECode.Success)

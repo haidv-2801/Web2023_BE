@@ -9,5 +9,7 @@ namespace Web2023_BE.ApplicationCore.Interfaces
     public interface IImageManagerService : IBaseService<ImageManager>
     {
         Task<ServiceResult> GetListImagePagingAsync(PagingRequest pagingRequest);
+
+        Task<bool> DeleteImage(string id,StorageFileType type, string name);
     }
 }

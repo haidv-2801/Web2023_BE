@@ -20,6 +20,7 @@ using System.Text.Json;
 using System.Web;
 using Web2023_BE.ApplicationCore.Enums;
 using System.Net.NetworkInformation;
+using Web2023_BE.ApplicationCore.Extensions;
 
 namespace Web2023_BE.ApplicationCore
 {
@@ -33,12 +34,14 @@ namespace Web2023_BE.ApplicationCore
         #region Declare
         IBaseRepository<TEntity> _baseRepository;
         protected ServiceResult _serviceResult = null;
+        public Type _modelType = null;
         #endregion
 
         #region Constructer
         public BaseService(IBaseRepository<TEntity> baseRepository)
         {
             _baseRepository = baseRepository;
+            _modelType = typeof(TEntity);
             _serviceResult = new ServiceResult()
             {
                 Data = null,
@@ -349,6 +352,33 @@ namespace Web2023_BE.ApplicationCore
         }
 
         /// <summary>
+        /// Xóa bản ghi theo id
+        /// </summary>
+        /// <param name="entityId">Id bản ghi</param>
+        /// <returns>Số bản ghi bị ảnh hưởng</returns>
+        /// CREATED BY: DVHAI (11/07/2021)
+        public async Task<ServiceResult> DeleteAsync(Guid entityId)
+        {
+            int rowAffects = await _baseRepository.DeleteAsync(entityId);
+            _serviceResult.Data = rowAffects;
+
+            if (rowAffects > 0)
+            {
+                _serviceResult.TOECode = TOECode.Success;
+                _serviceResult.Messasge = Properties.Resources.Msg_Success;
+            }
+            else
+            {
+                _serviceResult.TOECode = TOECode.InValid;
+                _serviceResult.Messasge = Properties.Resources.Msg_Failed;
+            }
+
+            AfterDelete();
+
+            return _serviceResult;
+        }
+
+        /// <summary>
         /// Validate tất cả
         /// </summary>
         /// <param name="entity">Thực thể</param>
@@ -420,6 +450,46 @@ namespace Web2023_BE.ApplicationCore
         protected virtual async Task<TEntity> CustomValueWhenInsert(TEntity entity)
         {
             return entity;
+        }
+
+
+        /// <summary>
+        /// Validate trùng
+        /// </summary>
+        /// <param name="entity">Thực thể</param>
+        /// <param name="propertyInfo">Thuộc tính của thực thể</param>
+        /// <returns>(true-đúng false-sai)</returns>
+        /// CREATED BY: DVHAI (07/07/2021)
+        private async Task<bool> ValidateDulicate(TEntity entity)
+        {
+            bool isValid = true;
+
+            var uniqueColumns = _modelType.GetUniqueColumns().Split(";").ToList();
+            var columns = _modelType.GetColumNames().ToList();
+            if (columns.Intersect(uniqueColumns).ToList().Count == uniqueColumns.Count)
+            {
+                var cols = uniqueColumns.Select(f => $"{f} = @v_{f}");
+                var query = new StringBuilder($"SELECT {_modelType.GetKeyName()} FROM {_tableName} WHERE {string.Join(" AND ", cols)}");
+
+                if (entity.EntityState == EntityState.Update)
+                {
+                    query.Append($" AND {_modelType.GetKeyName()} <> '{_modelType.GetKeyValue(entity)}'");
+                }
+                query.Append(";");
+
+                var pars = uniqueColumns.ToDictionary(k => $"@v_{k}", v => _modelType.GetValueByFieldName(entity, v));
+                var res = await _baseRepository.QueryUsingCommandTextAsync(query.ToString(), pars);
+                isValid = !res.ToList().Any();
+            }
+
+            if (!isValid)
+            {
+                _serviceResult.Code = Code.InValid;
+                _serviceResult.Messasge = Properties.Resources.Msg_NotValid;
+                _serviceResult.Data = string.Format(Properties.Resources.Msg_Duplicate, _modelType.GetUniqueColumns());
+            }
+
+            return isValid;
         }
 
         /// <summary>

@@ -10,8 +10,25 @@ namespace Web2023_BE.ApplicationCore
 {
     public class ImageManagerService : BaseService<ImageManager>, IImageManagerService
     {
-        public ImageManagerService(IBaseRepository<ImageManager> baseRepository) : base(baseRepository)
+        private readonly IStorageService _storageService;
+        public ImageManagerService(IBaseRepository<ImageManager> baseRepository, IStorageService storageService) : base(baseRepository)
         {
+            _storageService = storageService;
+        }
+
+        public async Task<bool> DeleteImage(string id , StorageFileType type, string name)
+        {
+            var result = true;
+            try
+            {
+                await _storageService.DeleteAsync(type, name);
+                await DeleteAsync(Guid.Parse(id));
+            }
+            catch (Exception ex)
+            {
+                return result = false;
+            }
+            return result;
         }
 
         public async Task<ServiceResult> GetListImagePagingAsync(PagingRequest pagingRequest)

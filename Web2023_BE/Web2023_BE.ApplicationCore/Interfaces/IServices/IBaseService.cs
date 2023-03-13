@@ -58,6 +58,15 @@ namespace Web2023_BE.ApplicationCore.Interfaces
         /// CREATED BY: DVHAI (07/07/2021)
         ServiceResult Delete(Guid entityId);
 
+
+        /// <summary>
+        /// Xóa bản ghi
+        /// </summary>
+        /// <param name="entityId"></param>
+        /// <returns>Số dòng bị xóa</returns>
+        /// CREATED BY: DVHAI (07/07/2021)
+        Task<ServiceResult> DeleteAsync(Guid entityId);
+
         Task<int> CountTotalRecordByClause(PagingRequest pagingRequest, string viewOrTableName = "");
 
         /// <summary>
