@@ -74,10 +74,10 @@ namespace Web2023_BE.Web.Controllers
                 _logger.LogError("Lỗi GetFilter: " + ex.Message);
                 serviceResult.Data = null;
                 serviceResult.Messasge = ex.Message;
-                serviceResult.TOECode = TOECode.Fail;
+                serviceResult.Code = Code.Fail;
             }
 
-            if (serviceResult.TOECode == TOECode.Fail) { return BadRequest(serviceResult); }
+            if (serviceResult.Code == Code.Fail) { return BadRequest(serviceResult); }
 
             return Ok(serviceResult);
         }
@@ -115,9 +115,9 @@ namespace Web2023_BE.Web.Controllers
             {
                 _logger.LogInformation($"Thêm bản ghi {typeof(TEntity).Name}: " + JsonConvert.SerializeObject(entity));
                 serviceResult = await _baseService.Insert(entity);
-                if (serviceResult.TOECode == TOECode.InValid)
+                if (serviceResult.Code == Code.InValid)
                     return BadRequest(serviceResult);
-                else if (serviceResult.TOECode == TOECode.Exception || serviceResult.TOECode == TOECode.Fail)
+                else if (serviceResult.Code == Code.Exception || serviceResult.Code == Code.Fail)
                     return StatusCode(500, serviceResult);
 
                 return StatusCode(201, serviceResult);
@@ -151,9 +151,9 @@ namespace Web2023_BE.Web.Controllers
                         patchDoc.ApplyTo(entity);
                         serviceResult = await _baseService.Update(id, entity);
 
-                        if (serviceResult.TOECode == TOECode.InValid)
+                        if (serviceResult.Code == Code.InValid)
                             return BadRequest(serviceResult);
-                        else if (serviceResult.TOECode == TOECode.Exception)
+                        else if (serviceResult.Code == Code.Exception)
                             return StatusCode(500, serviceResult);
 
                         return Ok(serviceResult);
@@ -189,9 +189,9 @@ namespace Web2023_BE.Web.Controllers
                 var serviceResult = await _baseService.Update(Guid.Parse(id), entity);
                 _logger.LogInformation($"ServiceResult Body put {typeof(TEntity).Name}:" + JsonConvert.SerializeObject(serviceResult));
 
-                if (serviceResult.TOECode == TOECode.InValid)
+                if (serviceResult.Code == Code.InValid)
                     return BadRequest(serviceResult);
-                else if (serviceResult.TOECode == TOECode.Exception)
+                else if (serviceResult.Code == Code.Exception)
                     return StatusCode(500, serviceResult);
 
                 return Ok(serviceResult);
@@ -215,7 +215,7 @@ namespace Web2023_BE.Web.Controllers
         public IActionResult Delete(string id)
         {
             var serviceResult = _baseService.Delete(Guid.Parse(id));
-            if (serviceResult.TOECode == TOECode.Success)
+            if (serviceResult.Code == Code.Success)
                 return Ok(serviceResult);
             else
                 return NoContent();

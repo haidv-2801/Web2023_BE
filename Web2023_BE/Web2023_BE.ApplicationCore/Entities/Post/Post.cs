@@ -5,6 +5,7 @@ using System.ComponentModel.DataAnnotations;
 using System.Text;
 using System.ComponentModel;
 using Nest;
+using Web2023_BE.ApplicationCore.Extensions;
 
 namespace Web2023_BE.ApplicationCore.Entities
 {
@@ -12,6 +13,7 @@ namespace Web2023_BE.ApplicationCore.Entities
     /// Thực thể bài viết
     /// </summary>
     [ElasticsearchType(IdProperty = nameof(PostID)), Description("posts")]
+    [ConfigTables(TableName = "post")]
     public class Post : BaseEntity
     {
 

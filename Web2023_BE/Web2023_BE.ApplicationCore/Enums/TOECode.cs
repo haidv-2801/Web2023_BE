@@ -32,10 +32,5 @@ namespace Web2023_BE.Entities
         Exception = 500
     }
 
-    public enum EntityState
-    {
-        Add = 1,
-        Update = 2,
-        Delete = 3
-    }
+
 }

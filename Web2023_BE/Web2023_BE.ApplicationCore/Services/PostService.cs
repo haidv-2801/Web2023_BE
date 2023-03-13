@@ -16,6 +16,7 @@ using System.Text;
 using System.Text.RegularExpressions;
 using System.Threading;
 using System.Threading.Tasks;
+using Web2023_BE.ApplicationCore.Extensions;
 
 namespace Web2023_BE.ApplicationCore.Interfaces
 {
@@ -106,7 +107,7 @@ namespace Web2023_BE.ApplicationCore.Interfaces
             var propertyName = propertyInfo.Name;
 
             //2. Tên hiển thị
-            var propertyDisplayName = GetAttributeDisplayName(propertyName);
+            var propertyDisplayName = _modelType.GetColumnDisplayName(propertyName);
 
             //3. Tùy chỉnh nguồn dữ liệu để validate, trạng thái thêm hoắc sửa
             var entityDuplicate = _postRepository.GetEntityByProperty(post, propertyInfo);
@@ -115,7 +116,7 @@ namespace Web2023_BE.ApplicationCore.Interfaces
             {
                 isValid = false;
 
-                _serviceResult.TOECode = TOECode.InValid;
+                _serviceResult.Code = Code.InValid;
                 _serviceResult.Messasge = Properties.Resources.Msg_NotValid;
                 _serviceResult.Data = string.Format(Properties.Resources.Msg_Duplicate, propertyDisplayName);
             }
@@ -138,7 +139,7 @@ namespace Web2023_BE.ApplicationCore.Interfaces
             var propertyName = propertyInfo.Name;
 
             //2. Tên hiển thị
-            var propertyDisplayName = GetAttributeDisplayName(propertyName);
+            var propertyDisplayName = _modelType.GetColumnDisplayName(propertyName);
 
             //3. Gía trị
             var value = propertyInfo.GetValue(post);
@@ -152,7 +153,7 @@ namespace Web2023_BE.ApplicationCore.Interfaces
             //4. Gán message lỗi
             if (!isValid)
             {
-                _serviceResult.TOECode = TOECode.InValid;
+                _serviceResult.Code = Code.InValid;
                 _serviceResult.Messasge = Properties.Resources.Msg_NotValid;
                 _serviceResult.Data = string.Format(Properties.Resources.Msg_NotFormat, propertyDisplayName);
             }
@@ -191,63 +192,10 @@ namespace Web2023_BE.ApplicationCore.Interfaces
         public ServiceResult GetPostsByMenuID(Guid? MenuID)
         {
             _serviceResult.Data = _postRepository.GetEntitiesByProperty("MenuID", MenuID.ToString());
-            _serviceResult.TOECode = TOECode.Success;
+            _serviceResult.Code = Code.Success;
             return _serviceResult;
         }
 
-        //public async Task SaveSingleAsync(Post post)
-        //{
-        //    if (_cache.Any(p => p.PostID == post.PostID))
-        //    {
-        //        await _elasticClient.UpdateAsync<Post>(post, u => u.Doc(post));
-        //    }
-        //    else
-        //    {
-        //        _cache.Add(post);
-        //        await _elasticClient.IndexDocumentAsync(post);
-        //    }
-        //}
-
-        //public async Task SaveManyAsync(Post[] posts)
-        //{
-        //    _cache.AddRange(posts);
-        //    var result = await _elasticClient.IndexManyAsync(posts);
-        //    if (result.Errors)
-        //    {
-        //        // the response can be inspected for errors
-        //        foreach (var itemWithError in result.ItemsWithErrors)
-        //        {
-        //            //_logger.LogError("Failed to index document {0}: {1}",
-        //            //    itemWithError.PostID, itemWithError.Error);
-        //        }
-        //    }
-        //}
-
-        //public async Task SaveBulkAsync(Post[] posts)
-        //{
-        //    _cache.AddRange(posts);
-        //    var result = await _elasticClient.BulkAsync(b => b.Index("posts").IndexMany(posts));
-        //    if (result.Errors)
-        //    {
-        //        // the response can be inspected for errors
-        //        foreach (var itemWithError in result.ItemsWithErrors)
-        //        {
-        //            //_logger.LogError("Failed to index document {0}: {1}",
-        //            //    itemWithError.PostID, itemWithError.Error);
-        //        }
-        //    }
-        //}
-
-        //public async Task DeleteAsync(Post post)
-        //{
-        //    await _elasticClient.DeleteAsync<Post>
-        //(post);
-
-        //    if (_cache.Contains(post))
-        //    {
-        //        _cache.Remove(post);
-        //    }
-        //}
         #endregion
     }
 }

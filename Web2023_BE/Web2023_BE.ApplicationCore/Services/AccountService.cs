@@ -20,6 +20,7 @@ using Microsoft.IdentityModel.Tokens;
 using Microsoft.Extensions.Configuration;
 using Newtonsoft.Json;
 using System.Threading.Tasks;
+using Web2023_BE.ApplicationCore.Extensions;
 
 namespace Web2023_BE.ApplicationCore.Interfaces
 {
@@ -136,7 +137,7 @@ namespace Web2023_BE.ApplicationCore.Interfaces
             var propertyName = propertyInfo.Name;
 
             //2. Tên hiển thị
-            var propertyDisplayName = GetAttributeDisplayName(propertyName);
+            var propertyDisplayName = _modelType.GetColumnDisplayName(propertyName);
 
             var propertyValue = (string)propertyInfo.GetValue(post);
 
@@ -147,7 +148,7 @@ namespace Web2023_BE.ApplicationCore.Interfaces
             {
                 isValid = false;
 
-                _serviceResult.TOECode = TOECode.InValid;
+                _serviceResult.Code = Code.InValid;
                 _serviceResult.Messasge = Properties.Resources.Msg_NotValid;
                 _serviceResult.Data = string.Format(Properties.Resources.Msg_Duplicate, propertyDisplayName);
             }
@@ -170,7 +171,7 @@ namespace Web2023_BE.ApplicationCore.Interfaces
             var propertyName = propertyInfo.Name;
 
             //2. Tên hiển thị
-            var propertyDisplayName = GetAttributeDisplayName(propertyName);
+            var propertyDisplayName = _modelType.GetColumnDisplayName(propertyName);
 
             //3. Gía trị
             var value = propertyInfo.GetValue(post);
@@ -184,7 +185,7 @@ namespace Web2023_BE.ApplicationCore.Interfaces
             //4. Gán message lỗi
             if (!isValid)
             {
-                _serviceResult.TOECode = TOECode.InValid;
+                _serviceResult.Code = Code.InValid;
                 _serviceResult.Messasge = Properties.Resources.Msg_NotValid;
                 _serviceResult.Data = string.Format(Properties.Resources.Msg_NotFormat, propertyDisplayName);
             }
@@ -305,7 +306,7 @@ namespace Web2023_BE.ApplicationCore.Interfaces
             if (acc == null)
             {
                 _serviceResult.Data = 0;
-                _serviceResult.TOECode = TOECode.Fail;
+                _serviceResult.Code = Code.Fail;
                 _serviceResult.Messasge = Properties.Resources.Msg_Failed;
             }
             else
@@ -319,19 +320,19 @@ namespace Web2023_BE.ApplicationCore.Interfaces
 
                     if (rowsAffect > 0)
                     {
-                        _serviceResult.TOECode = TOECode.Valid;
+                        _serviceResult.Code = Code.Valid;
                         _serviceResult.Messasge = Properties.Resources.Msg_Success;
                     }
                     else
                     {
-                        _serviceResult.TOECode = TOECode.Fail;
+                        _serviceResult.Code = Code.Fail;
                         _serviceResult.Messasge = Properties.Resources.Msg_Failed;
                     }
                 }
                 else
                 {
                     _serviceResult.Data = 0;
-                    _serviceResult.TOECode = TOECode.InValid;
+                    _serviceResult.Code = Code.InValid;
                     _serviceResult.Messasge = string.Format(Properties.Resources.Msg_InCorrect, "Mật khẩu cũ");
                 }
 

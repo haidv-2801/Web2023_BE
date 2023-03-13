@@ -49,9 +49,9 @@ namespace Web2023_BE.Web.Controllers
             {
                 _logger.LogInformation($"Thêm bản ghi {typeof(BookOrder).Name}: " + JsonConvert.SerializeObject(bookOrder));
                 serviceResult = await _bookOrderService.InsertBookOrder(bookOrder);
-                if (serviceResult.TOECode == TOECode.InValid || serviceResult.TOECode == TOECode.InValid)
+                if (serviceResult.Code == Code.InValid || serviceResult.Code == Code.InValid)
                     return BadRequest(serviceResult);
-                else if (serviceResult.TOECode == TOECode.Exception || serviceResult.TOECode == TOECode.Fail)
+                else if (serviceResult.Code == Code.Exception || serviceResult.Code == Code.Fail)
                     return StatusCode(500, serviceResult);
 
                 return StatusCode(201, serviceResult);
@@ -84,7 +84,7 @@ namespace Web2023_BE.Web.Controllers
         {
             try
             {
-                return Ok( await _bookOrderViewService.GetEntitiesFilter(pagingRequest, "view_bookorderview"));
+                return Ok(await _bookOrderViewService.GetEntitiesFilter(pagingRequest, "view_bookorderview"));
             }
             catch (Exception ex)
             {

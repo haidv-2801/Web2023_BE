@@ -15,6 +15,7 @@ using System.Reflection;
 using System.Text;
 using System.Text.RegularExpressions;
 using System.Threading;
+using Web2023_BE.ApplicationCore.Extensions;
 
 namespace Web2023_BE.ApplicationCore.Interfaces
 {
@@ -28,7 +29,7 @@ namespace Web2023_BE.ApplicationCore.Interfaces
         public MenuService(IMenuRepository postRepository) : base(postRepository)
         {
             _menuRepository = postRepository;
-;
+            ;
         }
         #endregion
 
@@ -62,7 +63,7 @@ namespace Web2023_BE.ApplicationCore.Interfaces
             return _serviceResult;
         }
 
-     
+
         /// <summary>
         /// Validate tùy chỉn theo màn hình nhân viên
         /// </summary>
@@ -107,7 +108,7 @@ namespace Web2023_BE.ApplicationCore.Interfaces
             var propertyName = propertyInfo.Name;
 
             //2. Tên hiển thị
-            var propertyDisplayName = GetAttributeDisplayName(propertyName);
+            var propertyDisplayName = _modelType.GetColumnDisplayName(propertyName);
 
             //3. Tùy chỉnh nguồn dữ liệu để validate, trạng thái thêm hoắc sửa
             var entityDuplicate = _menuRepository.GetEntityByProperty(post, propertyInfo);
@@ -116,7 +117,7 @@ namespace Web2023_BE.ApplicationCore.Interfaces
             {
                 isValid = false;
 
-                _serviceResult.TOECode = TOECode.InValid;
+                _serviceResult.Code = Code.InValid;
                 _serviceResult.Messasge = Properties.Resources.Msg_NotValid;
                 _serviceResult.Data = string.Format(Properties.Resources.Msg_Duplicate, propertyDisplayName);
             }
@@ -139,7 +140,7 @@ namespace Web2023_BE.ApplicationCore.Interfaces
             var propertyName = propertyInfo.Name;
 
             //2. Tên hiển thị
-            var propertyDisplayName = GetAttributeDisplayName(propertyName);
+            var propertyDisplayName = _modelType.GetColumnDisplayName(propertyName);
 
             //3. Gía trị
             var value = propertyInfo.GetValue(post);
@@ -153,7 +154,7 @@ namespace Web2023_BE.ApplicationCore.Interfaces
             //4. Gán message lỗi
             if (!isValid)
             {
-                _serviceResult.TOECode = TOECode.InValid;
+                _serviceResult.Code = Code.InValid;
                 _serviceResult.Messasge = Properties.Resources.Msg_NotValid;
                 _serviceResult.Data = string.Format(Properties.Resources.Msg_NotFormat, propertyDisplayName);
             }

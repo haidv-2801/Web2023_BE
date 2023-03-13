@@ -12,6 +12,7 @@ using Web2023_BE.Entities;
 using Web2023_BE.ApplicationCore.Entities;
 using System.ComponentModel;
 using System.Threading.Tasks;
+using Web2023_BE.ApplicationCore.Extensions;
 
 namespace Web2023_BE.ApplicationCore.Interfaces
 {
@@ -22,6 +23,7 @@ namespace Web2023_BE.ApplicationCore.Interfaces
         protected IDbConnection _dbConnection = null;
         string _connectionString = string.Empty;
         protected string _tableName;
+        public Type _modelType = null;
         #endregion
 
         #region Constructer
@@ -30,23 +32,20 @@ namespace Web2023_BE.ApplicationCore.Interfaces
             _configuration = configuration;
             _connectionString = _configuration.GetConnectionString("TOEIC365ConnectionString");
             _dbConnection = new MySqlConnection(_connectionString);
-            _tableName = ClassDisplayName();
+            _modelType = typeof(TEntity);
+            _tableName = _modelType.GetTableName().ToLowerInvariant();
         }
         #endregion
 
         #region Methods
         /// <summary>
-        /// Lấy tất cả
+        /// Lấy tất cả0
         /// </summary>
         /// <returns></returns>
         /// CREATED BY: DVHAI (11/07/2021)
         public async Task<IEnumerable<TEntity>> GetEntities()
         {
-            //1. Tạo kết nối và truy vấn                        
-            var entities = await _dbConnection.QueryAsync<TEntity>($"Proc_Get{_tableName}s", commandType: CommandType.StoredProcedure);
-
-            //2. Trả về dữ liệu
-            return entities.ToList<TEntity>();
+            return await GetEntitiesUsingCommandTextAsync();
         }
 
         /// <summary>
@@ -57,16 +56,7 @@ namespace Web2023_BE.ApplicationCore.Interfaces
         /// CREATED BY: DVHAI (11/07/2021)
         public async Task<TEntity> GetEntityById(Guid entityId)
         {
-            //1. Lấy tên của khóa chính
-            var keyName = GetKeyProperty().Name;
-
-            var dynamicParams = new DynamicParameters();
-            dynamicParams.Add($"@v_{keyName}", entityId);
-
-            //2. Tạo kết nối và truy vấn
-            var entity = await _dbConnection.QueryFirstOrDefaultAsync<TEntity>($"Proc_Get{_tableName}ById", param: dynamicParams, commandType: CommandType.StoredProcedure);
-
-            //3. Trả về dữ liệu
+            var entity = await GetEntitieByIdUsingCommandTextAsync(entityId.ToString());
             return entity;
         }
 
@@ -85,14 +75,14 @@ namespace Web2023_BE.ApplicationCore.Interfaces
             {
                 try
                 {
-                    //1. Lấy tên của khóa chính
-                    var keyName = GetKeyProperty().Name;
+                    var keyName = _modelType.GetKeyName();
 
                     var dynamicParams = new DynamicParameters();
                     dynamicParams.Add($"@v_{keyName}", entityId);
 
-                    //2. Kết nối tới CSDL:
-                    rowAffects = _dbConnection.Execute($"Proc_Delete{_tableName}ById", param: dynamicParams, transaction: transaction, commandType: CommandType.StoredProcedure);
+                    var query = new StringBuilder($"DELETE FROM {_tableName} WHERE {keyName}=@v_{keyName}");
+
+                    rowAffects = _dbConnection.Execute(query.ToString(), param: dynamicParams, transaction: transaction, commandType: CommandType.Text);
 
                     transaction.Commit();
                 }
@@ -109,24 +99,28 @@ namespace Web2023_BE.ApplicationCore.Interfaces
         /// <param name="entity"></param>
         /// <returns></returns>
         /// CREATED BY: DVHAI (11/07/2021)
-        public int Insert(TEntity entity)
+        public async Task<int> Insert(TEntity entity)
         {
             var rowAffects = 0;
             _dbConnection.Open();
+
+            var columnsInDatabase = await GetTableColumnsInDatabase();
+
             using (var transaction = _dbConnection.BeginTransaction())
             {
                 try
                 {
-                    //1.Duyệt các thuộc tính trên bản ghi và tạo parameters
-                    var parameters = MappingDbType(entity);
-                    //parameters.RemoveUnused = true;
+                    var query = SqlExtensions.GenerateInsertQuery(_modelType, columnsInDatabase.ToList());
 
-                    //2.Thực hiện thêm bản ghi
-                    rowAffects = _dbConnection.Execute($"Proc_Insert{_tableName}", param: parameters, transaction: transaction, commandType: CommandType.StoredProcedure);
+                    if (string.IsNullOrEmpty(query)) return rowAffects;
+
+                    var parameters = _modelType.MappingDbType(entity);
+
+                    rowAffects = await _dbConnection.ExecuteAsync(query, param: parameters, transaction: transaction, commandType: CommandType.Text);
 
                     transaction.Commit();
                 }
-                catch (Exception ex)
+                catch (Exception)
                 {
                     transaction.Rollback();
                 }
@@ -147,19 +141,24 @@ namespace Web2023_BE.ApplicationCore.Interfaces
         {
             var rowAffects = 0;
             _dbConnection.Open();
+
+            var columnsInDatabase = await GetTableColumnsInDatabase();
+
             using (var transaction = _dbConnection.BeginTransaction())
             {
                 try
                 {
-                    //1. Ánh xạ giá trị id
-                    var keyName = GetKeyProperty().Name;
+                    var query = SqlExtensions.GenerateUpdateQuery(_modelType, columnsInDatabase.ToList());
+
+                    if (string.IsNullOrEmpty(query)) return rowAffects;
+
+                    var keyName = _modelType.GetKeyName();
                     entity.GetType().GetProperty(keyName).SetValue(entity, entityId);
 
-                    //2. Duyệt các thuộc tính trên customer và tạo parameters
-                    var parameters = MappingDbType(entity);
+                    var parameters = _modelType.MappingDbType(entity);
 
                     //3. Kết nối tới CSDL:
-                    rowAffects = await _dbConnection.ExecuteAsync($"Proc_Update{_tableName}", param: parameters, transaction: transaction, commandType: CommandType.StoredProcedure);
+                    rowAffects = await _dbConnection.ExecuteAsync(query.ToString(), param: parameters, transaction: transaction, commandType: CommandType.Text);
 
                     transaction.Commit();
                 }
@@ -170,60 +169,6 @@ namespace Web2023_BE.ApplicationCore.Interfaces
             }
             //4. Trả về dữ liệu
             return rowAffects;
-        }
-
-        /// <summary>
-        /// Ánh xạ các thuộc tính sang kiểu dynamic
-        /// </summary>
-        /// <param name="entity">Thực thể</param>
-        /// <returns>Dan sách các biến động</returns>
-        protected DynamicParameters MappingDbType(TEntity entity)
-        {
-            var parameters = new DynamicParameters();
-            try
-            {
-                //1. Duyệt các thuộc tính trên entity và tạo parameters
-                var properties = entity.GetType().GetProperties();
-
-                foreach (var property in properties)
-                {
-                    var propertyName = property.Name;
-                    var propertyValue = property.GetValue(entity);
-                    var propertyType = property.PropertyType;
-                    if (propertyName != "EntityState")
-                    {
-                        if (propertyType == typeof(Guid) || propertyType == typeof(Guid?))
-                            parameters.Add($"@{"v_" + propertyName}", propertyValue, DbType.String);
-                        else
-                            parameters.Add($"@{"v_" + propertyName}", propertyValue);
-                    }
-
-                }
-            }
-            catch { }
-            //2. Trả về danh sách các parameter
-            return parameters;
-        }
-
-        /// <summary>
-        /// Lấy thuộc tính giá tị khóa
-        /// </summary>
-        /// <returns></returns>
-        /// CREATED BY: DVHAI (11/07/2021)
-        protected PropertyInfo GetKeyProperty()
-        {
-            try
-            {
-                var keyProperty = typeof(TEntity)
-                .GetProperties()
-                .Where(p => p.IsDefined(typeof(KeyAttribute), false))
-                .FirstOrDefault();
-                return keyProperty;
-            }
-            catch
-            {
-                return null;
-            }
         }
 
         /// <summary>
@@ -240,8 +185,8 @@ namespace Web2023_BE.ApplicationCore.Interfaces
             var propertyValue = property.GetValue(entity);
 
             //2. Thông tin khóa
-            var keyName = GetKeyProperty().Name;
-            var keyValue = GetKeyProperty().GetValue(entity);
+            var keyName = _modelType.GetKeyName();
+            var keyValue = _modelType.GetKeyValue(entity);
 
             string query = string.Empty;
 
@@ -256,7 +201,6 @@ namespace Web2023_BE.ApplicationCore.Interfaces
             var entityReturn = _dbConnection.Query<TEntity>(query, commandType: CommandType.Text).FirstOrDefault();
             return entityReturn;
         }
-
 
         /// <summary>
         /// Lấy thưc thể theo thuộc tính
@@ -287,7 +231,7 @@ namespace Web2023_BE.ApplicationCore.Interfaces
 
             if (columnNames == null) columnNames = "*";
             string query = $"SELECT {columnNames} FROM {resource} WHERE {whereClause}";
-            var entityReturn = (IEnumerable<TEntity>) await _dbConnection.QueryAsync<TEntity>(query, commandType: CommandType.Text);
+            var entityReturn = (IEnumerable<TEntity>)await _dbConnection.QueryAsync<TEntity>(query, commandType: CommandType.Text);
             return entityReturn;
         }
 
@@ -319,22 +263,82 @@ namespace Web2023_BE.ApplicationCore.Interfaces
             }
         }
 
+        public async Task<IEnumerable<TEntity>> QueryUsingCommandTextAsync(string commandText, object pars = null) => (await _dbConnection.QueryAsync<TEntity>(commandText, param: pars, commandType: CommandType.Text)).ToList();
+
         /// <summary>
-        /// Lấy tên class
+        /// Lấy column trong table
         /// </summary>
+        /// <param name="table"></param>
         /// <returns></returns>
-        public string ClassDisplayName()
+        public async Task<IEnumerable<string>> GetTableColumnsInDatabase(string table = "")
         {
-            var displayName = typeof(TEntity).GetCustomAttributes(typeof(DisplayNameAttribute), true).FirstOrDefault() as DisplayNameAttribute;
-            if (displayName == null) return typeof(TEntity).Name;
-            return displayName.DisplayName;
+            if (string.IsNullOrWhiteSpace(table))
+            {
+                table = _tableName;
+            }
+
+            var query = new StringBuilder($"SELECT COLUMN_NAME FROM information_schema.columns WHERE table_name='{table}'");
+
+            var columns = await _dbConnection.QueryAsync<string>(query.ToString(), commandType: CommandType.Text);
+
+            return columns;
         }
 
-        public async Task<IEnumerable<TEntity>> QueryUsingCommandTextAsync(string commandText) => (await _dbConnection.QueryAsync<TEntity>(commandText, commandType: CommandType.Text)).ToList();
+        #endregion
 
-        public int PatchUpdate(TEntity enitity)
+        #region PRIVATE METHODS
+        /// <summary>
+        /// Lấy tất cả theo command text
+        /// </summary>
+        /// <returns></returns>
+        /// CREATED BY: DVHAI (11/07/2021)
+        private async Task<IEnumerable<TEntity>> GetEntitiesUsingCommandTextAsync()
         {
-            throw new NotImplementedException();
+            var query = new StringBuilder($"select * from {_tableName}");
+            int whereCount = 0;
+
+            if (_modelType.GetHasDeletedColumn())
+            {
+                whereCount++;
+                query.Append($" where IsDeleted = TRUE");
+            }
+
+            var entities = await _dbConnection.QueryAsync<TEntity>(query.ToString(), commandType: CommandType.Text);
+
+            return entities.ToList();
+        }
+
+        /// <summary>
+        /// Lấy bản ghi theo id dùng command text
+        /// </summary>
+        /// <param name="id"></param>
+        /// <returns></returns>
+        private async Task<TEntity> GetEntitieByIdUsingCommandTextAsync(string id)
+        {
+            var query = new StringBuilder($"select * from {_tableName}");
+            int whereCount = 0;
+
+            Func<StringBuilder, bool> AppendWhere = (query) => { if (whereCount == 0) query.Append(" where "); return true; };
+
+            var primaryKey = _modelType.GetKeyName();
+
+            if (primaryKey != null)
+            {
+                AppendWhere(query);
+                query.Append($"{primaryKey} = '{id}'");
+                whereCount++;
+            }
+
+            if (_modelType.GetHasDeletedColumn())
+            {
+                AppendWhere(query);
+                query.Append($"IsDeleted = FALSE");
+                whereCount++;
+            }
+
+            var entities = await _dbConnection.QueryFirstOrDefaultAsync<TEntity>(query.ToString(), commandType: CommandType.Text);
+
+            return entities;
         }
 
         #endregion

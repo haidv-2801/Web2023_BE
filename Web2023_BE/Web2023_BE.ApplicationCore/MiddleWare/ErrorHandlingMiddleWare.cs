@@ -42,7 +42,7 @@ namespace Web2023_BE.ApplicationCore.MiddleWare
                         cusMsg = Properties.Resources.MISA_Error
                     },
                     Messasge = Properties.Resources.MISA_Error,
-                    TOECode = Web2023_BE.Entities.TOECode.Exception
+                    Code = Web2023_BE.Entities.Code.Exception
                 }
                 );
 

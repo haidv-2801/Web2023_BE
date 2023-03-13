@@ -25,9 +25,6 @@ namespace Web2023_BE.HostBase
         {
             services.AddScoped<IContextService, WebContextService>();
         }
-      
-
-     
 
         /// <summary>
         /// Khai báo khởi tạo service làm việc với cache
@@ -39,11 +36,9 @@ namespace Web2023_BE.HostBase
             services.AddMemoryCache();
             services.AddSingleton<IMemCached, MicrosoftMemCached>();
 
-
             //dist cache
             var distCacheds = GetRedisCached(configuration);
             services.AddSingleton(distCacheds);
-
 
             //service
             var config = ExtensionFactory.InjectConfig<CacheConfig>(configuration, "Cache", services);
@@ -83,8 +78,6 @@ namespace Web2023_BE.HostBase
         public static void InjectStorageService(IServiceCollection services, IConfiguration configuration)
         {
             var config = ExtensionFactory.InjectConfig<StorageConfig>(configuration, "Storage", services);
-           
-           
             
                 services.AddSingleton<IStorageService, FileStorageService>();
             
@@ -97,8 +90,5 @@ namespace Web2023_BE.HostBase
         {
             services.AddSingleton<IEncodeService, EncodeService>();
         }
-
-      
-     
     }
 }
