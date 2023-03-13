@@ -94,8 +94,6 @@ namespace Web2023_BE.ApplicationCore.Interfaces
         /// </summary>
         /// <param name="table"></param>
         /// <returns></returns>
-        Task<IEnumerable<string>> GetTableColumnsInDatabase(string table);
-
-        Task<int> DeleteAsync(Guid entityId);
+        Task<IEnumerable<string>> GetTableColumnsInDatabase(string table = "");
     }
 }

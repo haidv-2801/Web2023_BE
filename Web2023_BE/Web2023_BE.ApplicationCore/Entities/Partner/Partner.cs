@@ -5,10 +5,11 @@ using System.ComponentModel.DataAnnotations;
 using System.Text;
 using System.ComponentModel.DataAnnotations.Schema;
 using Web2023_BE.ApplicationCore.Enums;
+using Web2023_BE.ApplicationCore.Extensions;
 
 namespace Web2023_BE.ApplicationCore.Entities
 {
-    [Table("Partner")]
+    [ConfigTables(TableName = "partner")]
     public class Partner : BaseEntity
     {
         #region Property

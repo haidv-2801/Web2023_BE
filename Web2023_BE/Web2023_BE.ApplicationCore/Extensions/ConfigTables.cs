@@ -13,8 +13,12 @@ namespace Web2023_BE.ApplicationCore.Extensions
 
         public string UniqueColumns { get; set; } = string.Empty;
 
-        public ConfigTables(bool hasDeletedColumn = false, string uniqueColumns = "")
+        public string TableName { get; set; } = string.Empty;
+
+        public ConfigTables(string tableName = "" , bool hasDeletedColumn = false, string uniqueColumns = "")
         {
+            TableName = tableName;
+
             HasDeletedColumn = hasDeletedColumn;
 
             UniqueColumns = uniqueColumns;

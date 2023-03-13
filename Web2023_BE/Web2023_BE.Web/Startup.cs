@@ -50,8 +50,8 @@ namespace Web2023_BE.Web
             services.AddControllers();
             services.AddDirectoryBrowser();
 
+            //inject contact service
             HostBaseFactory.InjectContextService(services, Configuration);
-
 
             //cache
             HostBaseFactory.InjectCached(services, Configuration);
@@ -113,7 +113,6 @@ namespace Web2023_BE.Web
                     Configuration["AdminSafeList"], cache, logger);
             });
 
-
             //File storage
             HostBaseFactory.InjectStorageService(services, Configuration);
 
@@ -167,6 +166,18 @@ namespace Web2023_BE.Web
             services.AddScoped<ILibraryCardRepository, LibraryCardRepository>();
             services.AddScoped<ILibraryCardService, LibraryCardService>();
 
+            //carousel
+            services.AddScoped<ICarouselService, CarouselService>();
+
+            //partner
+            services.AddScoped<IPartnerService, PartnerService>();
+
+            //footer
+            services.AddScoped<IFooterService, FooterService>();
+
+            //teachintro
+            services.AddScoped<ITechIntroService, TechIntroService>();
+
             //library card
             services.AddScoped<IFolderRepository, FolderRespository>();
             services.AddScoped<IFolderService, FolderService>();
@@ -206,8 +217,8 @@ namespace Web2023_BE.Web
             {
                 ServeUnknownFileTypes = true,
                 FileProvider = new PhysicalFileProvider(
-           Path.Combine(env.ContentRootPath, "Uploads")),
-                RequestPath = "/uploads",
+           Path.Combine(env.ContentRootPath, "Stores")),
+                RequestPath = "/stores",
                 OnPrepareResponse = ctx =>
                 {
                     const int durationInSeconds = 86400;
@@ -226,8 +237,8 @@ namespace Web2023_BE.Web
             app.UseFileServer(new FileServerOptions
             {
                 FileProvider = new PhysicalFileProvider(
-                    Path.Combine(env.ContentRootPath, "Uploads")),
-                RequestPath = "/uploads",
+                    Path.Combine(env.ContentRootPath, "Stores")),
+                RequestPath = "/stores",
                 EnableDirectoryBrowsing = true
             });
 

@@ -21,6 +21,7 @@ using System.Web;
 using Web2023_BE.ApplicationCore.Enums;
 using System.Net.NetworkInformation;
 using Web2023_BE.ApplicationCore.Extensions;
+using Web2023_BE.Cache;
 
 namespace Web2023_BE.ApplicationCore
 {
@@ -35,6 +36,7 @@ namespace Web2023_BE.ApplicationCore
         IBaseRepository<TEntity> _baseRepository;
         protected ServiceResult _serviceResult = null;
         public Type _modelType = null;
+        protected string _tableName = "";
         #endregion
 
         #region Constructer
@@ -42,10 +44,11 @@ namespace Web2023_BE.ApplicationCore
         {
             _baseRepository = baseRepository;
             _modelType = typeof(TEntity);
+            _tableName = _modelType.GetTableName().ToLowerInvariant();
             _serviceResult = new ServiceResult()
             {
                 Data = null,
-                TOECode = TOECode.Success,
+                Code = Code.Success,
                 Messasge = Properties.Resources.Msg_Success,
             };
         }
@@ -255,22 +258,23 @@ namespace Web2023_BE.ApplicationCore
             entity.EntityState = EntityState.Add;
 
             //1. Validate tất cả các trường nếu được gắn thẻ
-            var isValid = Validate(entity);
+            var isValid = await Validate(entity);
 
             //2. Sử lí lỗi tương ứng
             if (isValid)
             {
-                int rowAffects = _baseRepository.Insert(entity);
+                int rowAffects = await _baseRepository.Insert(entity);
                 if (rowAffects == 0)
                 {
-                    _serviceResult.TOECode = TOECode.Fail;
+                    _serviceResult.Code = Code.Fail;
                     _serviceResult.Messasge = Properties.Resources.Msg_Failed;
                 }
                 else { _serviceResult.Data = rowAffects; }
             }
             else
             {
-                _serviceResult.TOECode = TOECode.InValid;
+                _serviceResult.IsSuccess = false;
+                _serviceResult.Code = Code.InValid;
                 _serviceResult.Messasge = Properties.Resources.Msg_NotValid;
             }
 
@@ -296,25 +300,25 @@ namespace Web2023_BE.ApplicationCore
             entity.EntityState = EntityState.Update;
 
             //2. Validate tất cả các trường nếu được gắn thẻ
-            var isValid = Validate(entity);
+            var isValid = await Validate(entity);
             if (isValid)
             {
                 int rowAffects = await _baseRepository.Update(entityId, entity);
                 _serviceResult.Data = rowAffects;
                 if (rowAffects > 0)
                 {
-                    _serviceResult.TOECode = TOECode.Valid;
+                    _serviceResult.Code = Code.Valid;
                     _serviceResult.Messasge = Properties.Resources.Msg_Success;
                 }
                 else
                 {
-                    _serviceResult.TOECode = TOECode.InValid;
+                    _serviceResult.Code = Code.InValid;
                     _serviceResult.Messasge = Properties.Resources.Msg_Failed;
                 }
             }
             else
             {
-                _serviceResult.TOECode = TOECode.InValid;
+                _serviceResult.Code = Code.InValid;
                 _serviceResult.Messasge = Properties.Resources.Msg_NotValid;
             }
 
@@ -337,12 +341,12 @@ namespace Web2023_BE.ApplicationCore
 
             if (rowAffects > 0)
             {
-                _serviceResult.TOECode = TOECode.Success;
+                _serviceResult.Code = Code.Success;
                 _serviceResult.Messasge = Properties.Resources.Msg_Success;
             }
             else
             {
-                _serviceResult.TOECode = TOECode.InValid;
+                _serviceResult.Code = Code.InValid;
                 _serviceResult.Messasge = Properties.Resources.Msg_Failed;
             }
 
@@ -384,9 +388,10 @@ namespace Web2023_BE.ApplicationCore
         /// <param name="entity">Thực thể</param>
         /// <returns>(true-đúng false-sai)</returns>
         /// CREATED BY: DVHAI (07/07/2021)
-        private bool Validate(TEntity entity)
+        private async Task<bool> Validate(TEntity entity)
         {
             var isValid = true;
+
 
             //1. Đọc các property
             var properties = entity.GetType().GetProperties();
@@ -405,6 +410,12 @@ namespace Web2023_BE.ApplicationCore
             if (isValid)
             {
                 isValid = ValidateCustom(entity);
+            }
+
+            //3. Validate trùng tên
+            if (isValid)
+            {
+                isValid = await ValidateDulicate(entity);
             }
 
             return isValid;
@@ -510,13 +521,13 @@ namespace Web2023_BE.ApplicationCore
             var propertyValue = propertyInfo.GetValue(entity);
 
             //3. Tên hiển thị
-            var propertyDisplayName = GetAttributeDisplayName(propertyName);
+            var propertyDisplayName = _modelType.GetColumnDisplayName(propertyName);
 
             if (string.IsNullOrEmpty(propertyValue.ToString()))
             {
                 isValid = false;
 
-                _serviceResult.TOECode = TOECode.InValid;
+                _serviceResult.Code = Code.InValid;
                 _serviceResult.Messasge = Properties.Resources.Msg_NotValid;
                 _serviceResult.Data = string.Format(Properties.Resources.Msg_Required, propertyDisplayName);
             }
@@ -524,23 +535,44 @@ namespace Web2023_BE.ApplicationCore
             return isValid;
         }
 
+
         /// <summary>
-        /// Lấy tên hiển thị của trường trong entity
+        /// Validate trùng
         /// </summary>
-        /// <param name="attributeName">Tên thuộc tính</param>
-        /// <returns>Tên hiển thị</returns>
+        /// <param name="entity">Thực thể</param>
+        /// <param name="propertyInfo">Thuộc tính của thực thể</param>
+        /// <returns>(true-đúng false-sai)</returns>
         /// CREATED BY: DVHAI (07/07/2021)
-        protected String GetAttributeDisplayName(string attributeName)
+        private async Task<bool> ValidateDulicate(TEntity entity)
         {
-            //Gán mặc định bằng tên thuộc tính
-            var res = attributeName;
-            try
+            bool isValid = true;
+
+            var uniqueColumns = _modelType.GetUniqueColumns().Split(";").ToList();
+            var columns = _modelType.GetColumNames().ToList();
+            if (columns.Intersect(uniqueColumns).ToList().Count == uniqueColumns.Count)
             {
-                res = typeof(TEntity).GetProperty(attributeName).GetCustomAttributes(typeof(DisplayAttribute),
-                                               false).Cast<DisplayAttribute>().Single().Name;
+                var cols = uniqueColumns.Select(f => $"{f} = @v_{f}");
+                var query = new StringBuilder($"SELECT {_modelType.GetKeyName()} FROM {_tableName} WHERE {string.Join(" AND ", cols)}");
+
+                if (entity.EntityState == EntityState.Update)
+                {
+                    query.Append($" AND {_modelType.GetKeyName()} <> '{_modelType.GetKeyValue(entity)}'");
+                }
+                query.Append(";");
+
+                var pars = uniqueColumns.ToDictionary(k => $"@v_{k}", v => _modelType.GetValueByFieldName(entity, v));
+                var res = await _baseRepository.QueryUsingCommandTextAsync(query.ToString(), pars);
+                isValid = !res.ToList().Any();
             }
-            catch { }
-            return res;
+
+            if (!isValid)
+            {
+                _serviceResult.Code = Code.InValid;
+                _serviceResult.Messasge = Properties.Resources.Msg_NotValid;
+                _serviceResult.Data = string.Format(Properties.Resources.Msg_Duplicate, _modelType.GetUniqueColumns());
+            }
+
+            return isValid;
         }
 
         /// <summary>

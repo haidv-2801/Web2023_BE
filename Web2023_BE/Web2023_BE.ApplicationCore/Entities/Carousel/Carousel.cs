@@ -5,10 +5,11 @@ using System.ComponentModel.DataAnnotations;
 using System.Text;
 using System.ComponentModel.DataAnnotations.Schema;
 using Web2023_BE.ApplicationCore.Enums;
+using Web2023_BE.ApplicationCore.Extensions;
 
 namespace Web2023_BE.ApplicationCore.Entities
 {
-    [Table("Carousel")]
+    [ConfigTables(TableName = "carousel")]
     public class Carousel : BaseEntity
     {
         #region Property
@@ -18,7 +19,7 @@ namespace Web2023_BE.ApplicationCore.Entities
         public string CarouselContent { get; set; }
 
         public string CarouselText { get; set; }
-
+ 
         public CarouselSection CarouselSection { get; set; }
 
         public bool IsShow { get; set; } = true;
