@@ -465,6 +465,12 @@ namespace Web2023_BE.ApplicationCore
                 {
                     query.Append($" AND {_modelType.GetKeyName()} <> '{_modelType.GetKeyValue(entity)}'");
                 }
+
+                if (_modelType.GetHasDeletedColumn())
+                {
+                    query.Append($" AND {nameof(entity.IsDeleted)} = FALSE ");
+                }
+
                 query.Append(";");
 
                 var pars = uniqueColumns.ToDictionary(k => $"@v_{k}", v => _modelType.GetValueByFieldName(entity, v));

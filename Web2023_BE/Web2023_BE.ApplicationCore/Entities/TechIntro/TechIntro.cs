@@ -22,7 +22,9 @@ namespace Web2023_BE.ApplicationCore.Entities
 
         public int Order { get; set; } = 0;
 
-        public bool IsShow { get; set; } = true;
+        public string Title { get; set; }
+
+        public bool IsShow { get; set; } = false;
         #endregion
     }
 }

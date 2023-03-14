@@ -22,6 +22,12 @@ namespace Web2023_BE.ApplicationCore.Entities
     }
 
     [AttributeUsage(AttributeTargets.Property)]
+    public class IExcludeOnUpdate : Attribute
+    {
+
+    }
+
+    [AttributeUsage(AttributeTargets.Property)]
     public class IPrimaryKey : Attribute
     {
 
@@ -50,17 +56,19 @@ namespace Web2023_BE.ApplicationCore.Entities
         /// <summary>
         /// Ngày tạo
         /// </summary>
-        public DateTime? CreatedDate { get; set; }
+        [IExcludeOnUpdate]
+        public DateTime? CreatedDate { get; set; } = DateTime.UtcNow;
 
         /// <summary>
         /// Người tạo
         /// </summary>
+        [IExcludeOnUpdate]
         public string CreatedBy { get; set; }
 
         /// <summary>
         /// Ngày sửa
         /// </summary>
-        public DateTime? ModifiedDate { get; set; }
+        public DateTime? ModifiedDate { get; set; } = DateTime.UtcNow;
 
         /// <summary>
         /// Người sửa

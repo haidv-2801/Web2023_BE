@@ -34,6 +34,16 @@ namespace Web2023_BE.ApplicationCore.Extensions
         }
 
         /// <summary>
+        /// Lấy trường không đưa vào update
+        /// </summary>
+        /// <returns></returns>
+        public static List<string> GetExcludeOnUpdateColumns(this Type type)
+        {
+            var columns = type.GetProperties().Where(f => f.IsDefined(typeof(IExcludeOnUpdate), true)).Select(f => f.Name);
+            return columns.ToList();
+        }
+
+        /// <summary>
         /// Lấy tên trường hiển thị
         /// </summary>
         /// <returns></returns>
