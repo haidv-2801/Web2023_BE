@@ -21,7 +21,7 @@ namespace Web2023_BE.ApplicationCore.Extensions
             query.Append($"INSERT INTO {type.GetTableName().ToLowerInvariant()} (");
 
             // Append the column names
-            var columnNames = string.Join(", ", columnToAdd);
+            var columnNames = string.Join(", ", columnToAdd.Select(f => $"`{f.Replace("`", "").Replace("'", "")}`"));
             query.Append(columnNames);
 
             query.Append(") VALUES (");
@@ -38,15 +38,15 @@ namespace Web2023_BE.ApplicationCore.Extensions
 
         public static string GenerateUpdateQuery(Type type, List<string> columns)
         {
-            var columnToUpdate = type.GetColumNames().Where(f => f != type.GetKeyName()).Intersect(columns);
-            
+            var columnToUpdate = type.GetColumNames().Where(f => f != type.GetKeyName() || !type.GetExcludeOnUpdateColumns().Contains(f)).Intersect(columns);
+
             if (!columnToUpdate.Any()) return string.Empty;
 
             var query = new StringBuilder();
             query.Append($"UPDATE {type.GetTableName().ToLowerInvariant()} SET ");
 
             // Append the column values as parameter placeholders
-            var columnValuePairs = columnToUpdate.Select(pair => $"{pair} = @v_{pair}");
+            var columnValuePairs = columnToUpdate.Select(pair => $"`{pair.Replace("`", "").Replace("'", "")}` = @v_{pair}");
             var columnValuesString = string.Join(", ", columnValuePairs);
             query.Append(columnValuesString);
 

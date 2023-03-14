@@ -90,6 +90,14 @@ namespace Web2023_BE.ApplicationCore.Interfaces
         Task<IEnumerable<TEntity>> QueryUsingCommandTextAsync(string commandText, object pars = null);
 
         /// <summary>
+        /// Query lấy bản ghi dùng procedure
+        /// </summary>
+        /// <param name="commandText"></param>
+        /// <param name="pars"></param>
+        /// <returns></returns>
+        Task<IEnumerable<TEntity>> QueryUsingProcedureAsync(string procedure, object pars = null);
+
+        /// <summary>
         /// Lấy column trong table
         /// </summary>
         /// <param name="table"></param>

@@ -13,6 +13,7 @@ using Web2023_BE.ApplicationCore.Entities;
 using System.ComponentModel;
 using System.Threading.Tasks;
 using Web2023_BE.ApplicationCore.Extensions;
+using DocumentFormat.OpenXml.Spreadsheet;
 
 namespace Web2023_BE.ApplicationCore.Interfaces
 {
@@ -300,7 +301,7 @@ namespace Web2023_BE.ApplicationCore.Interfaces
             if (_modelType.GetHasDeletedColumn())
             {
                 whereCount++;
-                query.Append($" where IsDeleted = TRUE");
+                query.Append($" where IsDeleted = FALSE");
             }
 
             var entities = await _dbConnection.QueryAsync<TEntity>(query.ToString(), commandType: CommandType.Text);
@@ -339,6 +340,18 @@ namespace Web2023_BE.ApplicationCore.Interfaces
             var entities = await _dbConnection.QueryFirstOrDefaultAsync<TEntity>(query.ToString(), commandType: CommandType.Text);
 
             return entities;
+        }
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="procedure"></param>
+        /// <param name="pars"></param>
+        /// <returns></returns>
+        /// <exception cref="NotImplementedException"></exception>
+        public async Task<IEnumerable<TEntity>> QueryUsingProcedureAsync(string procedure, object pars = null)
+        {
+            return (await _dbConnection.QueryAsync<TEntity>(procedure, param: pars, commandType: CommandType.StoredProcedure)).ToList();
         }
 
         #endregion
