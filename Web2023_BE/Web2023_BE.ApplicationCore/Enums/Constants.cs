@@ -111,4 +111,16 @@ namespace Web2023_BE.ApplicationCore.Enums
     {
         HomePage
     }
+
+    public enum ModuleType
+    {
+        IMAGE
+    }
+
+    public enum RoleCode
+    {
+        PUBLIC,
+        ADMIN,
+       
+    }
 }
