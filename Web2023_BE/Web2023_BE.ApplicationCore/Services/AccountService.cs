@@ -21,6 +21,8 @@ using Microsoft.Extensions.Configuration;
 using Newtonsoft.Json;
 using System.Threading.Tasks;
 using Web2023_BE.ApplicationCore.Extensions;
+using Web2023_BE.ApplicationCore.Authorization;
+using Web2023_BE.ApplicationCore.Enums;
 
 namespace Web2023_BE.ApplicationCore.Interfaces
 {
@@ -30,14 +32,16 @@ namespace Web2023_BE.ApplicationCore.Interfaces
         IAccountRepository _accountRepository;
         ILibraryCardService _libraryCardService;
         IConfiguration _config;
+        private IJwtUtils _jwtUtils;
         #endregion
 
         #region Constructer
-        public AccountService(IAccountRepository accountRepository, ILibraryCardService libraryCardService, IConfiguration config) : base(accountRepository)
+        public AccountService(IAccountRepository accountRepository, ILibraryCardService libraryCardService, IConfiguration config, IJwtUtils jwtUtils) : base(accountRepository)
         {
             _accountRepository = accountRepository;
             _config = config;
             _libraryCardService = libraryCardService;
+            _jwtUtils = jwtUtils;
         }
         #endregion
 
@@ -226,7 +230,7 @@ namespace Web2023_BE.ApplicationCore.Interfaces
             userRequest.Password = CreateMD5(userRequest.Password);
 
             var account = (Account)(await _accountRepository.Login(userRequest));
-
+            string token = "";
             if (account != null)
             {
                 if (account.Status == false) return null;
@@ -236,6 +240,12 @@ namespace Web2023_BE.ApplicationCore.Interfaces
 
                 //get member info
                 var memberInfo = await _libraryCardService.GetLibraryCardByAccountID(account.AccountID);
+                if(account != null)
+                {
+                    var role = roles.Select(item =>item.RoleType).ToList();
+                    string roleString = string.Join(",", role.ToArray());
+                    token = _jwtUtils.GenerateJwtToken(roleString, account.UserName);
+                }
 
                 return new { userInfo = new { roles = roles.Select(item => new { RoleName = item.RoleName, RoleType = item.RoleType }), Email = account.Email, UserName = account.UserName, FullName = account.FullName, PhoneNumer = account.PhoneNumber, CreatedDate = account.CreatedDate, Avatar = account.Avatar, UserID = account.AccountID }, token = GenerateJSONWebToken(account), member = memberInfo != null ? JsonConvert.SerializeObject(memberInfo) : null };
             }

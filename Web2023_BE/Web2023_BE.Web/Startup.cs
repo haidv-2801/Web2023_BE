@@ -30,6 +30,10 @@ using Microsoft.Extensions.Caching.Memory;
 using Microsoft.Extensions.Options;
 using Microsoft.AspNetCore.Mvc.Formatters;
 using Web2023_BE.HostBase;
+using Web2023_BE.ApplicationCore.Interfaces.IServices;
+using Web2023_BE.ApplicationCore.Services;
+using Web2023_BE.ApplicationCore.Authorization;
+using Web2023_BE.ApplicationCore.Entities;
 
 namespace Web2023_BE.Web
 {
@@ -69,7 +73,8 @@ namespace Web2023_BE.Web
             services.AddHttpContextAccessor();
 
 
-            services.AddControllersWithViews(options => {
+            services.AddControllersWithViews(options =>
+            {
                 options.InputFormatters.Insert(0, GetJsonPatchInputFormatter());
             }).AddNewtonsoftJson(options =>
             {
@@ -112,13 +117,15 @@ namespace Web2023_BE.Web
 
             //File storage
             HostBaseFactory.InjectStorageService(services, Configuration);
-
+            HostBaseFactory.InjectJwt(services, Configuration);
             //Add Elasticsearch
             //services.AddElasticsearch(Configuration);
             var url = Configuration["elasticsearch:url"];
             var settings = new ConnectionSettings(new Uri(url)).DefaultIndex("posts");
             var client = new ElasticClient(settings);
             services.AddSingleton(client);
+
+          
 
             // Register the Swagger generator, defining 1 or more Swagger documents
             services.AddSwaggerGen();
@@ -174,6 +181,17 @@ namespace Web2023_BE.Web
 
             //teachintro
             services.AddScoped<ITechIntroService, TechIntroService>();
+
+            // folder
+            services.AddScoped<IFolderService, FolderService>();
+
+            //image
+            services.AddScoped<IImageManagerService, ImageManagerService>();
+
+            
+
+          
+
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -187,6 +205,8 @@ namespace Web2023_BE.Web
             app.UseHttpsRedirection();
 
             app.UseMiddleware<ErrorHandlingMiddleWare>();
+
+            app.UseMiddleware<JwtMiddleware>();
 
             app.UseRouting();
 
@@ -233,7 +253,13 @@ namespace Web2023_BE.Web
 
 
             app.UseStaticFiles(); // For the wwwroot folder.
-            app.UseCors();
+            app
+               .UseCors(policy =>
+                   policy
+                       .AllowAnyHeader()
+                       .AllowAnyMethod()
+                       .AllowCredentials()
+                       .WithOrigins("http://localhost:3000"));
             app.UseAuthentication();
             app.UseAuthorization();
             app.UseMvc();

@@ -41,6 +41,7 @@ namespace Web2023_BE.Web
                     ConfigFileName.Connections,
                     ConfigFileName.Cache,
                     ConfigFileName.Storage,
+                    ConfigFileName.Auth
                    
                 })
                 .ConfigureWebHostDefaults(webBuilder =>

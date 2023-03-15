@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Text;
+using Web2023_BE.ApplicationCore.Entities;
 
 namespace MISA.Legder.Domain.Configs
 {
@@ -22,6 +23,9 @@ namespace MISA.Legder.Domain.Configs
         /// Cấu hình cho jwt
         /// </summary>
         public JwtTokenConfig JwtToken { get; set; }
+
+
+        public JwtSettings JwtSettings { get; set; }
     }
     public class JwtTokenConfig
     {
