@@ -14,6 +14,8 @@ using Microsoft.Extensions.Caching.Redis;
 using Web2023_BE.ApplicationCore.Entities;
 using MISA.Legder.Domain.Configs;
 using Web2023_BE.ApplicationCore.Authorization;
+using Web2023_BE.ApplicationCore.Services;
+using Web2023_BE.ApplicationCore.Interfaces.IServices;
 
 namespace Web2023_BE.HostBase
 {
@@ -54,6 +56,8 @@ namespace Web2023_BE.HostBase
             var config = ExtensionFactory.InjectConfig<AuthConfig>(configuration, "Auth", services);
             services.AddSingleton(config);
             services.AddSingleton<IJwtUtils, JwtUtils>();
+            services.AddSingleton<ITokenService, TokenService>();
+            
 
         }
 

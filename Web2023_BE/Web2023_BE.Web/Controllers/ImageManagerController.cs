@@ -52,6 +52,8 @@ namespace Web2023_BE.Web.Controllers
             return Ok(serviceResult);
         }
 
+
+        
         //[EnableCors("AllowCROSPolicy")]
         //[HttpDelete("deleteasync/{id}")]
         //public async Task<IActionResult> DeleteAsync(string id, StorageFileType type, string name)

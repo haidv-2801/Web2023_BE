@@ -21,9 +21,9 @@ namespace Web2023_BE.ApplicationCore.Authorization
     {
         private readonly AuthConfig _authConfig;
 
-        public JwtUtils(IOptions<AuthConfig> authConfig)
+        public JwtUtils(AuthConfig authConfig)
         {
-            _authConfig = authConfig.Value;
+            _authConfig = authConfig;
         }
 
         public string GenerateJwtToken(string role, string username)
