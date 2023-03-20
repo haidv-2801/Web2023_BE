@@ -99,7 +99,7 @@ namespace Web2023_BE.Web.Controllers
             try
             {
                 res = await _accountService.ChangePassword(Guid.Parse(id), entity);
-                if (res.Code == Code.InValid || res.Code == Code.Fail)
+                if (res.Code == Enums.InValid || res.Code == Enums.Fail)
                     return BadRequest(res);
                 return Ok(res);
             }

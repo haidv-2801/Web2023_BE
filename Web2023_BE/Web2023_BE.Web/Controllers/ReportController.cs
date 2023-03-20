@@ -28,12 +28,12 @@ namespace Web2023_BE.Web.Controllers
     {
         #region Declare
         IBookService _bookService;
-        ILibraryCardService _libraryCardService;
+        IContactSubmitService _libraryCardService;
         IBookOrderService _bookOrderService;
         #endregion
 
         #region Constructer
-        public ReportController(IBookService bookService, ILibraryCardService libraryCardService, IBookOrderService bookOrderService)
+        public ReportController(IBookService bookService, IContactSubmitService libraryCardService, IBookOrderService bookOrderService)
         {
             _bookService = bookService;
             _libraryCardService = libraryCardService;
@@ -49,10 +49,9 @@ namespace Web2023_BE.Web.Controllers
         public async Task<IActionResult> GetReportScoreCard()
         {
             var totalBookOrdered = _bookOrderService.GetTotalBookOrdered();
-            var totalLibraryCards = _libraryCardService.GetTotalLibraryCard();
             var totalBook = _bookService.GetTotalBook();
-            var res = await Task.WhenAll(totalBookOrdered, totalLibraryCards, totalBook);
-            return Ok(new { totalBooks = res[2], totalBookOrdereds = res[0], totalLibraryCards = res[1] });
+            var res = await Task.WhenAll(totalBookOrdered, totalBook);
+            return Ok(new { totalBooks = 0, totalBookOrdereds = res[0], totalLibraryCards = res[1] });
         }
 
 

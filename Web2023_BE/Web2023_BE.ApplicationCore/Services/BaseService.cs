@@ -48,7 +48,7 @@ namespace Web2023_BE.ApplicationCore
             _serviceResult = new ServiceResult()
             {
                 Data = null,
-                Code = Code.Success,
+                Code = Web2023_BE.Entities.Enums.Success,
                 Messasge = Properties.Resources.Msg_Success,
             };
         }
@@ -165,10 +165,6 @@ namespace Web2023_BE.ApplicationCore
             return tableName;
         }
 
-
-
-
-
         public async Task<int> CountTotalRecordByClause(PagingRequest pagingRequest, string viewOrTableName = "")
         {
             viewOrTableName = CustomTableNameService(viewOrTableName);
@@ -266,7 +262,7 @@ namespace Web2023_BE.ApplicationCore
                 int rowAffects = await _baseRepository.Insert(entity);
                 if (rowAffects == 0)
                 {
-                    _serviceResult.Code = Code.Fail;
+                    _serviceResult.Code = Web2023_BE.Entities.Enums.Fail;
                     _serviceResult.Messasge = Properties.Resources.Msg_Failed;
                 }
                 else { _serviceResult.Data = rowAffects; }
@@ -274,7 +270,7 @@ namespace Web2023_BE.ApplicationCore
             else
             {
                 _serviceResult.IsSuccess = false;
-                _serviceResult.Code = Code.InValid;
+                _serviceResult.Code = Web2023_BE.Entities.Enums.InValid;
                 _serviceResult.Messasge = Properties.Resources.Msg_NotValid;
             }
 
@@ -307,18 +303,18 @@ namespace Web2023_BE.ApplicationCore
                 _serviceResult.Data = rowAffects;
                 if (rowAffects > 0)
                 {
-                    _serviceResult.Code = Code.Valid;
+                    _serviceResult.Code = Web2023_BE.Entities.Enums.Valid;
                     _serviceResult.Messasge = Properties.Resources.Msg_Success;
                 }
                 else
                 {
-                    _serviceResult.Code = Code.InValid;
+                    _serviceResult.Code = Web2023_BE.Entities.Enums.InValid;
                     _serviceResult.Messasge = Properties.Resources.Msg_Failed;
                 }
             }
             else
             {
-                _serviceResult.Code = Code.InValid;
+                _serviceResult.Code = Web2023_BE.Entities.Enums.InValid;
                 _serviceResult.Messasge = Properties.Resources.Msg_NotValid;
             }
 
@@ -341,12 +337,12 @@ namespace Web2023_BE.ApplicationCore
 
             if (rowAffects > 0)
             {
-                _serviceResult.Code = Code.Success;
+                _serviceResult.Code = Web2023_BE.Entities.Enums.Success;
                 _serviceResult.Messasge = Properties.Resources.Msg_Success;
             }
             else
             {
-                _serviceResult.Code = Code.InValid;
+                _serviceResult.Code = Web2023_BE.Entities.Enums.InValid;
                 _serviceResult.Messasge = Properties.Resources.Msg_Failed;
             }
 
@@ -460,7 +456,7 @@ namespace Web2023_BE.ApplicationCore
             {
                 isValid = false;
 
-                _serviceResult.Code = Code.InValid;
+                _serviceResult.Code = Web2023_BE.Entities.Enums.InValid;
                 _serviceResult.Messasge = Properties.Resources.Msg_NotValid;
                 _serviceResult.Data = string.Format(Properties.Resources.Msg_Required, propertyDisplayName);
             }
@@ -506,7 +502,7 @@ namespace Web2023_BE.ApplicationCore
 
             if (!isValid)
             {
-                _serviceResult.Code = Code.InValid;
+                _serviceResult.Code = Web2023_BE.Entities.Enums.InValid;
                 _serviceResult.Messasge = Properties.Resources.Msg_NotValid;
                 _serviceResult.Data = string.Format(Properties.Resources.Msg_Duplicate, _modelType.GetUniqueColumns());
             }
