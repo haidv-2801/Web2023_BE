@@ -25,15 +25,15 @@ using Web2023_BE.ApplicationCore.Extensions;
 
 namespace Web2023_BE.ApplicationCore.Interfaces
 {
-    public class FooterService : BaseService<Footer>, IFooterService
+    public class HtmlSectionService : BaseService<HtmlSection>, IHtmlSectionService
     {
         #region Declare
-        IBaseRepository<Footer> _baseRepository;
+        IBaseRepository<HtmlSection> _baseRepository;
         IConfiguration _config;
         #endregion
 
         #region Constructer
-        public FooterService(IBaseRepository<Footer> footerRepository, IConfiguration config) : base(footerRepository)
+        public HtmlSectionService(IBaseRepository<HtmlSection> footerRepository, IConfiguration config) : base(footerRepository)
         {
             _baseRepository = footerRepository;
             _config = config;

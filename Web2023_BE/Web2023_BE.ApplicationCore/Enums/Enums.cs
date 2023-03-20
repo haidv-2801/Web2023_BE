@@ -4,7 +4,7 @@ using System.Text;
 
 namespace Web2023_BE.Entities
 {
-    public enum Code
+    public enum Enums
     {
         /// <summary>
         /// Hợp lệ
@@ -37,5 +37,16 @@ namespace Web2023_BE.Entities
         Add = 1,
         Update = 2,
         Delete = 3
+    }
+
+    public enum HtmlSectionType
+    {
+        Footer = 1,
+    }
+
+    public enum PostType
+    {
+        None = 1,
+        Recruitment = 2, // tuyển dụng
     }
 }

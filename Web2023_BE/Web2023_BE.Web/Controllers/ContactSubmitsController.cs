@@ -7,34 +7,39 @@ using System.Threading.Tasks;
 using Dapper;
 using MySqlConnector;
 using System.Data;
+using Web2023_BE.ApplicationCore;
 using Web2023_BE.ApplicationCore.Interfaces;
 using Web2023_BE.ApplicationCore.Entities;
-using Web2023_BE.Web.Controllers;
 using Microsoft.AspNetCore.Cors;
 using Web2023_BE.Entities;
 using System.Threading;
+using Microsoft.AspNetCore.Authorization;
+using System.ComponentModel.DataAnnotations;
 using Microsoft.Extensions.Logging;
-using Newtonsoft.Json;
 
 namespace Web2023_BE.Web.Controllers
 {
     /// <summary>
-    /// Controller footer
+    /// Controller bài đăng
     /// </summary>
     [ApiController]
-    public class HtmlSectionsController : BaseEntityController<HtmlSection>
+    public class ContactSubmitsController : BaseEntityController<ContactSubmit>
     {
         #region Declare
-        IHtmlSectionService _HtmlSectionService;
-        ILogger<HtmlSection> _logger;
+        IContactSubmitService _contactSubmitService;
+        ILogger<ContactSubmit> _logger;
         #endregion
 
         #region Constructer
-        public HtmlSectionsController(IHtmlSectionService HtmlSectionService, ILogger<HtmlSection> logger) : base(HtmlSectionService, logger)
+        public ContactSubmitsController(IContactSubmitService contactSubmitService, ILogger<ContactSubmit> logger) : base(contactSubmitService, logger)
         {
-            _HtmlSectionService = HtmlSectionService;
+            _contactSubmitService = contactSubmitService;
             _logger = logger;
         }
+        #endregion
+
+        #region Methods
+        
         #endregion
     }
 }

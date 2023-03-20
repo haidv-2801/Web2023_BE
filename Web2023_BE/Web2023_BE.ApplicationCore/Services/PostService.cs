@@ -116,7 +116,7 @@ namespace Web2023_BE.ApplicationCore.Interfaces
             {
                 isValid = false;
 
-                _serviceResult.Code = Code.InValid;
+                _serviceResult.Code = Web2023_BE.Entities.Enums.InValid;
                 _serviceResult.Messasge = Properties.Resources.Msg_NotValid;
                 _serviceResult.Data = string.Format(Properties.Resources.Msg_Duplicate, propertyDisplayName);
             }
@@ -153,7 +153,7 @@ namespace Web2023_BE.ApplicationCore.Interfaces
             //4. Gán message lỗi
             if (!isValid)
             {
-                _serviceResult.Code = Code.InValid;
+                _serviceResult.Code = Web2023_BE.Entities.Enums.InValid;
                 _serviceResult.Messasge = Properties.Resources.Msg_NotValid;
                 _serviceResult.Data = string.Format(Properties.Resources.Msg_NotFormat, propertyDisplayName);
             }
@@ -192,7 +192,7 @@ namespace Web2023_BE.ApplicationCore.Interfaces
         public ServiceResult GetPostsByMenuID(Guid? MenuID)
         {
             _serviceResult.Data = _postRepository.GetEntitiesByProperty("MenuID", MenuID.ToString());
-            _serviceResult.Code = Code.Success;
+            _serviceResult.Code = Web2023_BE.Entities.Enums.Success;
             return _serviceResult;
         }
 

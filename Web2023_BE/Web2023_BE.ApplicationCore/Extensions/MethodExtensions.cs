@@ -19,7 +19,13 @@ namespace Web2023_BE.ApplicationCore.Extensions
         public static string GetTableName(this Type type)
         {
             var configTable = GetConfigTable(type);
-            if (configTable == null) return type.Name;
+            if (configTable == null)
+            {
+                if (string.IsNullOrWhiteSpace(type.Name))
+                {
+                    throw new ArgumentException($"{nameof(type)} không có tên table");
+                }
+            };
             return configTable.TableName;
         }
 

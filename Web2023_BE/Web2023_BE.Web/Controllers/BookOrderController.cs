@@ -49,9 +49,9 @@ namespace Web2023_BE.Web.Controllers
             {
                 _logger.LogInformation($"Thêm bản ghi {typeof(BookOrder).Name}: " + JsonConvert.SerializeObject(bookOrder));
                 serviceResult = await _bookOrderService.InsertBookOrder(bookOrder);
-                if (serviceResult.Code == Code.InValid || serviceResult.Code == Code.InValid)
+                if (serviceResult.Code == Enums.InValid || serviceResult.Code == Enums.InValid)
                     return BadRequest(serviceResult);
-                else if (serviceResult.Code == Code.Exception || serviceResult.Code == Code.Fail)
+                else if (serviceResult.Code == Enums.Exception || serviceResult.Code == Enums.Fail)
                     return StatusCode(500, serviceResult);
 
                 return StatusCode(201, serviceResult);

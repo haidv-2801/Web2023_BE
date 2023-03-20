@@ -6,7 +6,7 @@ using Web2023_BE.ApplicationCore.Entities;
 
 namespace Web2023_BE.ApplicationCore.Interfaces.IRepositories
 {
-    public interface IFooterRepository : IBaseRepository<Footer>
+    public interface IFooterRepository : IBaseRepository<HtmlSection>
     {
 
     }

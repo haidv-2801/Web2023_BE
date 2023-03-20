@@ -99,7 +99,7 @@ namespace Web2023_BE.ApplicationCore.Interfaces
             {
                 isValid = false;
 
-                _serviceResult.Code = Code.InValid;
+                _serviceResult.Code = Web2023_BE.Entities.Enums.InValid;
                 _serviceResult.Messasge = Properties.Resources.Msg_NotValid;
                 _serviceResult.Data = string.Format(Properties.Resources.Msg_Duplicate, propertyDisplayName);
             }
@@ -117,7 +117,7 @@ namespace Web2023_BE.ApplicationCore.Interfaces
 
             if (user == null)
             {
-                _serviceResult.Code = Code.InValid;
+                _serviceResult.Code = Web2023_BE.Entities.Enums.InValid;
                 _serviceResult.Messasge = "Tài khoản không tồn tại";
                 return _serviceResult;
             }
@@ -136,7 +136,7 @@ namespace Web2023_BE.ApplicationCore.Interfaces
             else
             {
                 _serviceResult.Data = 0;
-                _serviceResult.Code = Code.Fail;
+                _serviceResult.Code = Web2023_BE.Entities.Enums.Fail;
                 _serviceResult.Messasge = "Danh sách id đầu vào trống.";
                 return _serviceResult;
             }
@@ -145,7 +145,7 @@ namespace Web2023_BE.ApplicationCore.Interfaces
             if (listBookByIDS.Count < bookOrderInformations.Count)
             {
                 _serviceResult.Data = 0;
-                _serviceResult.Code = Code.Fail;
+                _serviceResult.Code = Web2023_BE.Entities.Enums.Fail;
                 _serviceResult.Messasge = "Số lượng sách hiện có nhỏ hơn đầu vào.";
                 return _serviceResult;
             }
@@ -153,7 +153,7 @@ namespace Web2023_BE.ApplicationCore.Interfaces
             if (listBookByIDS.Any(book => book.Amount == 0 || book.Available == 0 || book.Reserved == book.Amount))
             {
                 _serviceResult.Data = 0;
-                _serviceResult.Code = Code.Fail;
+                _serviceResult.Code = Web2023_BE.Entities.Enums.Fail;
                 _serviceResult.Messasge = "Một trong số những sách đã chọn không có sẵn.";
                 return _serviceResult;
             }
@@ -176,13 +176,13 @@ namespace Web2023_BE.ApplicationCore.Interfaces
             if (rowEffects > 0)
             {
                 _serviceResult.Data = bookOrder.BookOrderID;
-                _serviceResult.Code = Code.Success;
+                _serviceResult.Code = Web2023_BE.Entities.Enums.Success;
                 _serviceResult.Messasge = "Thêm mới thành công.";
             }
             else
             {
                 _serviceResult.Data = 0;
-                _serviceResult.Code = Code.Fail;
+                _serviceResult.Code = Web2023_BE.Entities.Enums.Fail;
                 _serviceResult.Messasge = "Thêm mới thất bại.";
             }
 
