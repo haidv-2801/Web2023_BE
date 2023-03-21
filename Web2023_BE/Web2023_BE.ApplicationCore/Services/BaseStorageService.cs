@@ -63,6 +63,10 @@ namespace Web2023_BE.ApplicationCore
                     //một số file hệ thống sẽ xử lý không có tenant
                     path = this.GetTempPath(fileName);
                     break;
+
+                case StorageFileType.Thumbnail:
+                    path = this.GetTempPath(fileName);
+                    break;
                 case StorageFileType.SqlUpgradeTenant:
                 case StorageFileType.SqlUpgradeManage:
                 case StorageFileType.SqlUpgradeSystem:

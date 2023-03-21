@@ -31,7 +31,8 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="Stores\" />
+    <Folder Include="Images\" />
+    <Folder Include="Stores\thumbnail\" />
   </ItemGroup>
 
 </Project>

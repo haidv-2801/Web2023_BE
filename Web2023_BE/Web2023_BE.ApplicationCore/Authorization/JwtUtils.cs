@@ -14,7 +14,7 @@ namespace Web2023_BE.ApplicationCore.Authorization
     public interface IJwtUtils
     {
         public string GenerateJwtToken(string role, string username);
-        public string? ValidateJwtToken(string token);
+        public string ValidateJwtToken(string token);
     }
 
     public class JwtUtils : IJwtUtils
@@ -41,7 +41,7 @@ namespace Web2023_BE.ApplicationCore.Authorization
             return tokenHandler.WriteToken(token);
         }
 
-        public string? ValidateJwtToken(string token)
+        public string ValidateJwtToken(string token)
         {
             if (token == null)
                 return null;

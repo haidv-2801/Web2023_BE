@@ -47,6 +47,8 @@ namespace Web2023_BE.ApplicationCore
         /// file script nâng cấp db queue
         /// </summary>
         SqlUpgradeQueue = 7,
+
+        Thumbnail = 8,
         
     }
 }

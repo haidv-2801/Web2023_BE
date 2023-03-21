@@ -239,7 +239,7 @@ namespace Web2023_BE.ApplicationCore.Interfaces
                 var roles = (await _accountRepository.GetRolesByAccountID(account.AccountID.ToString()));
 
                 //get member info
-                var memberInfo = await _libraryCardService.GetLibraryCardByAccountID(account.AccountID);
+                //var memberInfo = await _libraryCardService.GetLibraryCardByAccountID(account.AccountID);
                 if(account != null)
                 {
                     var role = roles.Select(item =>item.RoleType).ToList();
@@ -247,7 +247,7 @@ namespace Web2023_BE.ApplicationCore.Interfaces
                     token = _jwtUtils.GenerateJwtToken(roleString, account.UserName);
                 }
 
-                return new { userInfo = new { roles = roles.Select(item => new { RoleName = item.RoleName, RoleType = item.RoleType }), Email = account.Email, UserName = account.UserName, FullName = account.FullName, PhoneNumer = account.PhoneNumber, CreatedDate = account.CreatedDate, Avatar = account.Avatar, UserID = account.AccountID }, token = GenerateJSONWebToken(account), member = memberInfo != null ? JsonConvert.SerializeObject(memberInfo) : null };
+                return new { userInfo = new { roles = roles.Select(item => new { RoleName = item.RoleName, RoleType = item.RoleType }), Email = account.Email, UserName = account.UserName, FullName = account.FullName, PhoneNumer = account.PhoneNumber, CreatedDate = account.CreatedDate, Avatar = account.Avatar, UserID = account.AccountID }, token = GenerateJSONWebToken(account)};
             }
 
             return account;

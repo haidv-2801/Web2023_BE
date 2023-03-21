@@ -34,6 +34,7 @@ using Web2023_BE.ApplicationCore.Interfaces.IServices;
 using Web2023_BE.ApplicationCore.Services;
 using Web2023_BE.ApplicationCore.Authorization;
 using Web2023_BE.ApplicationCore.Entities;
+using Microsoft.IdentityModel.Logging;
 
 namespace Web2023_BE.Web
 {
@@ -82,26 +83,8 @@ namespace Web2023_BE.Web
             });
 
             // Config authenication
-            services.AddAuthentication(x =>
-            {
-                x.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
-                x.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
-            })
-              .AddJwtBearer(options =>
-              {
-                  options.RequireHttpsMetadata = false;
-                  options.SaveToken = true;
-                  options.TokenValidationParameters = new TokenValidationParameters
-                  {
-                      ValidateIssuer = true,
-                      ValidateAudience = true,
-                      ValidateLifetime = true,
-                      ValidateIssuerSigningKey = true,
-                      ValidIssuer = Configuration["Jwt:Issuer"],
-                      ValidAudience = Configuration["Jwt:Issuer"],
-                      IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(Configuration["Jwt:Key"]))
-                  };
-              });
+            HostBaseFactory.InjectJwt(services, Configuration);
+            IdentityModelEventSource.ShowPII = true;
             services.AddMvc(x => x.EnableEndpointRouting = false);
 
             //
@@ -117,7 +100,7 @@ namespace Web2023_BE.Web
 
             //File storage
             HostBaseFactory.InjectStorageService(services, Configuration);
-            HostBaseFactory.InjectJwt(services, Configuration);
+           
             //Add Elasticsearch
             //services.AddElasticsearch(Configuration);
             var url = Configuration["elasticsearch:url"];
@@ -206,7 +189,7 @@ namespace Web2023_BE.Web
 
             app.UseMiddleware<ErrorHandlingMiddleWare>();
 
-            app.UseMiddleware<JwtMiddleware>();
+            //app.UseMiddleware<JwtMiddleware>();
 
             app.UseRouting();
 
