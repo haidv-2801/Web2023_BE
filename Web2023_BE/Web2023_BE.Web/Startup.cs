@@ -150,8 +150,8 @@ namespace Web2023_BE.Web
             services.AddScoped<IRoleService, RoleService>();
 
             //library card
-            services.AddScoped<ILibraryCardRepository, LibraryCardRepository>();
-            services.AddScoped<ILibraryCardService, LibraryCardService>();
+            services.AddScoped<IContactSubmitRepository, ContactSubmitRepository>();
+            services.AddScoped<IContactSubmitService, ContactSubmitService>();
 
             //carousel
             services.AddScoped<ICarouselService, CarouselService>();
@@ -160,7 +160,7 @@ namespace Web2023_BE.Web
             services.AddScoped<IPartnerService, PartnerService>();
 
             //footer
-            services.AddScoped<IFooterService, FooterService>();
+            services.AddScoped<IHtmlSectionService, HtmlSectionService>();
 
             //teachintro
             services.AddScoped<ITechIntroService, TechIntroService>();

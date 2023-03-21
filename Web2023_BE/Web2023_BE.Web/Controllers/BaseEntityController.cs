@@ -74,10 +74,10 @@ namespace Web2023_BE.Web.Controllers
                 _logger.LogError("Lỗi GetFilter: " + ex.Message);
                 serviceResult.Data = null;
                 serviceResult.Messasge = ex.Message;
-                serviceResult.Code = Code.Fail;
+                serviceResult.Code = Enums.Fail;
             }
 
-            if (serviceResult.Code == Code.Fail) { return BadRequest(serviceResult); }
+            if (serviceResult.Code == Enums.Fail) { return BadRequest(serviceResult); }
 
             return Ok(serviceResult);
         }
@@ -115,9 +115,9 @@ namespace Web2023_BE.Web.Controllers
             {
                 _logger.LogInformation($"Thêm bản ghi {typeof(TEntity).Name}: " + JsonConvert.SerializeObject(entity));
                 serviceResult = await _baseService.Insert(entity);
-                if (serviceResult.Code == Code.InValid)
+                if (serviceResult.Code == Enums.InValid)
                     return BadRequest(serviceResult);
-                else if (serviceResult.Code == Code.Exception || serviceResult.Code == Code.Fail)
+                else if (serviceResult.Code == Enums.Exception || serviceResult.Code == Enums.Fail)
                     return StatusCode(500, serviceResult);
 
                 return StatusCode(201, serviceResult);
@@ -151,9 +151,9 @@ namespace Web2023_BE.Web.Controllers
                         patchDoc.ApplyTo(entity);
                         serviceResult = await _baseService.Update(id, entity);
 
-                        if (serviceResult.Code == Code.InValid)
+                        if (serviceResult.Code == Enums.InValid)
                             return BadRequest(serviceResult);
-                        else if (serviceResult.Code == Code.Exception)
+                        else if (serviceResult.Code == Enums.Exception)
                             return StatusCode(500, serviceResult);
 
                         return Ok(serviceResult);
@@ -189,9 +189,9 @@ namespace Web2023_BE.Web.Controllers
                 var serviceResult = await _baseService.Update(Guid.Parse(id), entity);
                 _logger.LogInformation($"ServiceResult Body put {typeof(TEntity).Name}:" + JsonConvert.SerializeObject(serviceResult));
 
-                if (serviceResult.Code == Code.InValid)
+                if (serviceResult.Code == Enums.InValid)
                     return BadRequest(serviceResult);
-                else if (serviceResult.Code == Code.Exception)
+                else if (serviceResult.Code == Enums.Exception)
                     return StatusCode(500, serviceResult);
 
                 return Ok(serviceResult);
@@ -215,7 +215,7 @@ namespace Web2023_BE.Web.Controllers
         public IActionResult Delete(string id)
         {
             var serviceResult = _baseService.Delete(Guid.Parse(id));
-            if (serviceResult.Code == Code.Success)
+            if (serviceResult.Code == Enums.Success)
                 return Ok(serviceResult);
             else
                 return NoContent();

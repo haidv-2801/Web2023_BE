@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 
 namespace Web2023_BE.ApplicationCore.Interfaces
 {
-  public interface IFooterService : IBaseService<Footer>
+  public interface IHtmlSectionService : IBaseService<HtmlSection>
   {
     
   }

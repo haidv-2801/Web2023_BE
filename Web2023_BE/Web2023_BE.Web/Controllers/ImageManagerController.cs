@@ -44,10 +44,10 @@ namespace Web2023_BE.Web.Controllers
                 _logger.LogError("Lỗi GetFilter: " + ex.Message);
                 serviceResult.Data = null;
                 serviceResult.Messasge = ex.Message;
-                serviceResult.Code = Code.Fail;
+                serviceResult.Code = Enums.Fail;
             }
 
-            if (serviceResult.Code == Code.Fail) { return BadRequest(serviceResult); }
+            if (serviceResult.Code == Enums.Fail) { return BadRequest(serviceResult); }
 
             return Ok(serviceResult);
         }

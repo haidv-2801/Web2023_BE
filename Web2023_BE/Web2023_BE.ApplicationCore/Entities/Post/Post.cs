@@ -6,6 +6,7 @@ using System.Text;
 using System.ComponentModel;
 using Nest;
 using Web2023_BE.ApplicationCore.Extensions;
+using Web2023_BE.Entities;
 
 namespace Web2023_BE.ApplicationCore.Entities
 {
@@ -13,14 +14,9 @@ namespace Web2023_BE.ApplicationCore.Entities
     /// Thực thể bài viết
     /// </summary>
     [ElasticsearchType(IdProperty = nameof(PostID)), Description("posts")]
-    [ConfigTables(TableName = "post")]
+    [ConfigTables(TableName = "post", UniqueColumns = "Title;Slug")]
     public class Post : BaseEntity
     {
-
-        //public Post(string id)
-        //{
-        //    PostID = Guid.Parse(id);
-        //}
 
         #region Property
         /// <summary>
@@ -33,9 +29,6 @@ namespace Web2023_BE.ApplicationCore.Entities
         /// Id bài viết
         /// </summary>
         public Guid MenuID { get; set; } = Guid.Empty;
-        
-
-        public Guid AccountID { get; set; }
 
         /// <summary>
         /// Mã bài viết
@@ -83,7 +76,7 @@ namespace Web2023_BE.ApplicationCore.Entities
         /// Loại bài viết
         /// </summary>
         [Display(Name = "Loại bài viết")]
-        public int Type { get; set; }
+        public PostType Type { get; set; } = PostType.None;
         #endregion
     }
 }

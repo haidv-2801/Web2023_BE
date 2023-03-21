@@ -30,13 +30,13 @@ namespace Web2023_BE.ApplicationCore.Interfaces
     {
         #region Declare
         IAccountRepository _accountRepository;
-        ILibraryCardService _libraryCardService;
+        IContactSubmitService _libraryCardService;
         IConfiguration _config;
         private IJwtUtils _jwtUtils;
         #endregion
 
         #region Constructer
-        public AccountService(IAccountRepository accountRepository, ILibraryCardService libraryCardService, IConfiguration config, IJwtUtils jwtUtils) : base(accountRepository)
+        public AccountService(IAccountRepository accountRepository, IContactSubmitService libraryCardService, IConfiguration config, IJwtUtils jwtUtils) : base(accountRepository)
         {
             _accountRepository = accountRepository;
             _config = config;
@@ -152,7 +152,7 @@ namespace Web2023_BE.ApplicationCore.Interfaces
             {
                 isValid = false;
 
-                _serviceResult.Code = Code.InValid;
+                _serviceResult.Code = Web2023_BE.Entities.Enums.InValid;
                 _serviceResult.Messasge = Properties.Resources.Msg_NotValid;
                 _serviceResult.Data = string.Format(Properties.Resources.Msg_Duplicate, propertyDisplayName);
             }
@@ -189,7 +189,7 @@ namespace Web2023_BE.ApplicationCore.Interfaces
             //4. Gán message lỗi
             if (!isValid)
             {
-                _serviceResult.Code = Code.InValid;
+                _serviceResult.Code = Web2023_BE.Entities.Enums.InValid;
                 _serviceResult.Messasge = Properties.Resources.Msg_NotValid;
                 _serviceResult.Data = string.Format(Properties.Resources.Msg_NotFormat, propertyDisplayName);
             }
@@ -239,7 +239,6 @@ namespace Web2023_BE.ApplicationCore.Interfaces
                 var roles = (await _accountRepository.GetRolesByAccountID(account.AccountID.ToString()));
 
                 //get member info
-                //var memberInfo = await _libraryCardService.GetLibraryCardByAccountID(account.AccountID);
                 if(account != null)
                 {
                     var role = roles.Select(item =>item.RoleType).ToList();
@@ -247,7 +246,7 @@ namespace Web2023_BE.ApplicationCore.Interfaces
                     token = _jwtUtils.GenerateJwtToken(roleString, account.UserName);
                 }
 
-                return new { userInfo = new { roles = roles.Select(item => new { RoleName = item.RoleName, RoleType = item.RoleType }), Email = account.Email, UserName = account.UserName, FullName = account.FullName, PhoneNumer = account.PhoneNumber, CreatedDate = account.CreatedDate, Avatar = account.Avatar, UserID = account.AccountID }, token = GenerateJSONWebToken(account)};
+                return new { userInfo = new { roles = roles.Select(item => new { RoleName = item.RoleName, RoleType = item.RoleType }), Email = account.Email, UserName = account.UserName, FullName = account.FullName, PhoneNumer = account.PhoneNumber, CreatedDate = account.CreatedDate, Avatar = account.Avatar, UserID = account.AccountID }, token = GenerateJSONWebToken(account) };
             }
 
             return account;
@@ -316,7 +315,7 @@ namespace Web2023_BE.ApplicationCore.Interfaces
             if (acc == null)
             {
                 _serviceResult.Data = 0;
-                _serviceResult.Code = Code.Fail;
+                _serviceResult.Code = Web2023_BE.Entities.Enums.Fail;
                 _serviceResult.Messasge = Properties.Resources.Msg_Failed;
             }
             else
@@ -330,19 +329,19 @@ namespace Web2023_BE.ApplicationCore.Interfaces
 
                     if (rowsAffect > 0)
                     {
-                        _serviceResult.Code = Code.Valid;
+                        _serviceResult.Code = Web2023_BE.Entities.Enums.Valid;
                         _serviceResult.Messasge = Properties.Resources.Msg_Success;
                     }
                     else
                     {
-                        _serviceResult.Code = Code.Fail;
+                        _serviceResult.Code = Web2023_BE.Entities.Enums.Fail;
                         _serviceResult.Messasge = Properties.Resources.Msg_Failed;
                     }
                 }
                 else
                 {
                     _serviceResult.Data = 0;
-                    _serviceResult.Code = Code.InValid;
+                    _serviceResult.Code = Web2023_BE.Entities.Enums.InValid;
                     _serviceResult.Messasge = string.Format(Properties.Resources.Msg_InCorrect, "Mật khẩu cũ");
                 }
 
