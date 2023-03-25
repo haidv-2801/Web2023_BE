@@ -366,6 +366,37 @@ namespace Web2023_BE.ApplicationCore
         }
 
         /// <summary>
+        /// Lưu 1 phần
+        /// </summary>
+        /// <param name="model"></param>
+        /// <returns></returns>
+        public async Task<ServiceResult> UpdatePatch(Guid id, object model)
+        {
+            var oldModel = await GetEntityById(id);
+            if(oldModel == null)
+            {
+                _serviceResult.onError(null, $"Bản ghi với key={id} không tồn tại.");
+                return _serviceResult;
+            }
+
+            var modelDict = JsonConvert.DeserializeObject<Dictionary<string, object>>(model.ToString());
+            var oldModelDict = JsonConvert.DeserializeObject<Dictionary<string, object>>(JsonConvert.SerializeObject(oldModel));
+            oldModelDict = oldModelDict.Merge(modelDict);
+
+            var entity = JsonConvert.DeserializeObject<TEntity>(JsonConvert.SerializeObject(oldModelDict));
+            entity.ModifiedDate = DateTime.UtcNow;
+
+            _serviceResult = await Update(id, entity);
+
+            if(_serviceResult.Data != null && int.TryParse(_serviceResult.Data.ToString(), out int outData))
+            {
+                _serviceResult.Data = id;
+            }
+
+            return _serviceResult;
+        }
+
+        /// <summary>
         /// Cập nhập thông tin bản ghi 
         /// </summary>
         /// <param name="entityId">Id bản ghi</param>
@@ -374,14 +405,18 @@ namespace Web2023_BE.ApplicationCore
         /// CREATED BY: DVHAI (11/07/2021)
         public async Task<ServiceResult> Update(Guid entityId, TEntity entity)
         {
-            //0.Custom lại giá trị khi update
-            entity = CustomValueWhenUpdate(entity);
 
-            //1. Trạng thái
+            var model = await GetEntityById(entityId);
+            if (model == null)
+            {
+                _serviceResult.onError(_data:null, _message: null,  _code: Web2023_BE.Entities.Enums.NotFound);
+                return _serviceResult;
+            }
+
+            entity = CustomValueWhenUpdate(entity);            
             entity.EntityState = EntityState.Update;
 
-            //2. Validate tất cả các trường nếu được gắn thẻ
-            var isValid = await Validate(entity);
+            var isValid = await Validate(entity, entityId);
             if (isValid)
             {
                 int rowAffects = await _baseRepository.Update(entityId, entity);
@@ -442,7 +477,7 @@ namespace Web2023_BE.ApplicationCore
         /// <param name="entity">Thực thể</param>
         /// <returns>(true-đúng false-sai)</returns>
         /// CREATED BY: DVHAI (07/07/2021)
-        private async Task<bool> Validate(TEntity entity)
+        private async Task<bool> Validate(TEntity entity, Guid? id = null)
         {
             var isValid = true;
 
@@ -469,7 +504,7 @@ namespace Web2023_BE.ApplicationCore
             //3. Validate trùng tên
             if (isValid)
             {
-                isValid = await ValidateDulicate(entity);
+                isValid = await ValidateDulicate(entity, id);
             }
 
             return isValid;
@@ -514,6 +549,8 @@ namespace Web2023_BE.ApplicationCore
         /// <returns></returns>
         protected virtual async Task<TEntity> CustomValueWhenInsert(TEntity entity)
         {
+            entity.CreatedDate = DateTime.UtcNow;
+            entity.ModifiedDate = DateTime.UtcNow;
             return entity;
         }
 
@@ -557,7 +594,7 @@ namespace Web2023_BE.ApplicationCore
         /// <param name="propertyInfo">Thuộc tính của thực thể</param>
         /// <returns>(true-đúng false-sai)</returns>
         /// CREATED BY: DVHAI (07/07/2021)
-        private async Task<bool> ValidateDulicate(TEntity entity)
+        private async Task<bool> ValidateDulicate(TEntity entity, Guid? id)
         {
             bool isValid = true;
 
@@ -566,11 +603,11 @@ namespace Web2023_BE.ApplicationCore
             if (columns.Intersect(uniqueColumns).ToList().Count == uniqueColumns.Count)
             {
                 var cols = uniqueColumns.Select(f => $"{f} = @v_{f}");
-                var query = new StringBuilder($"SELECT {_modelType.GetKeyName()} FROM {_tableName} WHERE {string.Join(" AND ", cols)}");
+                var query = new StringBuilder($"SELECT Count({_modelType.GetKeyName()}) FROM {_tableName} WHERE {string.Join(" AND ", cols)}");
 
                 if (entity.EntityState == EntityState.Update)
                 {
-                    query.Append($" AND {_modelType.GetKeyName()} <> '{_modelType.GetKeyValue(entity)}'");
+                    query.Append($" AND {_modelType.GetKeyName()} <> '{id.Value}'");
                 }
 
                 if (_modelType.GetHasDeletedColumn())
@@ -581,8 +618,8 @@ namespace Web2023_BE.ApplicationCore
                 query.Append(";");
 
                 var pars = uniqueColumns.ToDictionary(k => $"@v_{k}", v => _modelType.GetValueByFieldName(entity, v));
-                var res = await _baseRepository.QueryUsingCommandTextAsync(query.ToString(), pars);
-                isValid = !res.ToList().Any();
+                var res = await _baseRepository.ExecuteScalaUsingCommandTextAsync<int>(query.ToString(), pars);
+                isValid = res == 0;
             }
 
             if (!isValid)

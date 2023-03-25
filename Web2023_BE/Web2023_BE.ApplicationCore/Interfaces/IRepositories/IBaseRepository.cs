@@ -92,6 +92,14 @@ namespace Web2023_BE.ApplicationCore.Interfaces
         Task<IEnumerable<TEntity>> QueryUsingCommandTextAsync(string commandText, object pars = null);
 
         /// <summary>
+        /// Query lấy số bản ghi dùng command text
+        /// </summary>
+        /// <param name="commandText"></param>
+        /// <param name="pars"></param>
+        /// <returns></returns>
+        Task<T> ExecuteScalaUsingCommandTextAsync<T>(string commandText, object pars = null);
+
+        /// <summary>
         /// Query lấy bản ghi dùng procedure
         /// </summary>
         /// <param name="commandText"></param>

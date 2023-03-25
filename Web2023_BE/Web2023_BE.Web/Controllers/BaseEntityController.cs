@@ -130,34 +130,22 @@ namespace Web2023_BE.Web.Controllers
         }
 
         [EnableCors("AllowCROSPolicy")]
-        [HttpPatch("PatchUpdate/{id}")]
-        public async Task<IActionResult> Patch(Guid id,
-    [FromBody] JsonPatchDocument patchDoc)
+        [HttpPut("PatchUpdate/{id}")]
+        public async Task<IActionResult> Patch(Guid id, [FromBody] object model)
         {
-            if (patchDoc is null)
-            {
-                throw new ArgumentNullException(nameof(patchDoc));
-            }
-
             try
             {
                 var serviceResult = new ServiceResult();
-                if (patchDoc != null)
+                if (model != null)
                 {
-                    var entity = await _baseService.GetEntityById(id);
-                    if (entity == null) return NotFound();
-                    else
-                    {
-                        patchDoc.ApplyTo(entity);
-                        serviceResult = await _baseService.Update(id, entity);
+                    serviceResult = await _baseService.UpdatePatch(id, model);
 
-                        if (serviceResult.Code == Enums.InValid)
-                            return BadRequest(serviceResult);
-                        else if (serviceResult.Code == Enums.Exception)
-                            return StatusCode(500, serviceResult);
+                    if (serviceResult.Code == Enums.InValid)
+                        return BadRequest(serviceResult);
+                    else if (serviceResult.Code == Enums.Exception)
+                        return StatusCode(500, serviceResult);
 
-                        return Ok(serviceResult);
-                    }
+                    return Ok(serviceResult.Data);
                 }
                 else
                 {
@@ -190,9 +178,11 @@ namespace Web2023_BE.Web.Controllers
                 _logger.LogInformation($"ServiceResult Body put {typeof(TEntity).Name}:" + JsonConvert.SerializeObject(serviceResult));
 
                 if (serviceResult.Code == Enums.InValid)
-                    return BadRequest(serviceResult);
+                    return StatusCode(StatusCodes.Status400BadRequest, serviceResult);
                 else if (serviceResult.Code == Enums.Exception)
-                    return StatusCode(500, serviceResult);
+                    return StatusCode(StatusCodes.Status500InternalServerError, serviceResult);
+                else if (serviceResult.Code == Enums.NotFound)
+                    return StatusCode(StatusCodes.Status404NotFound, serviceResult);
 
                 return Ok(serviceResult);
             }

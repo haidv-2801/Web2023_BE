@@ -51,6 +51,17 @@ namespace Web2023_BE.ApplicationCore.Interfaces
         /// CREATED BY: DVHAI (07/07/2021)
         Task<ServiceResult> Update(Guid entityId, TEntity entity);
 
+
+
+        /// <summary>
+        /// Cập nhập một phần thông tin bản ghi
+        /// </summary>
+        /// <param name="entityId">Id bản ghi</param>
+        /// <param name="entity">Thông tin bản ghi</param>
+        /// <returns>Số bản ghi bị ảnh hưởng</returns>
+        /// CREATED BY: DVHAI (07/07/2021)
+        public Task<ServiceResult> UpdatePatch(Guid id, object model);
+
         /// <summary>
         /// Xóa bản ghi
         /// </summary>
