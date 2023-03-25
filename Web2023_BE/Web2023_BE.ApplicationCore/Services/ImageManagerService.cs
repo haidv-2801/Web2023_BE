@@ -69,7 +69,7 @@ namespace Web2023_BE.ApplicationCore
                 if (System.IO.File.Exists(imagePath))
                     System.IO.File.Delete(imagePath);
                 imageManager.ImageName = await SaveImage(imageManager.ImageFile);
-               imageManager.Url = imageManager.Url + imageManager.ImageName
+                imageManager.Url = imageManager.Url + imageManager.ImageName;
             }
             var guidID = Guid.Parse(id);
             var entity = await GetEntityById(guidID);
