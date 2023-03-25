@@ -22,6 +22,8 @@ namespace Web2023_BE.ApplicationCore.Interfaces
         /// <returns></returns>
         Task<IEnumerable<TEntity>> GetEntitiesFilter(string whereClause, string columnNames = "*", string viewName = "");
 
+        Task<IEnumerable<T>> GetEntitiesFilter<T>(string whereClause, string columnNames = "*", string viewName = "");
+
         /// <summary>
         /// Base filter
         /// </summary>

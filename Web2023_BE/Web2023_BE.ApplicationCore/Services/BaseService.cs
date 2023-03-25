@@ -144,11 +144,96 @@ namespace Web2023_BE.ApplicationCore
             {
                 _serviceResult.Data = new
                 {
+                    TotalRecord = totalRecord,
+                    TotalPage = 0,
+                    PageSize = pagingRequest.PageSize,
+                    PageNumber = pagingRequest.PageIndex,
+                    PageData = new List<TEntity>()
+                };
+            }
+
+            return _serviceResult;
+        }
+
+
+        public async Task<ServiceResult> GetEntitiesFilter<T>(PagingRequest pagingRequest, string viewOrTableName = "")
+        {
+            viewOrTableName = CustomTableNameService(viewOrTableName);
+            StringBuilder stringBuilder = new StringBuilder();
+            var filter = JsonConvert.DeserializeObject<JArray>(FunctionHelper.Base64Decode(pagingRequest.Filter));
+            List<string> columns = null;
+
+            if (filter != null && filter.Type == JTokenType.Array)
+            {
+                BuildFilterClause(ref stringBuilder, filter);
+            }
+            else
+            {
+                stringBuilder.Append(" 1 = 1 ");
+            }
+
+            int totalRecord = await _baseRepository.CountTotalRecordByClause(stringBuilder.ToString(), viewOrTableName);
+
+
+            if (!string.IsNullOrEmpty(pagingRequest.Sort))
+            {
+                var sort = JsonConvert.DeserializeObject<JArray>(FunctionHelper.Base64Decode(pagingRequest.Sort));
+                if (sort != null && sort.Type == JTokenType.Array)
+                {
+                    stringBuilder.Append(" ORDER BY ");
+                    var listSort = new List<string>();
+
+                    foreach (var item in sort)
+                    {
+                        if (item.Type == JTokenType.Array)
+                        {
+                            string name = item[0].Value<string>().Trim();
+                            string sortType = item[1].Value<string>().Trim();
+                            if (!string.IsNullOrEmpty(name) && (sortType == SortType.ASC || sortType == SortType.DESC))
+                            {
+                                listSort.Add($"{name} {sortType}");
+                            }
+                        }
+                    }
+
+                    stringBuilder.Append(string.Join(", ", listSort));
+                }
+
+            }
+
+            if (pagingRequest.PageIndex > 0 && pagingRequest.PageSize > 0)
+            {
+                stringBuilder.Append($" LIMIT {pagingRequest.PageSize} OFFSET {pagingRequest.PageSize * (pagingRequest.PageIndex - 1) + pagingRequest.Delta}");
+            }
+
+            if (!string.IsNullOrEmpty(pagingRequest.Columns))
+            {
+                columns = pagingRequest.Columns.Split(",".ToCharArray()).Select(item => item.Trim()).ToList();
+            }
+
+            if (totalRecord > 0)
+            {
+                string cols = columns == null ? "*" : string.Join(", ", columns);
+                var data = await _baseRepository.GetEntitiesFilter<T>(stringBuilder.ToString(), cols, viewOrTableName);
+
+                _serviceResult.Data = new
+                {
                     totalRecord = totalRecord,
-                    totalPage = 0,
+                    totalPage = totalRecord % pagingRequest.PageSize == 0 ? (totalRecord / pagingRequest.PageSize) : (totalRecord / pagingRequest.PageSize) + 1,
                     pageSize = pagingRequest.PageSize,
                     pageNumber = pagingRequest.PageIndex,
-                    pageData = new List<TEntity>()
+                    pageData = data
+                };
+            }
+            else
+            {
+                _serviceResult.Data = new
+                {
+                    TotalRecord = totalRecord,
+                    TotalPage = 0,
+                    PageSize = pagingRequest.PageSize,
+                    PageNumber = pagingRequest.PageIndex,
+                    PageData = new List<TEntity>()
                 };
             }
 

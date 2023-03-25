@@ -16,6 +16,9 @@ using MISA.Legder.Domain.Configs;
 using Web2023_BE.ApplicationCore.Authorization;
 using Web2023_BE.ApplicationCore.Services;
 using Web2023_BE.ApplicationCore.Interfaces.IServices;
+using Microsoft.IdentityModel.Tokens;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
+using System.Text;
 
 namespace Web2023_BE.HostBase
 {
@@ -57,7 +60,32 @@ namespace Web2023_BE.HostBase
             services.AddSingleton(config);
             services.AddSingleton<IJwtUtils, JwtUtils>();
             services.AddSingleton<ITokenService, TokenService>();
-            
+
+
+            var signingKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(config.JwtSettings.Key));
+
+            var tokenValidationParameters = new TokenValidationParameters
+            {
+                ValidateIssuerSigningKey = true,
+                IssuerSigningKey = signingKey,
+                ValidateIssuer = false,
+                ValidateAudience = false,
+                ValidateLifetime = false,
+                ClockSkew = TimeSpan.Zero,
+                RequireExpirationTime = false
+            };
+            // Config authenication
+            services.AddAuthentication(x =>
+            {
+                x.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
+                x.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
+            })
+              .AddJwtBearer(options =>
+              {
+                  options.SaveToken = true;
+                  options.RequireHttpsMetadata = false;
+                  options.TokenValidationParameters = tokenValidationParameters;
+              });
 
         }
 
@@ -95,9 +123,9 @@ namespace Web2023_BE.HostBase
         public static void InjectStorageService(IServiceCollection services, IConfiguration configuration)
         {
             var config = ExtensionFactory.InjectConfig<StorageConfig>(configuration, "Storage", services);
-            
-                services.AddSingleton<IStorageService, FileStorageService>();
-            
+
+            services.AddSingleton<IStorageService, FileStorageService>();
+
         }
 
         /// <summary>

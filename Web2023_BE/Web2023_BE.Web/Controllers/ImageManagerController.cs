@@ -53,7 +53,96 @@ namespace Web2023_BE.Web.Controllers
         }
 
 
-        
+        [HttpPost]
+        [Route("Create")]
+        [EnableCors("AllowCROSPolicy")]
+        public async Task<IActionResult> CreateImage([FromForm] ImageManagerDTO imageManager)
+        {
+            var serviceResult = new ServiceResult();
+            try
+            {
+                imageManager.Url = String.Format("{0}://{1}{2}/Images/", Request.Scheme, Request.Host, Request.PathBase);
+                var entity = await _imageManagerService.CreateImage(imageManager);
+
+                if (entity == null)
+                    return NotFound();
+
+                return Ok(entity);
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError("Lỗi create: " + ex.Message);
+                serviceResult.Data = null;
+                serviceResult.Messasge = ex.Message;
+                serviceResult.Code = Enums.Fail;
+            }
+
+            if (serviceResult.Code == Enums.Fail) { return BadRequest(serviceResult); }
+
+            return Ok(serviceResult);
+        }
+
+
+        [HttpPut]
+        [Route("update/{id}")]
+        [EnableCors("AllowCROSPolicy")]
+        public async Task<IActionResult> CreateImage(string id, [FromForm] ImageManagerDTO imageManager)
+        {
+            var serviceResult = new ServiceResult();
+            try
+            {
+                imageManager.Url = String.Format("{0}://{1}{2}/Images/", Request.Scheme, Request.Host, Request.PathBase);
+                var entity = await _imageManagerService.UpdateImage(id, imageManager);
+
+                if (entity == null)
+                    return NotFound();
+
+                return Ok(entity);
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError("Lỗi uodate: " + ex.Message);
+                serviceResult.Data = null;
+                serviceResult.Messasge = ex.Message;
+                serviceResult.Code = Enums.Fail;
+            }
+
+            if (serviceResult.Code == Enums.Fail) { return BadRequest(serviceResult); }
+
+            return Ok(serviceResult);
+        }
+
+        [HttpPut]
+        [Route("delete/{id}")]
+        [EnableCors("AllowCROSPolicy")]
+        public async Task<IActionResult> CreateImage(string id)
+        {
+            var serviceResult = new ServiceResult();
+            try
+            {
+
+                var entity = await _imageManagerService.DeleteImage(id);
+
+                if (entity == null)
+                    return NotFound();
+
+                return Ok(entity);
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError("Lỗi delete: " + ex.Message);
+                serviceResult.Data = null;
+                serviceResult.Messasge = ex.Message;
+                serviceResult.Code = Enums.Fail;
+            }
+
+            if (serviceResult.Code == Enums.Fail) { return BadRequest(serviceResult); }
+
+            return Ok(serviceResult);
+        }
+
+
+
         //[EnableCors("AllowCROSPolicy")]
         //[HttpDelete("deleteasync/{id}")]
         //public async Task<IActionResult> DeleteAsync(string id, StorageFileType type, string name)

@@ -1,10 +1,13 @@
-﻿using System;
+﻿using Microsoft.AspNetCore.Http;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.Text;
+using Web2023_BE.ApplicationCore.Extensions;
 
 namespace Web2023_BE.ApplicationCore.Entities
 {
+    [ConfigTables(TableName = "image_manager")]
     public class ImageManager : BaseEntity
     {
         [Key]
@@ -24,5 +27,7 @@ namespace Web2023_BE.ApplicationCore.Entities
 
         [Display(Name = "ID folder chứa ảnh")]
         public Guid FolderID { get; set; }
+
+        public byte[] FormFile { get; set; }
     }
 }
