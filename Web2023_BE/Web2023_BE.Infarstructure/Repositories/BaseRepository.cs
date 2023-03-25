@@ -281,6 +281,8 @@ namespace Web2023_BE.ApplicationCore.Interfaces
 
         public async Task<IEnumerable<TEntity>> QueryUsingCommandTextAsync(string commandText, object pars = null) => (await _dbConnection.QueryAsync<TEntity>(commandText, param: pars, commandType: CommandType.Text)).ToList();
 
+        public async Task<T> ExecuteScalaUsingCommandTextAsync<T>(string commandText, object pars = null) => ((T)await _dbConnection.ExecuteScalarAsync<T>(commandText, param: pars, commandType: CommandType.Text));
+
         /// <summary>
         /// Lấy column trong table
         /// </summary>

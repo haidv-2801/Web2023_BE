@@ -1,4 +1,5 @@
 ﻿using DocumentFormat.OpenXml.Office2013.PowerPoint.Roaming;
+using Microsoft.AspNetCore.DataProtection.KeyManagement;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
@@ -149,6 +150,32 @@ namespace Web2023_BE.ApplicationCore.Extensions
         {
             var properties = type.GetProperties().Where(f => f.IsDefined(typeof(IExclude), true)).Select(f => f.Name);
             return properties.ToList();
+        }
+
+        /// <summary>
+        /// Merge 2 dictionart
+        /// </summary>
+        /// <typeparam name="TKey"></typeparam>
+        /// <typeparam name="TValue"></typeparam>
+        /// <param name="dict1"></param>
+        /// <param name="dict2"></param>
+        /// <returns></returns>
+        public static Dictionary<TKey, TValue> Merge<TKey, TValue>(
+        this Dictionary<TKey, TValue> dict1, Dictionary<TKey, TValue> dict2)
+        {
+            foreach (var item in dict2)
+            {
+                if (dict1.ContainsKey(item.Key))
+                {
+                    dict1[item.Key] = item.Value;
+                }
+                else
+                {
+                    dict1.Add(item.Key, item.Value);
+                }
+            }
+
+            return dict1;
         }
     }
 }

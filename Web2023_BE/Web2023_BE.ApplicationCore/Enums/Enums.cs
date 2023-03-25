@@ -27,6 +27,11 @@ namespace Web2023_BE.Entities
         Fail = 700,
 
         /// <summary>
+        /// Không tồn tại  
+        /// </summary>
+        NotFound = 701,
+
+        /// <summary>
         /// Lỗi exception
         /// </summary>
         Exception = 500
