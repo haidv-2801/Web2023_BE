@@ -24,6 +24,7 @@ namespace Web2023_BE.ApplicationCore.Interfaces
         /// <returns>Danh sách bản ghi</returns>
         /// CREATED BY: DVHAI (07/07/2021)
         Task<ServiceResult> GetEntitiesFilter(PagingRequest pagingRequest, string viewOrTableName = "");
+        Task<ServiceResult> GetEntitiesFilter<T>(PagingRequest pagingRequest, string viewOrTableName = "");
 
         /// <summary>
         ///  Lấy bản ghi theo id

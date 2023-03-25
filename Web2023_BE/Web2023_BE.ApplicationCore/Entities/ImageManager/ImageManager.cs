@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Microsoft.AspNetCore.Http;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.Text;
@@ -26,5 +27,7 @@ namespace Web2023_BE.ApplicationCore.Entities
 
         [Display(Name = "ID folder chứa ảnh")]
         public Guid FolderID { get; set; }
+
+        public byte[] FormFile { get; set; }
     }
 }

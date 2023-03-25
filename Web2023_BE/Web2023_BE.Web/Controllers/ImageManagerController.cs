@@ -61,8 +61,8 @@ namespace Web2023_BE.Web.Controllers
             var serviceResult = new ServiceResult();
             try
             {
-                imageManager.Url = String.Format("{0}://{1}{2}/Images/{3}", Request.Scheme, Request.Host, Request.PathBase, imageManager.ImageName);
-                 var entity = await _imageManagerService.CreateImage(imageManager);
+                imageManager.Url = String.Format("{0}://{1}{2}/Images/", Request.Scheme, Request.Host, Request.PathBase);
+                var entity = await _imageManagerService.CreateImage(imageManager);
 
                 if (entity == null)
                     return NotFound();
@@ -74,10 +74,10 @@ namespace Web2023_BE.Web.Controllers
                 _logger.LogError("Lỗi create: " + ex.Message);
                 serviceResult.Data = null;
                 serviceResult.Messasge = ex.Message;
-                serviceResult.Code = Code.Fail;
+                serviceResult.Code = Enums.Fail;
             }
 
-            if (serviceResult.Code == Code.Fail) { return BadRequest(serviceResult); }
+            if (serviceResult.Code == Enums.Fail) { return BadRequest(serviceResult); }
 
             return Ok(serviceResult);
         }
@@ -91,7 +91,7 @@ namespace Web2023_BE.Web.Controllers
             var serviceResult = new ServiceResult();
             try
             {
-
+                imageManager.Url = String.Format("{0}://{1}{2}/Images/", Request.Scheme, Request.Host, Request.PathBase);
                 var entity = await _imageManagerService.UpdateImage(id, imageManager);
 
                 if (entity == null)
@@ -104,10 +104,10 @@ namespace Web2023_BE.Web.Controllers
                 _logger.LogError("Lỗi uodate: " + ex.Message);
                 serviceResult.Data = null;
                 serviceResult.Messasge = ex.Message;
-                serviceResult.Code = Code.Fail;
+                serviceResult.Code = Enums.Fail;
             }
 
-            if (serviceResult.Code == Code.Fail) { return BadRequest(serviceResult); }
+            if (serviceResult.Code == Enums.Fail) { return BadRequest(serviceResult); }
 
             return Ok(serviceResult);
         }
@@ -133,10 +133,10 @@ namespace Web2023_BE.Web.Controllers
                 _logger.LogError("Lỗi delete: " + ex.Message);
                 serviceResult.Data = null;
                 serviceResult.Messasge = ex.Message;
-                serviceResult.Code = Code.Fail;
+                serviceResult.Code = Enums.Fail;
             }
 
-            if (serviceResult.Code == Code.Fail) { return BadRequest(serviceResult); }
+            if (serviceResult.Code == Enums.Fail) { return BadRequest(serviceResult); }
 
             return Ok(serviceResult);
         }

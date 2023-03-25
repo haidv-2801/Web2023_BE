@@ -222,6 +222,12 @@ namespace Web2023_BE.Web
                 },
             });
 
+            app.UseStaticFiles(new StaticFileOptions
+            {
+                FileProvider = new PhysicalFileProvider(Path.Combine(env.ContentRootPath, "Images")),
+                RequestPath = "/Images"
+            });
+
 
 
             // using Microsoft.Extensions.FileProviders;

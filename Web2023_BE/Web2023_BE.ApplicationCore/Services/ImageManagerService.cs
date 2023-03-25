@@ -29,14 +29,16 @@ namespace Web2023_BE.ApplicationCore
         {
             imageManager.ImageName = await SaveImage(imageManager.ImageFile);
 
+
             var imagemanagerNew = new ImageManager()
             {
+                ImageID = Guid.NewGuid(),
                 ImageName = imageManager.ImageName,
-                Url = imageManager.Url,
+                Url = imageManager.Url + imageManager.ImageName,
                 FolderID = imageManager.FolderID,
                 CreatedBy = _contextAccessor.HttpContext.Items["user"] + "" ?? "",
                 ModifiedBy = _contextAccessor.HttpContext.Items["user"] + "" ?? ""
-                
+
             };
             var result = await Insert(imagemanagerNew);
 
@@ -67,6 +69,7 @@ namespace Web2023_BE.ApplicationCore
                 if (System.IO.File.Exists(imagePath))
                     System.IO.File.Delete(imagePath);
                 imageManager.ImageName = await SaveImage(imageManager.ImageFile);
+               imageManager.Url = imageManager.Url + imageManager.ImageName
             }
             var guidID = Guid.Parse(id);
             var entity = await GetEntityById(guidID);
@@ -84,8 +87,9 @@ namespace Web2023_BE.ApplicationCore
             var pagingRequestFolder = new PagingRequest()
             {
                 Filter = pagingRequest.CustomParams.FilterFolder,
-                Sort = pagingRequest.CustomParams.FilterFolder
-
+                Sort = pagingRequest.CustomParams.SortFolder,
+                PageIndex = pagingRequest.PageIndex,
+                PageSize = pagingRequest.PageSize
             };
             var dataFolder = new List<Folder>();
             var data = new List<ImageManager>();
@@ -94,25 +98,30 @@ namespace Web2023_BE.ApplicationCore
             var countFolder = await CountTotalRecordByClause(pagingRequestFolder, "folder");
 
             var countFilter = await CountTotalRecordByClause(pagingRequest, "image_manager");
-
-            if (countFolder > 0)
+            surplus = countFolder - (countFolder / pagingRequest.PageSize) * pagingRequest.PageSize;
+            var isCheckGetFolder = countFolder + pagingRequest.PageSize - pagingRequest.PageIndex * pagingRequest.PageSize;
+            if (countFolder > 0 && isCheckGetFolder > 0)
             {
-                surplus = countFolder % pagingRequest.PageSize;
-                var resultFolder = await GetEntitiesFilter(pagingRequestFolder, "folder");
-                dataFolder = FunctionHelper.Deserialize<List<Folder>>(FunctionHelper.Serialize<object>(resultFolder.Data));
+                var resultFolder = await GetEntitiesFilter<Folder>(pagingRequestFolder, "folder");
+                var pagingResponse = FunctionHelper.Deserialize<PagingResponse>(FunctionHelper.Serialize<object>(resultFolder.Data));
+                dataFolder = FunctionHelper.Deserialize<List<Folder>>(FunctionHelper.Serialize<object>(pagingResponse.PageData));
             }
 
-            if (surplus > 0 && surplus > pagingRequest.PageIndex)
+            if (surplus > 0)
             {
-                pagingRequest.Delta = pagingRequest.PageSize - surplus;
-                var resultData = await GetEntitiesFilter(pagingRequestFolder, "folder");
-                data = FunctionHelper.Deserialize<List<ImageManager>>(FunctionHelper.Serialize<object>(resultData.Data));
+                pagingRequest.PageIndex = pagingRequest.PageIndex - countFolder / pagingRequest.PageSize;
+
+                if (pagingRequest.PageIndex > 1)
+                {
+                    pagingRequest.Delta = pagingRequest.PageSize - surplus;
+                }
+
+
+                var resultData = await GetEntitiesFilter(pagingRequest, "image_manager");
+                var pagingResponse = FunctionHelper.Deserialize<PagingResponse>(FunctionHelper.Serialize<object>(resultData.Data));
+                data = FunctionHelper.Deserialize<List<ImageManager>>(FunctionHelper.Serialize<object>(pagingResponse.PageData));
             }
-            else
-            {
-                var resultData = await GetEntitiesFilter(pagingRequestFolder, "folder");
-                data = FunctionHelper.Deserialize<List<ImageManager>>(FunctionHelper.Serialize<object>(resultData.Data));
-            }
+
 
             var resultDictionary = new Dictionary<string, object>();
 
@@ -135,6 +144,8 @@ namespace Web2023_BE.ApplicationCore
             }
             return imageName;
         }
+
+
 
 
     }

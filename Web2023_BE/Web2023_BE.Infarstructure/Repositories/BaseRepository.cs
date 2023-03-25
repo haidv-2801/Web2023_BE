@@ -236,6 +236,21 @@ namespace Web2023_BE.ApplicationCore.Interfaces
             return entityReturn;
         }
 
+
+        public async Task<IEnumerable<T>> GetEntitiesFilter<T>(string whereClause, string columnNames = "*", string viewName = "")
+        {
+            string resource = _tableName;
+            if (!string.IsNullOrEmpty(viewName))
+            {
+                resource = viewName;
+            }
+
+            if (columnNames == null) columnNames = "*";
+            string query = $"SELECT {columnNames} FROM {resource} WHERE {whereClause}";
+            var entityReturn = (IEnumerable<T>)await _dbConnection.QueryAsync<T>(query, commandType: CommandType.Text);
+            return entityReturn;
+        }
+
         /// <summary>
         /// 
         /// </summary>
