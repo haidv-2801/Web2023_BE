@@ -11,8 +11,11 @@ namespace Web2023_BE.ApplicationCore.Interfaces.IServices
         Task<ServiceResult> GetListImagePagingAsync(PagingRequest pagingRequest);
 
         Task<ServiceResult> CreateImage(ImageManagerDTO imageManager);
-        Task<ServiceResult> DeleteImage(string id);
+
+        Task<ServiceResult> DeleteImage(Guid id, string imageName = "");
+
         Task<ServiceResult> UpdateImage(string id, ImageManagerDTO imageManager);
 
+        string GetBasePath();
     }
 }

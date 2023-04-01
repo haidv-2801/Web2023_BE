@@ -18,15 +18,12 @@ namespace Web2023_BE.Web
     {
         public static void Main(string[] args)
         {
-            var logger = NLog.Web.NLogBuilder.ConfigureNLog("nlog.config").GetCurrentClassLogger();
             try
             {
-                logger.Debug("Application Started...");
                 CreateHostBuilder(args).Build().Run();
             }
             catch (Exception ex)
             {
-                logger.Error(ex, "Exception during execution..");
                 throw;
             }
             finally

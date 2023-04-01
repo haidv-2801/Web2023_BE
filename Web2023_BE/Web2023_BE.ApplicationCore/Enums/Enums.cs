@@ -34,7 +34,12 @@ namespace Web2023_BE.Entities
         /// <summary>
         /// Lỗi exception
         /// </summary>
-        Exception = 500
+        Exception = 500,
+
+        /// <summary>
+        /// Trùng
+        /// </summary>
+        Duplicate = 600
     }
 
     public enum EntityState

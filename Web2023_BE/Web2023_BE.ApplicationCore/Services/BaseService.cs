@@ -352,12 +352,6 @@ namespace Web2023_BE.ApplicationCore
                 }
                 else { _serviceResult.Data = rowAffects; }
             }
-            else
-            {
-                _serviceResult.IsSuccess = false;
-                _serviceResult.Code = Web2023_BE.Entities.Enums.InValid;
-                _serviceResult.Messasge = Properties.Resources.Msg_NotValid;
-            }
 
             AfterInsert();
 
@@ -624,7 +618,8 @@ namespace Web2023_BE.ApplicationCore
 
             if (!isValid)
             {
-                _serviceResult.Code = Web2023_BE.Entities.Enums.InValid;
+                _serviceResult.IsSuccess = isValid;
+                _serviceResult.Code = Web2023_BE.Entities.Enums.Duplicate;
                 _serviceResult.Messasge = Properties.Resources.Msg_NotValid;
                 _serviceResult.Data = string.Format(Properties.Resources.Msg_Duplicate, _modelType.GetUniqueColumns());
             }

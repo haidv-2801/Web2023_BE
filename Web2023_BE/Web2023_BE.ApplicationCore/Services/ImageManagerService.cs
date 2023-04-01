@@ -27,48 +27,48 @@ namespace Web2023_BE.ApplicationCore
 
         public async Task<ServiceResult> CreateImage(ImageManagerDTO imageManager)
         {
-            imageManager.ImageName = await SaveImage(imageManager.ImageFile);
-
+            imageManager.ImageName = await SaveImage(imageManager);
 
             var imagemanagerNew = new ImageManager()
             {
                 ImageID = Guid.NewGuid(),
-                ImageName = imageManager.ImageName,
+                ImageName = imageManager.ImageFile.FileName,
                 Url = imageManager.Url + imageManager.ImageName,
                 FolderID = imageManager.FolderID,
                 CreatedBy = _contextAccessor.HttpContext.Items["user"] + "" ?? "",
-                ModifiedBy = _contextAccessor.HttpContext.Items["user"] + "" ?? ""
+                ModifiedBy = _contextAccessor.HttpContext.Items["user"] + "" ?? "",
+                CreatedDate = DateTime.UtcNow,
+                ModifiedDate = DateTime.UtcNow,
             };
 
             var result = await Insert(imagemanagerNew);
 
+            if (!result.IsSuccess) _ = DeleteImage(Guid.Empty, imageManager.ImageName);
+
             return result;
         }
 
-
-        public async Task<ServiceResult> DeleteImage(string id)
+        public async Task<ServiceResult> DeleteImage(Guid id,  string imageName = "")
         {
-            var guidID = Guid.Parse(id);
-            var item = await GetEntityById(guidID);
-            var imagePath = Path.Combine(_hostEnvironment.ContentRootPath, "Images", item.ImageName);
+            var imagePath = Path.Combine(_hostEnvironment.ContentRootPath, GetBasePath(), imageName);
+
             if (System.IO.File.Exists(imagePath))
                 System.IO.File.Delete(imagePath);
 
-
-            var result = Delete(guidID);
+            var result = Delete(id);
 
             return result;
         }
-
 
         public async Task<ServiceResult> UpdateImage(string id, ImageManagerDTO imageManager)
         {
             if (imageManager.ImageName != null)
             {
-                var imagePath = Path.Combine(_hostEnvironment.ContentRootPath, "Images", imageManager.ImageName);
+                var imagePath = Path.Combine(_hostEnvironment.ContentRootPath, imageManager.Url, imageManager.ImageName);
                 if (System.IO.File.Exists(imagePath))
                     System.IO.File.Delete(imagePath);
-                imageManager.ImageName = await SaveImage(imageManager.ImageFile);
+
+                imageManager.ImageName = await SaveImage(imageManager);
                 imageManager.Url = imageManager.Url + imageManager.ImageName;
             }
             var guidID = Guid.Parse(id);
@@ -77,8 +77,6 @@ namespace Web2023_BE.ApplicationCore
 
             return result;
         }
-
-
 
 
         public async Task<ServiceResult> GetListImagePagingAsync(PagingRequest pagingRequest)
@@ -132,21 +130,21 @@ namespace Web2023_BE.ApplicationCore
             return serviceResult;
         }
 
-
-        private async Task<string> SaveImage(IFormFile imageFile)
+        private async Task<string> SaveImage(ImageManagerDTO imageDto)
         {
-            string imageName = new String(Path.GetFileNameWithoutExtension(imageFile.FileName).Take(10).ToArray()).Replace(' ', '-');
-            imageName = imageName + DateTime.Now.ToString("yymmssfff") + Path.GetExtension(imageFile.FileName);
-            var imagePath = Path.Combine(_hostEnvironment.ContentRootPath, "Images", imageName);
+            string fileKey = string.Format(Guid.NewGuid().ToString());
+            string fileExtension = Path.GetExtension(imageDto.ImageFile.FileName);
+            string fileName = $"{fileKey}{fileExtension}";
+
+            var imagePath = Path.Combine(_hostEnvironment.ContentRootPath, imageDto.Url, fileName);
             using (var fileStream = new FileStream(imagePath, FileMode.Create))
             {
-                await imageFile.CopyToAsync(fileStream);
+                await imageDto.ImageFile.CopyToAsync(fileStream);
             }
-            return imageName;
+
+            return fileName;
         }
 
-
-
-
+        public string GetBasePath() => "stores/temp/";
     }
 }
