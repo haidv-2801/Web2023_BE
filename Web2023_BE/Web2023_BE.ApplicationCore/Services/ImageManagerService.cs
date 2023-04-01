@@ -38,8 +38,8 @@ namespace Web2023_BE.ApplicationCore
                 FolderID = imageManager.FolderID,
                 CreatedBy = _contextAccessor.HttpContext.Items["user"] + "" ?? "",
                 ModifiedBy = _contextAccessor.HttpContext.Items["user"] + "" ?? ""
-
             };
+
             var result = await Insert(imagemanagerNew);
 
             return result;

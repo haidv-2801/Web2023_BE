@@ -40,18 +40,28 @@ namespace Web2023_BE.Web
 {
     public class Startup
     {
-        public Startup(IConfiguration configuration)
+        
+
+        public Startup(IConfiguration configuration, IWebHostEnvironment environment)
         {
             Configuration = configuration;
+            Environment = environment;
         }
 
         public IConfiguration Configuration { get; }
+        public IWebHostEnvironment Environment { get; }
 
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddControllers();
             services.AddDirectoryBrowser();
+
+            var configuration = new ConfigurationBuilder()
+           .AddJsonFile($"appsettings.{Environment.EnvironmentName}.json")
+           .Build();
+
+            var domain = configuration["Domain"];
 
             //inject contact service
             HostBaseFactory.InjectContextService(services, Configuration);
@@ -109,6 +119,7 @@ namespace Web2023_BE.Web
             services.AddSingleton(client);
 
           
+            services.AddSingleton(configuration);
 
             // Register the Swagger generator, defining 1 or more Swagger documents
             services.AddSwaggerGen();
@@ -170,11 +181,6 @@ namespace Web2023_BE.Web
 
             //image
             services.AddScoped<IImageManagerService, ImageManagerService>();
-
-            
-
-          
-
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

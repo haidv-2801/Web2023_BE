@@ -39,6 +39,14 @@ namespace Web2023_BE.ApplicationCore.Entities
         [Text(Index = true, Fielddata = true, Analyzer = "casesensitive_text")]
         public string Title { get; set; }
 
+
+        /// <summary>
+        /// Mã bài viết
+        /// </summary>
+        [Display(Name = "Post title")]
+        [Text(Index = true, Fielddata = true, Analyzer = "casesensitive_text")]
+        public string Title_En { get; set; }
+
         /// <summary>
         /// Họ và tên bài viết
         /// </summary>
@@ -46,6 +54,15 @@ namespace Web2023_BE.ApplicationCore.Entities
         [IDuplicate]
         [Text(Index = true, Fielddata = true, Analyzer = "casesensitive_text")]
         public string Slug { get; set; }
+
+
+        /// <summary>
+        /// Họ và tên bài viết
+        /// </summary>
+        [Display(Name = "Alias post")]
+        [Text(Index = true, Fielddata = true, Analyzer = "casesensitive_text")]
+        public string Slug_En { get; set; }
+
 
         /// <summary>
         /// Mô tả
@@ -55,10 +72,23 @@ namespace Web2023_BE.ApplicationCore.Entities
         public string Description { get; set; }
 
         /// <summary>
+        /// Mô tả
+        /// </summary>
+        [Display(Name = "Description of the article")]
+        [Text(Index = true, Fielddata = true, Analyzer = "casesensitive_text")]
+        public string Description_En { get; set; }
+
+        /// <summary>
         /// Nội dung html
         /// </summary>
         [Display(Name = "Nội dung html")]
         public string Content { get; set; }
+
+        /// <summary>
+        /// Nội dung html
+        /// </summary>
+        [Display(Name = "Content html")]
+        public string Content_En { get; set; }
 
         /// <summary>
         /// Ảnh xem trước
@@ -77,6 +107,11 @@ namespace Web2023_BE.ApplicationCore.Entities
         /// </summary>
         [Display(Name = "Loại bài viết")]
         public PostType Type { get; set; } = PostType.None;
+
+        /// <summary>
+        /// Giá
+        /// </summary>
+        public string Price { get; set; }
         #endregion
     }
 }
