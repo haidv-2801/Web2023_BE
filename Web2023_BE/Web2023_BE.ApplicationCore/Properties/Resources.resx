@@ -124,7 +124,7 @@
     <value>@"^(([^&lt;&gt;()[\]\\.,;:\s@"]+(\.[^&lt;&gt;()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]^(([^&lt;&gt;()[\]\\.,;:\s@"]+(\.[^&lt;&gt;()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$"</value>
   </data>
   <data name="MISA_Error" xml:space="preserve">
-    <value>Có lỗi xảy ra, vui lòng liên hệ MISA</value>
+    <value>Có lỗi xảy ra, vui lòng liên hệ.</value>
   </data>
   <data name="Msg_Duplicate" xml:space="preserve">
     <value>Thông tin {0} đã tồn tại trên hệ thống</value>

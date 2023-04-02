@@ -20,7 +20,7 @@ namespace Web2023_BE.Web.Controllers
         ILogger<ImageManager> _logger;
         private readonly IImageManagerService _imageManagerService;
         private readonly StorageConfig _storageConfig;
-        private readonly string baseUrl = "stores/temp/";
+        private readonly string baseUrl = "images/";
 
         public ImageManagerController(IBaseService<ImageManager> baseService, IImageManagerService imageManagerService, StorageConfig storageConfig, ILogger<ImageManager> logger) : base(baseService, logger)
         {

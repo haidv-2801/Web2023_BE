@@ -50,7 +50,7 @@ namespace Web2023_BE.ApplicationCore
 
         public async Task<ServiceResult> DeleteImage(Guid id,  string imageName = "")
         {
-            var imagePath = Path.Combine(_hostEnvironment.ContentRootPath, GetBasePath(), imageName);
+            var imagePath = Path.Combine(_hostEnvironment.WebRootPath, GetBasePath(), imageName);
 
             if (System.IO.File.Exists(imagePath))
                 System.IO.File.Delete(imagePath);
@@ -136,7 +136,7 @@ namespace Web2023_BE.ApplicationCore
             string fileExtension = Path.GetExtension(imageDto.ImageFile.FileName);
             string fileName = $"{fileKey}{fileExtension}";
 
-            var imagePath = Path.Combine(_hostEnvironment.ContentRootPath, imageDto.Url, fileName);
+            var imagePath = Path.Combine(_hostEnvironment.WebRootPath, imageDto.Url, fileName);
             //var imagePathThumb = Path.Combine(_hostEnvironment.ContentRootPath, imageDto.Url + "thumbnails/", fileName);
 
             using (var fileStream = new FileStream(imagePath, FileMode.Create))
@@ -152,6 +152,6 @@ namespace Web2023_BE.ApplicationCore
             return fileName;
         }
 
-        public string GetBasePath() => "stores/temp/";
+        public string GetBasePath() => "images/";
     }
 }

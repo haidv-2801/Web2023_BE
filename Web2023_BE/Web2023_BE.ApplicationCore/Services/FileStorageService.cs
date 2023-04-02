@@ -96,28 +96,12 @@ namespace Web2023_BE.ApplicationCore.FileSystem
             //Khởi tạo thư mục nếu chưa tồn tại
             this.CreateDirectoryIfNotExist(path);
 
-
             //lưu file
             using (var file = new FileStream(path, FileMode.Create, FileAccess.Write))
             {
                 content.Seek(0, SeekOrigin.Begin);
                 await content.CopyToAsync(file);
             }
-
-            var pathThumbnail = this.GetPath(StorageFileType.Thumbnail, "thumbnail", databaseId);
-
-
-            this.CreateDirectoryIfNotExist(pathThumbnail);
-
-            using (var file = new FileStream(pathThumbnail, FileMode.Create, FileAccess.Write))
-            {
-                content.Seek(0, SeekOrigin.Begin);
-                await content.CopyToAsync(file);
-            }
-
-
-
-
         }
 
         public async Task SaveAsync(StorageFileType type, string name, string content, int? databaseId = null)

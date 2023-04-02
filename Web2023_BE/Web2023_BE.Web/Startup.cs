@@ -228,11 +228,11 @@ namespace Web2023_BE.Web
                 },
             });
 
-            app.UseStaticFiles(new StaticFileOptions
-            {
-                FileProvider = new PhysicalFileProvider(Path.Combine(env.ContentRootPath, "Images")),
-                RequestPath = "/Images"
-            });
+            //app.UseStaticFiles(new StaticFileOptions
+            //{
+            //    FileProvider = new PhysicalFileProvider(Path.Combine(env.ContentRootPath, "Images")),
+            //    RequestPath = "/Images"
+            //});
 
 
 
@@ -254,7 +254,7 @@ namespace Web2023_BE.Web
                        .AllowAnyHeader()
                        .AllowAnyMethod()
                        .AllowCredentials()
-                       .WithOrigins("http://localhost:3000"));
+                       .WithOrigins("http://localhost:3001"));
             app.UseAuthentication();
             app.UseAuthorization();
             app.UseMvc();
