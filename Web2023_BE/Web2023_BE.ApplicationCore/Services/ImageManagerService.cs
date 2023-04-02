@@ -137,10 +137,17 @@ namespace Web2023_BE.ApplicationCore
             string fileName = $"{fileKey}{fileExtension}";
 
             var imagePath = Path.Combine(_hostEnvironment.ContentRootPath, imageDto.Url, fileName);
+            //var imagePathThumb = Path.Combine(_hostEnvironment.ContentRootPath, imageDto.Url + "thumbnails/", fileName);
+
             using (var fileStream = new FileStream(imagePath, FileMode.Create))
             {
                 await imageDto.ImageFile.CopyToAsync(fileStream);
             }
+
+            //using (var fileStream = new FileStream(imagePathThumb, FileMode.Create))
+            //{
+            //    await imageDto.ImageFile.CopyToAsync(fileStream);
+            //}
 
             return fileName;
         }

@@ -18,6 +18,8 @@ namespace Web2023_BE.ApplicationCore.Entities
         public Guid SectionID { get; set; } = Guid.NewGuid();
 
         public string Content { get; set; }
+
+        public string ContentEn { get; set; }
             
         public HtmlSectionType HtmlSectionType { get; set; }
         #endregion
