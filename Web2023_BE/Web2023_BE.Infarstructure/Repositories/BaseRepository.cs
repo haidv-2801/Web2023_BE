@@ -24,6 +24,7 @@ namespace Web2023_BE.ApplicationCore.Interfaces
         protected IDbConnection _dbConnection = null;
         string _connectionString = string.Empty;
         protected string _tableName;
+        protected string _databaseName;
         public Type _modelType = null;
         #endregion
 
@@ -32,6 +33,7 @@ namespace Web2023_BE.ApplicationCore.Interfaces
         {
             _configuration = configuration;
             _connectionString = _configuration.GetConnectionString("TOEIC365ConnectionString");
+            _databaseName = _configuration["Database"];
             _dbConnection = new MySqlConnection(_connectionString);
             _modelType = typeof(TEntity);
             _tableName = _modelType.GetTableName().ToLowerInvariant();
@@ -295,7 +297,7 @@ namespace Web2023_BE.ApplicationCore.Interfaces
                 table = _tableName;
             }
 
-            var query = new StringBuilder($"SELECT COLUMN_NAME FROM information_schema.columns WHERE table_name='{table}'");
+            var query = new StringBuilder($"SELECT COLUMN_NAME FROM information_schema.columns WHERE table_name='{table}' and TABLE_SCHEMA='{_databaseName}'");
 
             var columns = await _dbConnection.QueryAsync<string>(query.ToString(), commandType: CommandType.Text);
 

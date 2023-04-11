@@ -177,13 +177,13 @@ namespace Web2023_BE.Web.Controllers
             //Nếu không có extension -> fail
             if (data.Count() < 2)
             {
-                return "File name invalid";
+                return "Tên file không hợp lệ";
             }
 
             var ext = data.Last().ToLower();
             if (!_storageConfig.UploadAllowExtensions.Contains(ext))
             {
-                return "File extension invalid";
+                return "Loại file không hợp lệ";
             }
 
             if (_storageConfig.UploadMaxSizeMB.HasValue && file.Length > _storageConfig.UploadMaxSizeMB.Value * 1024 * 1024)

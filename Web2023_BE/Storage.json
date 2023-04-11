@@ -1,6 +1,7 @@
 {
   "Storage": {
-    "UploadAllowExtensions": "ppt,pptx,doc,docx,xls,xlsx,pdf,txt,zip,rar,png,jpg,gif,bmp,tiff,svg,xml,xmind,inv,ods,odt,rtf,heic,jpeg",
+    "UploadAllowExtensions": "png,jpg,gif,bmp,tiff,svg,rtf,heic,jpeg,avif",
+    //"UploadAllowExtensions": "ppt,pptx,doc,docx,xls,xlsx,pdf,txt,zip,rar,png,jpg,gif,bmp,tiff,svg,xml,xmind,inv,ods,odt,rtf,heic,jpeg",
     "UploadMaxSizeMB": 5,
     "Type": "File",
     "File": {

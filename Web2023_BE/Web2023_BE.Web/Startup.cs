@@ -110,7 +110,7 @@ namespace Web2023_BE.Web
 
             //File storage
             HostBaseFactory.InjectStorageService(services, Configuration);
-           
+
             //Add Elasticsearch
             //services.AddElasticsearch(Configuration);
             var url = Configuration["elasticsearch:url"];
@@ -118,7 +118,6 @@ namespace Web2023_BE.Web
             var client = new ElasticClient(settings);
             services.AddSingleton(client);
 
-          
             services.AddSingleton(configuration);
 
             // Register the Swagger generator, defining 1 or more Swagger documents
@@ -211,22 +210,24 @@ namespace Web2023_BE.Web
             // Remove MP4 videos.
             provider.Mappings.Remove(".mp4");
 
-            app.UseStaticFiles(new StaticFileOptions
-            {
-                ServeUnknownFileTypes = true,
-                FileProvider = new PhysicalFileProvider(
-           Path.Combine(env.ContentRootPath, "Stores")),
-                RequestPath = "/stores",
-                OnPrepareResponse = ctx =>
-                {
-                    const int durationInSeconds = 86400;
-                    ctx.Context.Response.Headers[HeaderNames.CacheControl] = "public,max-age=" + durationInSeconds;
+            //build
 
-                    ctx.Context.Response.Headers[HeaderNames.AccessControlAllowOrigin] = "*";
-                    ctx.Context.Response.Headers[HeaderNames.AccessControlMaxAge] = durationInSeconds.ToString();
-                    ctx.Context.Response.Headers[HeaderNames.Vary] = "Accept-Encoding";
-                },
-            });
+           // app.UseStaticFiles(new StaticFileOptions
+           // {
+           //     ServeUnknownFileTypes = true,
+           //     FileProvider = new PhysicalFileProvider(
+           //Path.Combine(env.ContentRootPath, "Stores")),
+           //     RequestPath = "/stores",
+           //     OnPrepareResponse = ctx =>
+           //     {
+           //         const int durationInSeconds = 86400;
+           //         ctx.Context.Response.Headers[HeaderNames.CacheControl] = "public,max-age=" + durationInSeconds;
+
+           //         ctx.Context.Response.Headers[HeaderNames.AccessControlAllowOrigin] = "*";
+           //         ctx.Context.Response.Headers[HeaderNames.AccessControlMaxAge] = durationInSeconds.ToString();
+           //         ctx.Context.Response.Headers[HeaderNames.Vary] = "Accept-Encoding";
+           //     },
+           // });
 
             //app.UseStaticFiles(new StaticFileOptions
             //{
@@ -235,16 +236,15 @@ namespace Web2023_BE.Web
             //});
 
 
-
             // using Microsoft.Extensions.FileProviders;
             // using System.IO;
-            app.UseFileServer(new FileServerOptions
-            {
-                FileProvider = new PhysicalFileProvider(
-                    Path.Combine(env.ContentRootPath, "Stores")),
-                RequestPath = "/stores",
-                EnableDirectoryBrowsing = true
-            });
+            //app.UseFileServer(new FileServerOptions
+            //{
+            //    FileProvider = new PhysicalFileProvider(
+            //        Path.Combine(env.ContentRootPath, "Stores")),
+            //    RequestPath = "/stores",
+            //    EnableDirectoryBrowsing = true
+            //});
 
 
             app.UseStaticFiles(); // For the wwwroot folder.
@@ -254,7 +254,7 @@ namespace Web2023_BE.Web
                        .AllowAnyHeader()
                        .AllowAnyMethod()
                        .AllowCredentials()
-                       .WithOrigins("http://localhost:3001"));
+                       .WithOrigins("http://localhost:3000"));
             app.UseAuthentication();
             app.UseAuthorization();
             app.UseMvc();

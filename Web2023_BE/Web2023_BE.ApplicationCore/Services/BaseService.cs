@@ -106,7 +106,7 @@ namespace Web2023_BE.ApplicationCore
                             string sortType = item[1].Value<string>().Trim();
                             if (!string.IsNullOrEmpty(name) && (sortType == SortType.ASC || sortType == SortType.DESC))
                             {
-                                listSort.Add($"{name} {sortType}");
+                                listSort.Add($"`{name}` {sortType}");
                             }
                         }
                     }
@@ -123,7 +123,7 @@ namespace Web2023_BE.ApplicationCore
 
             if (!string.IsNullOrEmpty(pagingRequest.Columns))
             {
-                columns = pagingRequest.Columns.Split(",".ToCharArray()).Select(item => item.Trim()).ToList();
+                columns = pagingRequest.Columns.Split(",".ToCharArray()).Select(item => "`" + item.Trim() + "`").ToList();
             }
 
             if (totalRecord > 0)
@@ -367,7 +367,7 @@ namespace Web2023_BE.ApplicationCore
         public async Task<ServiceResult> UpdatePatch(Guid id, object model)
         {
             var oldModel = await GetEntityById(id);
-            if(oldModel == null)
+            if (oldModel == null)
             {
                 _serviceResult.onError(null, $"Bản ghi với key={id} không tồn tại.");
                 return _serviceResult;
@@ -382,7 +382,7 @@ namespace Web2023_BE.ApplicationCore
 
             _serviceResult = await Update(id, entity);
 
-            if(_serviceResult.Data != null && int.TryParse(_serviceResult.Data.ToString(), out int outData))
+            if (_serviceResult.Data != null && int.TryParse(_serviceResult.Data.ToString(), out int outData))
             {
                 _serviceResult.Data = id;
             }
@@ -403,11 +403,11 @@ namespace Web2023_BE.ApplicationCore
             var model = await GetEntityById(entityId);
             if (model == null)
             {
-                _serviceResult.onError(_data:null, _message: null,  _code: Web2023_BE.Entities.Enums.NotFound);
+                _serviceResult.onError(_data: null, _message: null, _code: Web2023_BE.Entities.Enums.NotFound);
                 return _serviceResult;
             }
 
-            entity = CustomValueWhenUpdate(entity);            
+            entity = CustomValueWhenUpdate(entity);
             entity.EntityState = EntityState.Update;
 
             var isValid = await Validate(entity, entityId);

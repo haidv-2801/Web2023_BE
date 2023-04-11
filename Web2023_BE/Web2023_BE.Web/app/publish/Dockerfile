@@ -2,6 +2,9 @@
 
 FROM mcr.microsoft.com/dotnet/aspnet:6.0 AS base
 WORKDIR /app
+RUN mkdir -p /app/Stores
+RUN mkdir -p /app/Images
+RUN mkdir -p /app/wwwroot/images
 EXPOSE 80
 EXPOSE 443
 

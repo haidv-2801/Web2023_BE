@@ -28,7 +28,7 @@ namespace Web2023_BE.ApplicationCore.Entities
         /// <summary>
         /// Id bài viết
         /// </summary>
-        public Guid MenuID { get; set; } = Guid.Empty;
+        public Guid CategoryID { get; set; } = Guid.Empty;
 
         /// <summary>
         /// Mã bài viết
@@ -112,6 +112,11 @@ namespace Web2023_BE.ApplicationCore.Entities
         /// Giá
         /// </summary>
         public string Price { get; set; }
+
+        /// <summary>
+        /// Thứ tự hiển thị
+        /// </summary>
+        public int Order { get; set; } = 0;
         #endregion
     }
 }

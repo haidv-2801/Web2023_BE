@@ -3,12 +3,14 @@ using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.Text;
+using Web2023_BE.ApplicationCore.Extensions;
 
 namespace Web2023_BE.ApplicationCore.Entities
 {
     /// <summary>
     /// Thực thể thể loại
     /// </summary>
+    [ConfigTables(TableName = "category", UniqueColumns = "Title;Type")]
     public class Category : BaseEntity
     {
         #region Property
@@ -24,22 +26,22 @@ namespace Web2023_BE.ApplicationCore.Entities
         /// <summary>
         /// Mã thể loại
         /// </summary>
-        [IDuplicate]
         [IRequired]
         [Display(Name = "Tiêu đề thể loại")]
         public string Title { get; set; }
 
-        /// <summary>
-        /// Mô tả
-        /// </summary>
-        [Display(Name = "ID cha của thể loại")]
-        public Guid? ParentID { get; set; }
 
         /// <summary>
-        /// Ghi chú
+        /// Mã thể loại
         /// </summary>
-        [Display(Name = "Ghi chú")]
-        public string Note { get; set; }
+        public string Title_en { get; set; }
+
+        /// <summary>
+        /// Loại là sản phẩm, dự án
+        /// </summary>
+        public int Type { get; set; }
+
+
         #endregion
     }
 }

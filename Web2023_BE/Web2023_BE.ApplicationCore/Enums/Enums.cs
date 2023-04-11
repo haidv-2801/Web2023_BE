@@ -59,4 +59,10 @@ namespace Web2023_BE.Entities
         None = 1,
         Recruitment = 2, // tuyển dụng
     }
+
+    public enum PartnerType
+    {
+        Partner = 0,
+        Customer = 1,
+    }
 }
