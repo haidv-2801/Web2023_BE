@@ -35,6 +35,7 @@ using Web2023_BE.ApplicationCore.Services;
 using Web2023_BE.ApplicationCore.Authorization;
 using Web2023_BE.ApplicationCore.Entities;
 using Microsoft.IdentityModel.Logging;
+using SixLabors.ImageSharp.Processing.Processors;
 
 namespace Web2023_BE.Web
 {
@@ -180,6 +181,7 @@ namespace Web2023_BE.Web
 
             //image
             services.AddScoped<IImageManagerService, ImageManagerService>();
+            //services.AddScoped<IImageProcessor, ImageSharpProcessor>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
