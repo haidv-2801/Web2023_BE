@@ -22,7 +22,7 @@ using Nest;
 using Microsoft.Extensions.FileProviders;
 using System.IO;
 using Microsoft.AspNetCore.Cors.Infrastructure;
-using Microsoft.Owin.Cors;
+
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.StaticFiles;
 using Microsoft.Net.Http.Headers;
