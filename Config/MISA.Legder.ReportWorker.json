@@ -1,5 +1,0 @@
-{
-  "ElasticApm": {
-    "ServiceName": "legder-report-worker"
-  }
-}

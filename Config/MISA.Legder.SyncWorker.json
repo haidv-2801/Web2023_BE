@@ -1,5 +1,0 @@
-{
-  "ElasticApm": {
-    "ServiceName": "legder-sync-worker"
-  }
-}
