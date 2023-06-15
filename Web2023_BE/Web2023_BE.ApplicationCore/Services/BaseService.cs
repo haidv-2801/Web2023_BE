@@ -255,7 +255,6 @@ namespace Web2023_BE.ApplicationCore
             viewOrTableName = CustomTableNameService(viewOrTableName);
             StringBuilder stringBuilder = new StringBuilder();
             var filter = JsonConvert.DeserializeObject<JArray>(FunctionHelper.Base64Decode(pagingRequest.Filter));
-            List<string> columns = null;
 
             if (filter != null && filter.Type == JTokenType.Array)
             {

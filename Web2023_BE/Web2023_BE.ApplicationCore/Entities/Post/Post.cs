@@ -13,7 +13,6 @@ namespace Web2023_BE.ApplicationCore.Entities
     /// <summary>
     /// Thực thể bài viết
     /// </summary>
-    [ElasticsearchType(IdProperty = nameof(PostID)), Description("posts")]
     [ConfigTables(TableName = "post", UniqueColumns = "Title;Slug")]
     public class Post : BaseEntity
     {
@@ -36,7 +35,6 @@ namespace Web2023_BE.ApplicationCore.Entities
         [IDuplicate]
         [IRequired]
         [Display(Name = "Tiêu đề bài viết")]
-        [Text(Index = true, Fielddata = true, Analyzer = "casesensitive_text")]
         public string Title { get; set; }
 
 
@@ -44,7 +42,6 @@ namespace Web2023_BE.ApplicationCore.Entities
         /// Mã bài viết
         /// </summary>
         [Display(Name = "Post title")]
-        [Text(Index = true, Fielddata = true, Analyzer = "casesensitive_text")]
         public string Title_En { get; set; }
 
         /// <summary>
@@ -52,7 +49,6 @@ namespace Web2023_BE.ApplicationCore.Entities
         /// </summary>
         [Display(Name = "Alias bài viết")]
         [IDuplicate]
-        [Text(Index = true, Fielddata = true, Analyzer = "casesensitive_text")]
         public string Slug { get; set; }
 
 
@@ -60,7 +56,6 @@ namespace Web2023_BE.ApplicationCore.Entities
         /// Họ và tên bài viết
         /// </summary>
         [Display(Name = "Alias post")]
-        [Text(Index = true, Fielddata = true, Analyzer = "casesensitive_text")]
         public string Slug_En { get; set; }
 
 
@@ -68,14 +63,12 @@ namespace Web2023_BE.ApplicationCore.Entities
         /// Mô tả
         /// </summary>
         [Display(Name = "Mô tả của bài viết")]
-        [Text(Index = true, Fielddata = true, Analyzer = "casesensitive_text")]
         public string Description { get; set; }
 
         /// <summary>
         /// Mô tả
         /// </summary>
         [Display(Name = "Description of the article")]
-        [Text(Index = true, Fielddata = true, Analyzer = "casesensitive_text")]
         public string Description_En { get; set; }
 
         /// <summary>

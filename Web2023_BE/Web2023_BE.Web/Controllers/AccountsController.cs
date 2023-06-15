@@ -16,6 +16,10 @@ using System.Threading;
 using Microsoft.AspNetCore.Authorization;
 using System.ComponentModel.DataAnnotations;
 using Microsoft.Extensions.Logging;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.AspNetCore.Authentication;
+using Microsoft.AspNetCore.Authentication.Cookies;
+using Newtonsoft.Json.Linq;
 
 namespace Web2023_BE.Web.Controllers
 {
@@ -76,6 +80,8 @@ namespace Web2023_BE.Web.Controllers
         {
             try
             {
+                // Xóa token của người dùng sau khi logoutJwtBearerDefaults.AuthenticationScheme
+                //await HttpContext.SignOutAsync("Cookies");
                 var loggedIn = await _accountService.Login(accountInfo);
                 if (loggedIn == null) return Unauthorized();
                 return Ok(loggedIn);
@@ -92,7 +98,31 @@ namespace Web2023_BE.Web.Controllers
         /// </summary>
         [EnableCors("AllowCROSPolicy")]
         [AllowAnonymous]
+        [HttpPost("Logout")]
+        public async Task<IActionResult> Logout()
+        {
+            try
+            {
+                string accessToken = HttpContext.Request.Cookies["access_token"];
+
+                await HttpContext.SignOutAsync("Cookies");
+
+                return Ok(true);
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(StatusCodes.Status400BadRequest, ex.Message);
+            }
+        }
+
+
+        /// <summary>
+        /// Login
+        /// </summary>
+        [EnableCors("AllowCROSPolicy")]
+        [AllowAnonymous]
         [HttpPut("/api/Accounts/ChangePassword/{id}")]
+        [Authorize]
         public async Task<IActionResult> ChangePassword([FromRoute][Required] string id, [FromBody][Required] AccountPasswordChangeDTO entity)
         {
             var res = new ServiceResult();

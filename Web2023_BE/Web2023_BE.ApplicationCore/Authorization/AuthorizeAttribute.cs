@@ -19,6 +19,7 @@ namespace Web2023_BE.ApplicationCore.Authorization
         {
             _roles = roles ?? new RoleCode[] { };
         }
+
         public void OnAuthorization(AuthorizationFilterContext context)
         {
             // skip authorization if action is decorated with [AllowAnonymous] attribute

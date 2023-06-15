@@ -11,12 +11,12 @@ using Web2023_BE.ApplicationCore;
 using Web2023_BE.ApplicationCore.Interfaces;
 using Web2023_BE.ApplicationCore.Entities;
 using Web2023_BE.Web.Controllers;
-using Web2023_BE.ApplicationCore.Entities;
 using Microsoft.AspNetCore.Cors;
 using Web2023_BE.Entities;
 using System.Threading;
 using System.ComponentModel.DataAnnotations;
 using Microsoft.Extensions.Logging;
+using Microsoft.AspNetCore.Authorization;
 
 namespace Web2023_BE.Web.Controllers
 {
@@ -29,15 +29,13 @@ namespace Web2023_BE.Web.Controllers
         #region Declare
         IPostService _postService;
         ILogger<Post> _logger;
-        IElasticService<Post> _postELKService;
         #endregion
 
         #region Constructer
-        public PostsController(IPostService postService, ILogger<Post> logger, IElasticService<Post> postELKService) : base(postService, logger)
+        public PostsController(IPostService postService, ILogger<Post> logger) : base(postService, logger)
         {
             _postService = postService;
             _logger = logger;
-            _postELKService = postELKService;
         }
         #endregion
 
@@ -65,45 +63,6 @@ namespace Web2023_BE.Web.Controllers
         {
             return Ok(_postService.GetPostsByMenuID(Guid.Parse(id)));
         }
-
-        [EnableCors("AllowCROSPolicy")]
-        [Route("/api/PostsELK")]
-        [HttpPost]
-        public async Task<ActionResult> GetPostsELK([FromBody][Required]GridQueryModel gridQueryModel)
-        {
-            var (totalRecords, documents) = await _postELKService.GetDocumentsAsync(gridQueryModel);
-
-            var gridResponse = new ApiGridResponse<Post>(documents, totalRecords);
-
-            return Ok(gridResponse);
-        }
-
-        [EnableCors("AllowCROSPolicy")]
-        [Route("/api/PostELK/Upsert")]
-        [HttpPost]
-        public async Task<ActionResult> UpsertPostELK([FromBody][Required] Post post)
-        {
-            await _postELKService.UpdateDocumentAsync(post);
-            return Ok();
-        }
-
-        [EnableCors("AllowCROSPolicy")]
-        [HttpGet("/api/PostELK/GetByID/{id}")]
-        public async Task<ActionResult> GetPostELKByID([Required] string id)
-        {
-             var res = await _postELKService.GetDocumentAsync(id);
-             return Ok(res);
-        }
-
-        [EnableCors("AllowCROSPolicy")]
-        [Route("/api/PostELK/Delete/{id}")]
-        [HttpDelete]
-        public async Task<IActionResult> DeletePostELK(string id)
-        {
-            await _postELKService.DeleteDocumentAsync(new Post() { PostID = Guid.Parse(id)});
-            return Ok();
-        }
-
         #endregion
     }
 }

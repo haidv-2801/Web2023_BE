@@ -51,7 +51,7 @@ namespace Web2023_BE.Infrastructure
             //2. Tạo kết nối và truy vấn                        
             var posts = _dbConnection.Query<AccountDTO>($"Proc_Get{_tableName}sFilterPaging", param: param, commandType: CommandType.StoredProcedure);
 
-            serviceResult.Data = (IEnumerable<AccountDTO>)posts;
+            serviceResult.Data = posts; 
             serviceResult.TotalRecords = param.Get<int>("v_total_record");
 
             //3. Trả về dữ liệu

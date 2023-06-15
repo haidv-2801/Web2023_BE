@@ -32,7 +32,7 @@ namespace Web2023_BE.ApplicationCore.Interfaces
         public BaseRepository(IConfiguration configuration)
         {
             _configuration = configuration;
-            _connectionString = _configuration.GetConnectionString("TOEIC365ConnectionString");
+            _connectionString = _configuration.GetConnectionString("AppConnectionString");
             _databaseName = _configuration["Database"];
             _dbConnection = new MySqlConnection(_connectionString);
             _modelType = typeof(TEntity);

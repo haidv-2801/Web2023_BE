@@ -55,6 +55,7 @@ namespace Web2023_BE.Web.Controllers
         [EnableCors("AllowCROSPolicy")]
         [Route("/api/file/insert")]
         [HttpPost]
+        [Authorize]
         [DisableFormValueModelBindingAttribute]
         public ActionResult Create([FromBody]IFormFile file)
         {

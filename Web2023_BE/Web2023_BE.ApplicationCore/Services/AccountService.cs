@@ -23,6 +23,8 @@ using System.Threading.Tasks;
 using Web2023_BE.ApplicationCore.Extensions;
 using Web2023_BE.ApplicationCore.Authorization;
 using Web2023_BE.ApplicationCore.Enums;
+using Nelibur.ObjectMapper;
+using DocumentFormat.OpenXml.Drawing.Charts;
 
 namespace Web2023_BE.ApplicationCore.Interfaces
 {
@@ -30,17 +32,15 @@ namespace Web2023_BE.ApplicationCore.Interfaces
     {
         #region Declare
         IAccountRepository _accountRepository;
-        IContactSubmitService _libraryCardService;
         IConfiguration _config;
         private IJwtUtils _jwtUtils;
         #endregion
 
         #region Constructer
-        public AccountService(IAccountRepository accountRepository, IContactSubmitService libraryCardService, IConfiguration config, IJwtUtils jwtUtils) : base(accountRepository)
+        public AccountService(IAccountRepository accountRepository, IConfiguration config, IJwtUtils jwtUtils) : base(accountRepository)
         {
             _accountRepository = accountRepository;
             _config = config;
-            _libraryCardService = libraryCardService;
             _jwtUtils = jwtUtils;
         }
         #endregion
@@ -57,7 +57,7 @@ namespace Web2023_BE.ApplicationCore.Interfaces
         public ServiceResult GetAccountsFilterPaging(string filterValue, int pageSize, int pageNumber)
         {
             //.1 Lấy danh sách nhân viên phân trang
-            var postDbResponse = (DbResponse)_accountRepository.GetAccountsFilterPaging(filterValue, pageSize, pageNumber);
+            var postDbResponse = _accountRepository.GetAccountsFilterPaging(filterValue, pageSize, pageNumber);
 
             //2. Lấy tổng số bản ghi
             long totalRecord = postDbResponse.TotalRecords;
@@ -122,7 +122,7 @@ namespace Web2023_BE.ApplicationCore.Interfaces
         /// <returns></returns>
         protected override async Task<Account> CustomValueWhenInsert(Account entity)
         {
-            entity.Password = CreateMD5(entity.Password);
+            if (!string.IsNullOrWhiteSpace(entity.Password)) entity.Password = CreateMD5(entity.Password);
             return entity;
         }
 
@@ -198,29 +198,6 @@ namespace Web2023_BE.ApplicationCore.Interfaces
         }
 
         /// <summary>
-        /// Lấy giá trị theo tên thuộc tíh
-        /// </summary>
-        /// <param name="post">Thông tin nhân viên</param>
-        /// <param name="propName">Tên thuộc tính</param>
-        /// <returns>Giá trị</returns>
-        /// CREATED BY: DVHAI (12/07/2021)
-        private object GetValueByProperty(Account post, string propName)
-        {
-            var propertyInfo = post.GetType().GetProperty(propName);
-
-            //Trường hợp là datetime thì format lại
-            if (propertyInfo.PropertyType == typeof(DateTime) || propertyInfo.PropertyType == typeof(DateTime?))
-            {
-                var value = propertyInfo.GetValue(post, null);
-                var date = Convert.ToDateTime(value).ToString("dd/MM/yyyy");
-
-                return value != null ? date : "";
-            }
-
-            return propertyInfo.GetValue(post, null);
-        }
-
-        /// <summary>
         /// Đăng nhập
         /// </summary>
         /// <param name="userRequest"></param>
@@ -228,25 +205,18 @@ namespace Web2023_BE.ApplicationCore.Interfaces
         public async Task<object> Login(AccountLoginDTO userRequest)
         {
             userRequest.Password = CreateMD5(userRequest.Password);
-
-            var account = (Account)(await _accountRepository.Login(userRequest));
-            string token = "";
+            var account = (await _accountRepository.Login(userRequest));
             if (account != null)
             {
                 if (account.Status == false) return null;
 
-                //get role
-                var roles = (await _accountRepository.GetRolesByAccountID(account.AccountID.ToString()));
-
-                //get member info
-                if(account != null)
+                var tokenInfo = GenerateJSONWebToken(account);
+                return new
                 {
-                    var role = roles.Select(item =>item.RoleType).ToList();
-                    string roleString = string.Join(",", role.ToArray());
-                    token = _jwtUtils.GenerateJwtToken(roleString, account.UserName);
-                }
-
-                return new { userInfo = new { roles = roles.Select(item => new { RoleName = item.RoleName, RoleType = item.RoleType }), Email = account.Email, UserName = account.UserName, FullName = account.FullName, PhoneNumer = account.PhoneNumber, CreatedDate = account.CreatedDate, Avatar = account.Avatar, UserID = account.AccountID }, token = GenerateJSONWebToken(account) };
+                    user = TinyMapper.Map<AccountClientDTO>(account),
+                    token = tokenInfo.Item1,
+                    expiredTime = (long)(tokenInfo.Item2 - new DateTime(1970, 1, 1)).TotalMilliseconds
+                };
             }
 
             return account;
@@ -257,26 +227,28 @@ namespace Web2023_BE.ApplicationCore.Interfaces
         /// </summary>
         /// <param name="userInfo"></param>
         /// <returns></returns>
-        private string GenerateJSONWebToken(Account userInfo)
+        private Tuple<string, DateTime> GenerateJSONWebToken(Account userInfo)
         {
-            var test = DateTime.Now.AddMinutes(1);
             var securityKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_config["Jwt:Key"]));
             var credentials = new SigningCredentials(securityKey, SecurityAlgorithms.HmacSha256);
 
             var claims = new[] {
                 new Claim(JwtRegisteredClaimNames.Sub, userInfo.UserName),
                 new Claim(JwtRegisteredClaimNames.Email, userInfo.Email),
-                new Claim("CreatedDate", userInfo.CreatedDate.Value.ToString("dd-MM-yyyy")),
-                new Claim(JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString())
+                new Claim(JwtRegisteredClaimNames.Iat, DateTime.UtcNow.ToString()),
+                new Claim(JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString()),
+                new Claim("AccountID", userInfo.AccountID.ToString()),
             };
+
+            var expiredTime = DateTime.UtcNow.AddMinutes(int.Parse(_config["Authenication:TimeExpired"]));
 
             var token = new JwtSecurityToken(_config["Jwt:Issuer"],
                 _config["Jwt:Issuer"],
                 claims,
-                expires: DateTime.Now.AddMinutes(int.Parse(_config["Authenication:TimeExpired"])),
+                expires: expiredTime,
                 signingCredentials: credentials);
-
-            return new JwtSecurityTokenHandler().WriteToken(token);
+            
+            return Tuple.Create(new JwtSecurityTokenHandler().WriteToken(token), expiredTime);
         }
 
         /// <summary>

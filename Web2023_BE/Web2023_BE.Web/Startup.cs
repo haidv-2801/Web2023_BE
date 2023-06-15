@@ -36,12 +36,14 @@ using Web2023_BE.ApplicationCore.Authorization;
 using Web2023_BE.ApplicationCore.Entities;
 using Microsoft.IdentityModel.Logging;
 using SixLabors.ImageSharp.Processing.Processors;
+using Web2023_BE.ApplicationCore.Extensions;
 
 namespace Web2023_BE.Web
 {
     public class Startup
     {
-        
+        public IConfiguration Configuration { get; }
+        public IWebHostEnvironment Environment { get; }
 
         public Startup(IConfiguration configuration, IWebHostEnvironment environment)
         {
@@ -49,10 +51,6 @@ namespace Web2023_BE.Web
             Environment = environment;
         }
 
-        public IConfiguration Configuration { get; }
-        public IWebHostEnvironment Environment { get; }
-
-        // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddControllers();
@@ -62,126 +60,22 @@ namespace Web2023_BE.Web
            .AddJsonFile($"appsettings.{Environment.EnvironmentName}.json")
            .Build();
 
-            var domain = configuration["Domain"];
-
-            //inject contact service
+            //================ inject base ================
             HostBaseFactory.InjectContextService(services, Configuration);
-
-            //cache
             HostBaseFactory.InjectCached(services, Configuration);
-
-            services.AddCors(options =>
-            {
-                options.AddPolicy("AllowCROSPolicy",
-                    builder =>
-                    {
-                        builder.AllowAnyOrigin()
-                                .AllowAnyMethod()
-                                .AllowAnyHeader();
-                    });
-            });
-
-
-            services.AddHttpContextAccessor();
-
-
-            services.AddControllersWithViews(options =>
-            {
-                options.InputFormatters.Insert(0, GetJsonPatchInputFormatter());
-            }).AddNewtonsoftJson(options =>
-            {
-                options.SerializerSettings.ReferenceLoopHandling = Newtonsoft.Json.ReferenceLoopHandling.Ignore;
-            });
-
-            // Config authenication
             HostBaseFactory.InjectJwt(services, Configuration);
             IdentityModelEventSource.ShowPII = true;
-            services.AddMvc(x => x.EnableEndpointRouting = false);
-
-            //
-            services.AddScoped<ClientIpCheckActionFilter>(container =>
-            {
-                var loggerFactory = container.GetRequiredService<ILoggerFactory>();
-                var cache = container.GetRequiredService<IMemoryCache>();
-                var logger = loggerFactory.CreateLogger<ClientIpCheckActionFilter>();
-
-                return new ClientIpCheckActionFilter(
-                    Configuration["AdminSafeList"], cache, logger);
-            });
-
-            //File storage
             HostBaseFactory.InjectStorageService(services, Configuration);
-
-            //Add Elasticsearch
-            //services.AddElasticsearch(Configuration);
-            var url = Configuration["elasticsearch:url"];
-            var settings = new ConnectionSettings(new Uri(url)).DefaultIndex("posts");
-            var client = new ElasticClient(settings);
-            services.AddSingleton(client);
-
             services.AddSingleton(configuration);
 
-            // Register the Swagger generator, defining 1 or more Swagger documents
+            TinyMapperExtension.Bind();
+            //================ inject base ================
+
+            StartupExtensions.AddCors(services);
+            services.AddMvc(x => x.EnableEndpointRouting = false);
+            services.AddHttpContextAccessor();
             services.AddSwaggerGen();
-
-            //base
-            services.AddScoped(typeof(IBaseRepository<>), typeof(BaseRepository<>));
-            services.AddScoped(typeof(IBaseService<>), typeof(BaseService<>));
-
-            //account
-            services.AddScoped<IAccountRepository, AccountRepository>();
-            services.AddScoped<IAccountService, AccountService>();
-
-            //post
-            services.AddScoped<IPostRepository, PostRepository>();
-            services.AddScoped<IPostService, PostService>();
-
-            //menu
-            services.AddScoped<IMenuRepository, MenuRepository>();
-            services.AddScoped<IMenuService, MenuService>();
-
-            //book
-            services.AddScoped<IBookRepository, BookRepository>();
-            services.AddScoped<IBookService, BookService>();
-
-            //elastic search
-            services.AddScoped(typeof(IElasticRepository<>), typeof(ElasticRepository<>));
-            services.AddScoped(typeof(IElasticService<>), typeof(ElasticService<>));
-
-            //book order
-            services.AddScoped<IBookOrderRepository, BookOrderRepository>();
-            services.AddScoped<IBookOrderService, BookOrderService>();
-
-            //safe address
-            services.AddScoped<ISafeAddressRepository, SafeAddressRepository>();
-            services.AddScoped<ISafeAddressService, SafeAddressService>();
-
-            //role address
-            services.AddScoped<IRoleRepository, RoleRepository>();
-            services.AddScoped<IRoleService, RoleService>();
-
-            //library card
-            services.AddScoped<IContactSubmitRepository, ContactSubmitRepository>();
-            services.AddScoped<IContactSubmitService, ContactSubmitService>();
-
-            //carousel
-            services.AddScoped<ICarouselService, CarouselService>();
-
-            //partner
-            services.AddScoped<IPartnerService, PartnerService>();
-
-            //footer
-            services.AddScoped<IHtmlSectionService, HtmlSectionService>();
-
-            //teachintro
-            services.AddScoped<ITechIntroService, TechIntroService>();
-
-            // folder
-            services.AddScoped<IFolderService, FolderService>();
-
-            //image
-            services.AddScoped<IImageManagerService, ImageManagerService>();
-            //services.AddScoped<IImageProcessor, ImageSharpProcessor>();
+            services.InjectDependencies();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -191,65 +85,10 @@ namespace Web2023_BE.Web
             {
                 app.UseDeveloperExceptionPage();
             }
-
             app.UseHttpsRedirection();
-
-            app.UseMiddleware<ErrorHandlingMiddleWare>();
-
-            //app.UseMiddleware<JwtMiddleware>();
-
+            app.UseMiddlewares();
             app.UseRouting();
-
-
-            // Set up custom content types - associating file extension to MIME type
-            var provider = new FileExtensionContentTypeProvider();
-            // Add new mappings
-            provider.Mappings[".myapp"] = "application/x-msdownload";
-            provider.Mappings[".htm3"] = "text/html";
-            provider.Mappings[".image"] = "image/png";
-            // Replace an existing mapping
-            provider.Mappings[".rtf"] = "application/x-msdownload";
-            // Remove MP4 videos.
-            provider.Mappings.Remove(".mp4");
-
-            //build
-
-           // app.UseStaticFiles(new StaticFileOptions
-           // {
-           //     ServeUnknownFileTypes = true,
-           //     FileProvider = new PhysicalFileProvider(
-           //Path.Combine(env.ContentRootPath, "Stores")),
-           //     RequestPath = "/stores",
-           //     OnPrepareResponse = ctx =>
-           //     {
-           //         const int durationInSeconds = 86400;
-           //         ctx.Context.Response.Headers[HeaderNames.CacheControl] = "public,max-age=" + durationInSeconds;
-
-           //         ctx.Context.Response.Headers[HeaderNames.AccessControlAllowOrigin] = "*";
-           //         ctx.Context.Response.Headers[HeaderNames.AccessControlMaxAge] = durationInSeconds.ToString();
-           //         ctx.Context.Response.Headers[HeaderNames.Vary] = "Accept-Encoding";
-           //     },
-           // });
-
-            //app.UseStaticFiles(new StaticFileOptions
-            //{
-            //    FileProvider = new PhysicalFileProvider(Path.Combine(env.ContentRootPath, "Images")),
-            //    RequestPath = "/Images"
-            //});
-
-
-            // using Microsoft.Extensions.FileProviders;
-            // using System.IO;
-            //app.UseFileServer(new FileServerOptions
-            //{
-            //    FileProvider = new PhysicalFileProvider(
-            //        Path.Combine(env.ContentRootPath, "Stores")),
-            //    RequestPath = "/stores",
-            //    EnableDirectoryBrowsing = true
-            //});
-
-
-            app.UseStaticFiles(); // For the wwwroot folder.
+            app.UseStaticFiles();
             app
                .UseCors(policy =>
                    policy
@@ -257,15 +96,12 @@ namespace Web2023_BE.Web
                        .AllowAnyMethod()
                        .AllowCredentials()
                        .WithOrigins("http://localhost:3000"));
+
             app.UseAuthentication();
             app.UseAuthorization();
             app.UseMvc();
 
-            // Enable middleware to serve generated Swagger as a JSON endpoint.
             app.UseSwagger();
-
-            // Enable middleware to serve swagger-ui (HTML, JS, CSS, etc.),
-            // specifying the Swagger JSON endpoint.
             app.UseSwaggerUI(c =>
             {
                 c.SwaggerEndpoint("/swagger/v1/swagger.json", "My API V1");
@@ -275,25 +111,6 @@ namespace Web2023_BE.Web
             {
                 endpoints.MapControllers();
             });
-
-            app.UseMiddleware<AdminSafeListMiddleware>(Configuration["AdminSafeList"]);
-        }
-
-
-        private static NewtonsoftJsonPatchInputFormatter GetJsonPatchInputFormatter()
-        {
-            var builder = new ServiceCollection()
-                .AddLogging()
-                .AddMvc()
-                .AddNewtonsoftJson()
-                .Services.BuildServiceProvider();
-
-            return builder
-                .GetRequiredService<IOptions<MvcOptions>>()
-                .Value
-                .InputFormatters
-                .OfType<NewtonsoftJsonPatchInputFormatter>()
-                .First();
         }
     }
 }

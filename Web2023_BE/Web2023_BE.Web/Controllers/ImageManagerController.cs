@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Cors;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Cors;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
@@ -33,6 +34,7 @@ namespace Web2023_BE.Web.Controllers
         [HttpPost]
         [Route("filter-paging-async")]
         [EnableCors("AllowCROSPolicy")]
+        [Authorize]
         public async Task<IActionResult> GetListImagePagingAsync(PagingRequest pagingRequest)
         {
             var serviceResult = new ServiceResult();
@@ -64,6 +66,7 @@ namespace Web2023_BE.Web.Controllers
         [Route("create")]
         [RequestSizeLimit(100000000)]
         [EnableCors("AllowCROSPolicy")]
+        [Authorize]
         public async Task<IActionResult> CreateImage([FromForm] IFormFile image)
         {
             var serviceResult = new ServiceResult();
@@ -109,6 +112,7 @@ namespace Web2023_BE.Web.Controllers
         [HttpPut]
         [Route("update/{id}")]
         [EnableCors("AllowCROSPolicy")]
+        [Authorize]
         public async Task<IActionResult> CreateImage(string id, [FromForm] ImageManagerDTO imageManager)
         {
             var serviceResult = new ServiceResult();

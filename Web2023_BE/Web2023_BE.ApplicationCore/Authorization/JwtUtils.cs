@@ -1,4 +1,5 @@
-﻿using Microsoft.Extensions.Options;
+﻿using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.Options;
 using Microsoft.IdentityModel.Tokens;
 using MISA.Legder.Domain.Configs;
 using System;
@@ -13,28 +14,31 @@ namespace Web2023_BE.ApplicationCore.Authorization
 {
     public interface IJwtUtils
     {
-        public string GenerateJwtToken(string role, string username);
+        public string GenerateJwtToken(string role, string accountID, string username);
         public string ValidateJwtToken(string token);
     }
 
     public class JwtUtils : IJwtUtils
     {
         private readonly AuthConfig _authConfig;
+        private readonly IConfiguration _config;
 
-        public JwtUtils(AuthConfig authConfig)
+
+        public JwtUtils(AuthConfig authConfig, IConfiguration config)
         {
             _authConfig = authConfig;
+            _config = config;
         }
 
-        public string GenerateJwtToken(string role, string username)
+        public string GenerateJwtToken(string role, string accountID, string username)
         {
             // generate token that is valid for 7 days
             var tokenHandler = new JwtSecurityTokenHandler();
             var key = Encoding.ASCII.GetBytes(_authConfig.JwtSettings.Key);
             var tokenDescriptor = new SecurityTokenDescriptor
             {
-                Subject = new ClaimsIdentity(new[] { new Claim("Role", role), new Claim("UserName", username) }),
-                Expires = DateTime.UtcNow.AddDays(7),
+                Subject = new ClaimsIdentity(new[] { new Claim("Role", role), new Claim("AccountID", accountID), new Claim("UserName", username) }),
+                Expires = DateTime.UtcNow.AddHours(7),
                 SigningCredentials = new SigningCredentials(new SymmetricSecurityKey(key), SecurityAlgorithms.HmacSha256Signature)
             };
             var token = tokenHandler.CreateToken(tokenDescriptor);
@@ -47,7 +51,9 @@ namespace Web2023_BE.ApplicationCore.Authorization
                 return null;
 
             var tokenHandler = new JwtSecurityTokenHandler();
-            var key = Encoding.ASCII.GetBytes(_authConfig.JwtSettings.Key);
+
+            //var key = Encoding.ASCII.GetBytes(_authConfig.JwtSettings.Key);
+            var key = Encoding.ASCII.GetBytes(_config["Jwt:Key"]);
             try
             {
                 tokenHandler.ValidateToken(token, new TokenValidationParameters
@@ -61,10 +67,9 @@ namespace Web2023_BE.ApplicationCore.Authorization
                 }, out SecurityToken validatedToken);
 
                 var jwtToken = (JwtSecurityToken)validatedToken;
-                var role = jwtToken.Claims.First(x => x.Type == "Role").Value;
+                var accountID = jwtToken.Claims.First(x => x.Type == "AccountID").Value;
 
-                // return user id from JWT token if validation successful
-                return role;
+                return accountID;
             }
             catch
             {

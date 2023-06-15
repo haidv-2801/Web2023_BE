@@ -5,13 +5,14 @@ using System.ComponentModel.DataAnnotations;
 using System.Text;
 using System.ComponentModel;
 using Nest;
+using Web2023_BE.ApplicationCore.Extensions;
 
 namespace Web2023_BE.ApplicationCore.Entities
 {
     /// <summary>
     /// Thực thể book order
     /// </summary>
-    [DisplayName("Book_Order")]
+    [ConfigTables("book_order")]
     public class BookOrder : BaseEntity
     {
         #region Property

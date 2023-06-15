@@ -7,17 +7,18 @@ using System.ComponentModel.DataAnnotations.Schema;
 
 namespace Web2023_BE.ApplicationCore.Entities
 {
-    public class AccountLoginDTO
+    public class AccountClientDTO 
     {
         #region Property
-        /// <summary>
-        /// Email
-        /// </summary>
-        [Display(Name = "Email")]
-        public string Email { get; set; }
+        public Guid AccountID { get; set; }
 
-        [Display(Name = "Mật khẩu")]
-        public string Password { get; set; }
+        public string Email { get; set; }
+        
+        public string UserName { get; set; }
+
+        public string FullName { get; set; }
+    
+        public string Avatar { get; set; }
         #endregion
     }
 }

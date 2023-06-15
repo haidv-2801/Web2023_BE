@@ -71,6 +71,7 @@ namespace Web2023_BE.Web.Controllers
         [HttpPost]
         [RequestSizeLimit(100000000)]
         [EnableCors("AllowCROSPolicy")]
+        [Authorize]
         public async Task<IActionResult> UploadFile([FromForm] IFormFile file)
         {
             var err = ValidateUpload(StorageFileType.Temp, file);
@@ -104,6 +105,7 @@ namespace Web2023_BE.Web.Controllers
         /// <returns>Danh sách tên file temp</returns>
         [RequestSizeLimit(100000000)]
         [HttpPost("multi")]
+        [Authorize]
         public async Task<IActionResult> UploadFiles([FromRoute][Required] StorageFileType type, List<IFormFile> file)
         {
             int validCount = 0;

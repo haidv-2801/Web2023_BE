@@ -11,7 +11,7 @@ namespace Web2023_BE.ApplicationCore.Entities
     /// <summary>
     /// Thực thể người dùng
     /// </summary>
-    [ConfigTables(TableName = "account")]
+    [ConfigTables(TableName = "account", UniqueColumns = "UserName;Email")]
     public class Account : BaseEntity
     {
         #region Property
@@ -40,7 +40,10 @@ namespace Web2023_BE.ApplicationCore.Entities
         /// Email
         /// </summary>
         [Display(Name = "Mật khẩu")]
+        [IRequired]
         public string Password { get; set; }
+
+        public string RefreshToken { get; set; }
 
         [Display(Name = "Họ và tên")]
         public string FullName { get; set; }

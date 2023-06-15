@@ -9,7 +9,6 @@
       "Web2023_BE.Web/1.0.0": {
         "dependencies": {
           "Magick.NET-Q16-AnyCPU": "12.2.2",
-          "Microsoft.Owin.Cors": "4.2.1",
           "Microsoft.VisualStudio.Azure.Containers.Tools.Targets": "1.15.1",
           "NLog": "4.7.15",
           "NLog.Web.AspNetCore": "4.14.0",
@@ -166,14 +165,6 @@
           "lib/netstandard21/Magick.NET.Core.dll": {
             "assemblyVersion": "12.2.0.0",
             "fileVersion": "12.2.2.0"
-          }
-        }
-      },
-      "Microsoft.AspNet.Cors/5.0.0": {
-        "runtime": {
-          "lib/net45/System.Web.Cors.dll": {
-            "assemblyVersion": "5.0.0.0",
-            "fileVersion": "5.0.11001.0"
           }
         }
       },
@@ -471,30 +462,6 @@
           }
         }
       },
-      "Microsoft.Owin/4.2.1": {
-        "dependencies": {
-          "Owin": "1.0.0"
-        },
-        "runtime": {
-          "lib/net45/Microsoft.Owin.dll": {
-            "assemblyVersion": "4.2.1.0",
-            "fileVersion": "4.200.122.20502"
-          }
-        }
-      },
-      "Microsoft.Owin.Cors/4.2.1": {
-        "dependencies": {
-          "Microsoft.AspNet.Cors": "5.0.0",
-          "Microsoft.Owin": "4.2.1",
-          "Owin": "1.0.0"
-        },
-        "runtime": {
-          "lib/net45/Microsoft.Owin.Cors.dll": {
-            "assemblyVersion": "4.2.1.0",
-            "fileVersion": "4.200.122.20502"
-          }
-        }
-      },
       "Microsoft.VisualStudio.Azure.Containers.Tools.Targets/1.15.1": {},
       "Microsoft.Win32.Primitives/4.3.0": {
         "dependencies": {
@@ -643,14 +610,6 @@
           }
         }
       },
-      "Owin/1.0.0": {
-        "runtime": {
-          "lib/net40/Owin.dll": {
-            "assemblyVersion": "1.0.0.0",
-            "fileVersion": "1.0.0.0"
-          }
-        }
-      },
       "Pipelines.Sockets.Unofficial/2.2.0": {
         "dependencies": {
           "System.IO.Pipelines": "5.0.1"
@@ -716,6 +675,14 @@
       "runtime.ubuntu.14.04-x64.runtime.native.System.Security.Cryptography.OpenSsl/4.3.2": {},
       "runtime.ubuntu.16.04-x64.runtime.native.System.Security.Cryptography.OpenSsl/4.3.2": {},
       "runtime.ubuntu.16.10-x64.runtime.native.System.Security.Cryptography.OpenSsl/4.3.2": {},
+      "SixLabors.ImageSharp/3.0.1": {
+        "runtime": {
+          "lib/net6.0/SixLabors.ImageSharp.dll": {
+            "assemblyVersion": "3.0.0.0",
+            "fileVersion": "3.0.1.0"
+          }
+        }
+      },
       "StackExchange.Redis/2.2.4": {
         "dependencies": {
           "Pipelines.Sockets.Unofficial": "2.2.0",
@@ -1700,6 +1667,21 @@
           }
         }
       },
+      "TinyMapper/3.0.3": {
+        "dependencies": {
+          "System.Collections.NonGeneric": "4.3.0",
+          "System.ComponentModel.TypeConverter": "4.3.0",
+          "System.Reflection.Emit": "4.3.0",
+          "System.Reflection.Emit.ILGeneration": "4.3.0",
+          "System.Reflection.TypeExtensions": "4.3.0"
+        },
+        "runtime": {
+          "lib/netstandard1.3/TinyMapper.dll": {
+            "assemblyVersion": "3.0.1.0",
+            "fileVersion": "3.0.1.0"
+          }
+        }
+      },
       "Web2023_BE.ApplicationCore/1.0.0": {
         "dependencies": {
           "ClosedXML": "0.95.4",
@@ -1714,6 +1696,8 @@
           "NLog": "4.7.15",
           "NLog.Web.AspNetCore": "4.14.0",
           "Newtonsoft.Json": "13.0.1",
+          "SixLabors.ImageSharp": "3.0.1",
+          "TinyMapper": "3.0.3",
           "Web2023_BE.Cache": "1.0.0"
         },
         "runtime": {
@@ -1852,13 +1836,6 @@
       "sha512": "sha512-U4aPbh0BRlwSeP/5waebv8oVTrp66gRHxVj1o6dRpZk5kD5SPz4i8asdaClL5B2oqWNVNrGHD3Uc5Bz4Ao5G8g==",
       "path": "magick.net.core/12.2.2",
       "hashPath": "magick.net.core.12.2.2.nupkg.sha512"
-    },
-    "Microsoft.AspNet.Cors/5.0.0": {
-      "type": "package",
-      "serviceable": true,
-      "sha512": "sha512-jNwFhEnm0jRlaRCgHEk52hJQltVoM2Bllysv2NtPYrgsVWyS3r5BOtCXkM/lEZ5AdUUBOvha+4QAVcVp1MZp5g==",
-      "path": "microsoft.aspnet.cors/5.0.0",
-      "hashPath": "microsoft.aspnet.cors.5.0.0.nupkg.sha512"
     },
     "Microsoft.AspNet.WebApi.Client/5.2.8": {
       "type": "package",
@@ -2112,20 +2089,6 @@
       "path": "microsoft.openapi/1.2.3",
       "hashPath": "microsoft.openapi.1.2.3.nupkg.sha512"
     },
-    "Microsoft.Owin/4.2.1": {
-      "type": "package",
-      "serviceable": true,
-      "sha512": "sha512-/iYirTV0KS5DqiKgFvxqGR0fOtboceDX7NxVZCYyiuUVz55U1Z3BZRUd2h+35U/8kgFETa6HulCx1hj4ej9heg==",
-      "path": "microsoft.owin/4.2.1",
-      "hashPath": "microsoft.owin.4.2.1.nupkg.sha512"
-    },
-    "Microsoft.Owin.Cors/4.2.1": {
-      "type": "package",
-      "serviceable": true,
-      "sha512": "sha512-N1M4WUfvSp+0LXvj6QaTX6pwGSR1o+D6quaUOpBT/bR5jMdN9EekNnxnVBozuNmxA9kkO33/DeyVz4RKbMRSHg==",
-      "path": "microsoft.owin.cors/4.2.1",
-      "hashPath": "microsoft.owin.cors.4.2.1.nupkg.sha512"
-    },
     "Microsoft.VisualStudio.Azure.Containers.Tools.Targets/1.15.1": {
       "type": "package",
       "serviceable": true,
@@ -2209,13 +2172,6 @@
       "sha512": "sha512-5fTviEu/f+mIxucGHmcx1q/mtJGo8EZbxACD57H4iJPZbLaD0LsLxMB2xDCxDO9uexlnfMMDoryq1nFdrl/C6A==",
       "path": "nlog.web.aspnetcore/4.14.0",
       "hashPath": "nlog.web.aspnetcore.4.14.0.nupkg.sha512"
-    },
-    "Owin/1.0.0": {
-      "type": "package",
-      "serviceable": true,
-      "sha512": "sha512-OseTFniKmyp76mEzOBwIKGBRS5eMoYNkMKaMXOpxx9jv88+b6mh1rSaw43vjBOItNhaLFG3d0a20PfHyibH5sw==",
-      "path": "owin/1.0.0",
-      "hashPath": "owin.1.0.0.nupkg.sha512"
     },
     "Pipelines.Sockets.Unofficial/2.2.0": {
       "type": "package",
@@ -2342,6 +2298,13 @@
       "sha512": "sha512-leXiwfiIkW7Gmn7cgnNcdtNAU70SjmKW3jxGj1iKHOvdn0zRWsgv/l2OJUO5zdGdiv2VRFnAsxxhDgMzofPdWg==",
       "path": "runtime.ubuntu.16.10-x64.runtime.native.system.security.cryptography.openssl/4.3.2",
       "hashPath": "runtime.ubuntu.16.10-x64.runtime.native.system.security.cryptography.openssl.4.3.2.nupkg.sha512"
+    },
+    "SixLabors.ImageSharp/3.0.1": {
+      "type": "package",
+      "serviceable": true,
+      "sha512": "sha512-o0v/J6SJwp3RFrzR29beGx0cK7xcMRgOyIuw8ZNLQyNnBhiyL/vIQKn7cfycthcWUPG3XezUjFwBWzkcUUDFbg==",
+      "path": "sixlabors.imagesharp/3.0.1",
+      "hashPath": "sixlabors.imagesharp.3.0.1.nupkg.sha512"
     },
     "StackExchange.Redis/2.2.4": {
       "type": "package",
@@ -2986,6 +2949,13 @@
       "sha512": "sha512-A/uxsWi/Ifzkmd4ArTLISMbfFs6XpRPsXZonrIqyTY70xi8t+mDtvSM5Os0RqyRDobjMBwIDHDL4NOIbkDwf7A==",
       "path": "system.xml.xpath.xmldocument/4.3.0",
       "hashPath": "system.xml.xpath.xmldocument.4.3.0.nupkg.sha512"
+    },
+    "TinyMapper/3.0.3": {
+      "type": "package",
+      "serviceable": true,
+      "sha512": "sha512-a070h+NbFjMMclmWjEjGDnihUs4wE3ykx7R4BG7Oo38Jf66spzc3h3CbvbJYFlkbYl65dt5vbJFFH72vFdRr1A==",
+      "path": "tinymapper/3.0.3",
+      "hashPath": "tinymapper.3.0.3.nupkg.sha512"
     },
     "Web2023_BE.ApplicationCore/1.0.0": {
       "type": "project",

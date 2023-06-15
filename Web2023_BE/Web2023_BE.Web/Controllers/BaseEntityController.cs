@@ -108,6 +108,7 @@ namespace Web2023_BE.Web.Controllers
         /// CreatedBy: DVHAI 07/07/2021
         [EnableCors("AllowCROSPolicy")]
         [HttpPost]
+        [Authorize]
         public async Task<IActionResult> Post([FromBody] TEntity entity)
         {
             var serviceResult = new ServiceResult();
@@ -131,6 +132,7 @@ namespace Web2023_BE.Web.Controllers
 
         [EnableCors("AllowCROSPolicy")]
         [HttpPut("PatchUpdate/{id}")]
+        [Authorize]
         public async Task<IActionResult> Patch(Guid id, [FromBody] object model)
         {
             try
@@ -156,7 +158,6 @@ namespace Web2023_BE.Web.Controllers
             {
                 return BadRequest(ex);
             }
-            return BadRequest();
         }
 
         /// <summary>
@@ -168,6 +169,7 @@ namespace Web2023_BE.Web.Controllers
         /// CreatedBy: DVHAI 07/07/2021
         [EnableCors("AllowCROSPolicy")]
         [HttpPut("{id}")]
+        [Authorize]
         public async Task<IActionResult> Put([FromRoute] string id, [FromBody] TEntity entity)
         {
             try
@@ -202,6 +204,7 @@ namespace Web2023_BE.Web.Controllers
         /// CreatedBy: DVHAI 07/07/2021
         [EnableCors("AllowCROSPolicy")]
         [HttpDelete("{id}")]
+        [Authorize]
         public IActionResult Delete(string id)
         {
             var serviceResult = _baseService.Delete(Guid.Parse(id));

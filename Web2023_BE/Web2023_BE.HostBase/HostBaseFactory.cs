@@ -5,13 +5,11 @@ using Microsoft.Extensions.DependencyInjection;
 using Web2023_BE.Cache;
 using Web2023_BE.Domain.Shared.Debugs;
 using Web2023_BE.ApplicationCore;
-using Web2023_BE.Cache;
 using Web2023_BE.Domain.Shared.Commons;
 using Web2023_BE.Extension;
 using Web2023_BE.ApplicationCore.FileSystem;
 using Web2023_BE.Cache.Redis;
 using Microsoft.Extensions.Caching.Redis;
-using Web2023_BE.ApplicationCore.Entities;
 using MISA.Legder.Domain.Configs;
 using Web2023_BE.ApplicationCore.Authorization;
 using Web2023_BE.ApplicationCore.Services;
@@ -61,36 +59,31 @@ namespace Web2023_BE.HostBase
             services.AddSingleton<IJwtUtils, JwtUtils>();
             services.AddSingleton<ITokenService, TokenService>();
 
-
-            var signingKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(config.JwtSettings.Key));
+            var signingKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(configuration["Jwt:Key"]));
 
             var tokenValidationParameters = new TokenValidationParameters
             {
-                ValidateIssuerSigningKey = true,
                 IssuerSigningKey = signingKey,
-                ValidateIssuer = false,
-                ValidateAudience = false,
-                ValidateLifetime = false,
+                ValidateIssuer = true,
+                ValidateAudience = true,
+                ValidIssuer = configuration["Jwt:Issuer"],
+                ValidAudience = configuration["Jwt:Issuer"],
+                RequireExpirationTime = true,
                 ClockSkew = TimeSpan.Zero,
-                RequireExpirationTime = false
             };
-            // Config authenication
-            services.AddAuthentication(x =>
+
+            services.AddAuthentication(options =>
             {
-                x.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
-                x.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
-            })
-              .AddJwtBearer(options =>
-              {
-                  options.SaveToken = true;
-                  options.RequireHttpsMetadata = false;
-                  options.TokenValidationParameters = tokenValidationParameters;
-              });
-
+                options.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
+                options.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
+                options.DefaultSignInScheme = "Cookies";
+            }).AddJwtBearer(options =>
+            {
+                options.RequireHttpsMetadata = false;
+                options.SaveToken = true;
+                options.TokenValidationParameters = tokenValidationParameters;
+            }).AddCookie("Cookies");
         }
-
-
-
 
         private static Dictionary<string, IDistCached> GetRedisCached(IConfiguration configuration)
         {

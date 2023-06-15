@@ -7,6 +7,8 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using Web2023_BE.ApplicationCore.Authorization;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
+using System.Net;
 
 namespace Web2023_BE.ApplicationCore.MiddleWare
 {
@@ -15,6 +17,7 @@ namespace Web2023_BE.ApplicationCore.MiddleWare
         private readonly RequestDelegate _next;
 
         private readonly AuthConfig _authConfig;
+
         public JwtMiddleware(RequestDelegate next, IOptions<AuthConfig> authConfig)
         {
             _next = next;
@@ -24,14 +27,21 @@ namespace Web2023_BE.ApplicationCore.MiddleWare
         public async Task Invoke(HttpContext context, IJwtUtils jwtUtils)
         {
             var token = context.Request.Headers["Authorization"].FirstOrDefault()?.Split(" ").Last();
-            var role = jwtUtils.ValidateJwtToken(token);
-            if (!string.IsNullOrEmpty(role))
+            var accountID = jwtUtils.ValidateJwtToken(token);
+
+#if DEBUG
+            await _next(context);
+#else
+
+            if (string.IsNullOrWhiteSpace(accountID))
             {
-                // attach user to context on successful jwt validation
-                context.Items["Role"] = role;
+                context.Response.StatusCode = (int)HttpStatusCode.Unauthorized;
+                return;
             }
 
+            context.Items["AccountID"] = accountID;
             await _next(context);
+#endif
         }
     }
 }

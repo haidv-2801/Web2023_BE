@@ -1,54 +1,59 @@
 ﻿using IdentityModel.Client;
+using Microsoft.AspNetCore.Http;
+using Microsoft.Extensions.Caching.Distributed;
+using Microsoft.Extensions.Options;
+using Microsoft.Extensions.Primitives;
 using Microsoft.IdentityModel.Tokens;
 using MISA.Legder.Domain.Configs;
 using System;
 using System.Collections.Generic;
 using System.IdentityModel.Tokens.Jwt;
-using System.Security.Claims;
-using System.Text;
+using System.Linq;
+using System.Threading.Tasks;
 using Web2023_BE.ApplicationCore.Interfaces.IServices;
+
 
 namespace Web2023_BE.ApplicationCore.Services
 {
     public class TokenService : ITokenService
     {
-        private string _role = "";
+        private readonly IDistributedCache _cache;
+        private readonly IHttpContextAccessor _httpContextAccessor;
         private readonly AuthConfig _authConfig;
 
-        public TokenService(AuthConfig authConfig)
+        public TokenService(IDistributedCache cache, IHttpContextAccessor httpContextAccessor, AuthConfig authConfig)
         {
+            _cache = cache;
+            _httpContextAccessor = httpContextAccessor;
             _authConfig = authConfig;
         }
 
-       
+        public async Task<bool> IsCurrentActiveToken() => await IsActiveAsync(GetCurrentAsync());
 
-        private string GenerateJwt() => GenerateEncryptedToken(GetSigningCredential());
+        public async Task DeactivateCurrentAsync() => await DeactivateAsync(GetCurrentAsync());
 
+        public async Task<bool> IsActiveAsync(string token) => await _cache.GetStringAsync(GetKey(token)) == null;
 
-        private string GenerateEncryptedToken(SigningCredentials signingCredentials)
+        public async Task DeactivateAsync(string token)
         {
-            var claims = new[]
-            {
-            new Claim("Role", _role)
-        };
-            var token = new JwtSecurityToken(
-                claims: claims,
-                expires: DateTime.Now.AddMinutes(30),
-                signingCredentials: signingCredentials);
-            var tokenHandler = new JwtSecurityTokenHandler();
-            return tokenHandler.WriteToken(token);
+            await _cache.SetStringAsync(GetKey(token),
+                " ", new DistributedCacheEntryOptions
+                {
+                    AbsoluteExpirationRelativeToNow =
+                        TimeSpan.FromMinutes(2)
+                });
         }
 
-        private SigningCredentials GetSigningCredential()
+        private string GetCurrentAsync()
         {
-            byte[] secret = Encoding.UTF8.GetBytes(_authConfig.JwtSettings.Key);
-            return new SigningCredentials(new SymmetricSecurityKey(secret),
-                SecurityAlgorithms.HmacSha256);
+            var authorizationHeader = _httpContextAccessor
+                .HttpContext.Request.Headers["authorization"];
+
+            return authorizationHeader == StringValues.Empty
+                ? string.Empty
+                : authorizationHeader.Single().Split(" ").Last();
         }
 
-        public TokenResponse GetToken(TokenRequest request)
-        {
-            throw new NotImplementedException();
-        }
+        private static string GetKey(string token) => $"tokens:{token}:deactivated";
     }
 }
